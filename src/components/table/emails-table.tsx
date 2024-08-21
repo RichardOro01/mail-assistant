@@ -11,7 +11,8 @@ interface MailProps {
 
 const EmailsTable: React.FC<MailProps> = ({ conversations }) => {
   const [showOptions, setShowOptions] = useState<number | null>(null);
-  const { selectedMail, setSelectedMail } = useContext(MailSelected);
+  const { selectedMail, setSelectedMail, selectConversation } =
+    useContext(MailSelected);
 
   return (
     <Table>
@@ -36,6 +37,7 @@ const EmailsTable: React.FC<MailProps> = ({ conversations }) => {
                   ? "border-l-4 border-blue-400"
                   : ""
               }`}
+              onClick={() => selectConversation(conversation.id)}
             >
               <span className="line-clamp-1">
                 {conversation.emails[0].from.name
@@ -43,7 +45,10 @@ const EmailsTable: React.FC<MailProps> = ({ conversations }) => {
                   : conversation.emails[0].from.email}
               </span>
             </TableCell>
-            <TableCell className="py-3">
+            <TableCell
+              className="py-3"
+              onClick={() => selectConversation(conversation.id)}
+            >
               <span className="line-clamp-1">
                 {conversation.subject}
                 <span className="ml-5">{conversation.emails[0].text}</span>
