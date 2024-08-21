@@ -3,7 +3,7 @@ import { IConversation } from "@/types/email";
 import { Avatar, AvatarFallback, AvatarImage } from "@radix-ui/react-avatar";
 
 interface MenuCardProps {
-  conversation: IConversation | null;
+  conversation: IConversation | undefined;
 }
 
 const MenuCard: React.FC<MenuCardProps> = ({ conversation }) => {
