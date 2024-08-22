@@ -1,8 +1,9 @@
 "use client";
+import { MailSelected } from "@/app/mail/layout";
 import { IConversation } from "@/types/email";
 import { format } from "date-fns";
 import { Check, Clock, Ellipsis, Trash } from "lucide-react";
-import { useParams } from "next/navigation";
+import { useContext, useEffect } from "react";
 import DOMPurify from "dompurify";
 import { Separator } from "../ui/separator";
 
@@ -11,7 +12,11 @@ type MailCardProps = {
 };
 
 const MailCard: React.FC<MailCardProps> = ({ conversation }) => {
-  const params = useParams<{ id: string }>();
+  const { setSelectedMail } = useContext(MailSelected);
+
+  useEffect(() => {
+    setSelectedMail(conversation);
+  }, [setSelectedMail, conversation]);
 
   return (
     <div className="flex flex-col w-full gap-7 mx-20 my-10">
