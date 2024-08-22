@@ -19,10 +19,10 @@ const MailCard: React.FC<MailCardProps> = ({ conversation }) => {
   }, [setSelectedMail, conversation]);
 
   return (
-    <div className="flex flex-col w-full gap-7 mx-20 my-10">
-      <div className="flex justify-between mx-6">
+    <div className="flex flex-col w-screen gap-8 mx-20 my-10">
+      <div className="flex justify-between">
         <h2 className="text-xl font-semibold">{conversation?.subject}</h2>
-        <div className="flex gap-5 items-center">
+        <div className="flex ml-2 gap-4 items-center">
           <button>
             <Check color="gray" size={18} />
           </button>
