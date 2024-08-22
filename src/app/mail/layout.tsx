@@ -32,7 +32,7 @@ const CardLayout = ({ children }: LayoutBaseProps) => {
       value={{ selectedMail, setSelectedMail, selectConversation }}
     >
       <div className="flex justify-between">
-        {children}
+        <main className="flex max-h-screen overflow-y-auto">{children}</main>
         <MenuCard conversation={selectedMail} />
       </div>
     </MailSelected.Provider>

@@ -48,7 +48,7 @@ const ShortcutsTab: React.FC<ShortcutsTabProp> = ({ conversations }) => {
 
   return (
     <Tabs defaultValue="0" className="w-full">
-      <div className="flex justify-between py-6 px-7 text-xl items-center">
+      <div className="flex justify-between py-5 px-7 text-xl items-center sticky top-0 bg-white z-10">
         <div className="flex gap-5">
           <TabsList className="flex text-gray-500 items-center gap-1">
             {shortcuts.map((shortcut, index) => (
