@@ -69,7 +69,9 @@ const ShortcutsTab: React.FC<ShortcutsTabProp> = ({ conversations }) => {
           <button onClick={() => addShortcut("Trabajo")}>
             <Plus color="gray" size={18} />
           </button>
-          <button onClick={() => router.push("/mail/mail-compose")}>
+          <button
+            onClick={() => router.push("/mail/mail-message/mail-compose")}
+          >
             <PencilLine color="gray" size={18} />
           </button>
           <Search color="gray" size={18} />

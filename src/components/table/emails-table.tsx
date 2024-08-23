@@ -37,7 +37,9 @@ const EmailsTable: React.FC<MailProps> = ({ conversations }) => {
                   ? "border-l-4 border-blue-400"
                   : ""
               }`}
-              onClick={() => route.push(`mail-content/${conversation.id}`)}
+              onClick={() =>
+                route.push(`mail-message/mail-content/${conversation.id}`)
+              }
             >
               <span className="line-clamp-1">
                 {conversation.emails[0].from.name
@@ -47,7 +49,9 @@ const EmailsTable: React.FC<MailProps> = ({ conversations }) => {
             </TableCell>
             <TableCell
               className="py-3"
-              onClick={() => route.push(`mail-content/${conversation.id}`)}
+              onClick={() =>
+                route.push(`mail-message/mail-content/${conversation.id}`)
+              }
             >
               <span className="line-clamp-1">
                 {conversation.subject}
