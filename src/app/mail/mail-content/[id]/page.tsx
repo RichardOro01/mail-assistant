@@ -8,7 +8,7 @@ const MailContent: React.FC<any> = async ({ params }) => {
   return (
     <div className="flex w-full">
       <LeftBar />
-      <MailCard conversation={conversation} />
+      <MailCard conversation={conversation} write={false} />
     </div>
   );
 };

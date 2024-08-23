@@ -3,6 +3,7 @@ import EmailsTable from "@/components/table/emails-table";
 import { IConversation } from "@/types/email";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import { Dot, PencilLine, Plus, Search } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 type Shortcut = {
@@ -20,6 +21,7 @@ const ShortcutsTab: React.FC<ShortcutsTabProp> = ({ conversations }) => {
     { id: "1", name: "Importantes", amount: 3 },
     { id: "2", name: "Otros", amount: null },
   ]);
+  const router = useRouter();
 
   useEffect(() => {
     localStorage.setItem("shortcuts", JSON.stringify(shortcuts));
@@ -67,7 +69,9 @@ const ShortcutsTab: React.FC<ShortcutsTabProp> = ({ conversations }) => {
           <button onClick={() => addShortcut("Trabajo")}>
             <Plus color="gray" size={18} />
           </button>
-          <PencilLine color="gray" size={18} />
+          <button onClick={() => router.push("/mail/mail-compose")}>
+            <PencilLine color="gray" size={18} />
+          </button>
           <Search color="gray" size={18} />
         </div>
       </div>
