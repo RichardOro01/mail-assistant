@@ -1,17 +1,19 @@
 "use client";
 import { MailSelected } from "@/app/mail/layout";
 import { IConversation } from "@/types/email";
-import { format } from "date-fns";
-import { Check, Clock, Ellipsis, Trash } from "lucide-react";
 import { useContext, useEffect } from "react";
+import MailCardHeader from "../layout/mail-card-header";
+import MailCardFooter from "../layout/mail-card-footer";
+import { format } from "date-fns";
 import DOMPurify from "dompurify";
 import { Separator } from "../ui/separator";
 
 type MailCardProps = {
-  conversation: IConversation | undefined;
+  conversation?: IConversation;
+  write: boolean;
 };
 
-const MailCard: React.FC<MailCardProps> = ({ conversation }) => {
+const MailCard: React.FC<MailCardProps> = ({ conversation, write }) => {
   const { setSelectedMail } = useContext(MailSelected);
 
   useEffect(() => {
@@ -20,16 +22,10 @@ const MailCard: React.FC<MailCardProps> = ({ conversation }) => {
 
   return (
     <div className="flex flex-col w-screen gap-8 mx-20 my-10">
-      <div className="flex justify-between">
-        <h2 className="text-xl font-semibold">{conversation?.subject}</h2>
-        <div className="flex ml-2 gap-4 items-center">
-          <button>
-            <Check color="gray" size={18} />
-          </button>
-          <Clock color="gray" size={18} />
-          <Trash color="gray" size={18} />
-        </div>
-      </div>
+      <MailCardHeader
+        write={write}
+        title={conversation ? conversation.subject : "New Message"}
+      />
       <div className="flex flex-col justify-between shadow-lg border-l-4 border-slate-400 rounded-lg lg:min-w-[400px]">
         <div className="flex flex-col m-5 gap-5">
           {conversation?.emails.map((email, index) => (
@@ -54,11 +50,7 @@ const MailCard: React.FC<MailCardProps> = ({ conversation }) => {
             </div>
           ))}
         </div>
-        <div className="ml-5">
-          <button>
-            <Ellipsis />
-          </button>
-        </div>
+        <MailCardFooter write={write} />
       </div>
     </div>
   );
