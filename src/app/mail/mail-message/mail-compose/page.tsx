@@ -1,7 +1,7 @@
 import MailCard from "@/components/card/mail-card";
 
 const MailCompose = () => {
-  return <MailCard write={true} />;
+  return <MailCard />;
 };
 
 export default MailCompose;

@@ -3,6 +3,7 @@ import { IConversation } from "@/types/email";
 import { format } from "date-fns";
 import DOMPurify from "dompurify";
 import { Separator } from "../ui/separator";
+import { Ellipsis } from "lucide-react";
 
 type MailCardContentProps = {
   conversation: IConversation;
@@ -10,7 +11,7 @@ type MailCardContentProps = {
 
 const MailCardContent: React.FC<MailCardContentProps> = ({ conversation }) => {
   return (
-    <div className="flex flex-col m-5 gap-5">
+    <div className="flex flex-col mx-5 my-3 gap-5">
       {conversation?.emails.map((email, index) => (
         <div key={email.id}>
           <div className="flex justify-between">
@@ -30,6 +31,9 @@ const MailCardContent: React.FC<MailCardContentProps> = ({ conversation }) => {
           )}
         </div>
       ))}
+      <button>
+        <Ellipsis />
+      </button>
     </div>
   );
 };

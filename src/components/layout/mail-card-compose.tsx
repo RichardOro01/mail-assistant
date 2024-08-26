@@ -5,7 +5,6 @@ import { Label } from "../ui/label";
 
 const MailCardCompose = () => {
   const [text, setText] = useState("");
-
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
@@ -16,7 +15,7 @@ const MailCardCompose = () => {
   }, [text]);
 
   return (
-    <div className="flex flex-col m-5 gap-3">
+    <div className="flex flex-col mx-5 my-3 gap-3">
       <div className="flex items-center gap-4 mb-4">
         <Label htmlFor="to" className="text-lg font-semibold">
           To
@@ -41,6 +40,10 @@ const MailCardCompose = () => {
         className="w-full px-0 text-lg font-medium resize-none bg-transparent border-none focus-visible:ring-0 focus-visible:ring-offset-0"
         style={{ overflow: "hidden" }}
       />
+      <div className="flex gap-4">
+        <button className="font-semibold">Send</button>
+        <button>Send later</button>
+      </div>
     </div>
   );
 };
