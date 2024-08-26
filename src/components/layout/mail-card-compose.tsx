@@ -5,6 +5,8 @@ import { Label } from "../ui/label";
 
 const MailCardCompose = () => {
   const [text, setText] = useState("");
+  const [to, setTo] = useState("");
+  const [subject, setSubject] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
@@ -13,6 +15,27 @@ const MailCardCompose = () => {
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
   }, [text]);
+
+  const sendMail = async () => {
+    try {
+      const response = await fetch("/api/smtp-service", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ to, subject, text }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to send email");
+      }
+
+      const result = await response.json();
+      console.log("Email sent:", result.messageId);
+    } catch (error) {
+      console.error("Error sending email:", error);
+    }
+  };
 
   return (
     <div className="flex flex-col mx-5 my-3 gap-3">
@@ -23,11 +46,15 @@ const MailCardCompose = () => {
         <Input
           id="to"
           type="text"
+          value={to}
+          onChange={(e) => setTo(e.target.value)}
           className="flex-1 bg-transparent text-lg font-bold border-none focus-visible:ring-0 focus-visible:ring-offset-0 placeholder-gray-400"
         />
       </div>
       <Input
         type="text"
+        value={subject}
+        onChange={(e) => setSubject(e.target.value)}
         placeholder="Subject"
         className="w-full px-0 mb-4 text-lg font-bold border-none focus-visible:ring-0 focus-visible:ring-offset-0"
       />
@@ -41,7 +68,9 @@ const MailCardCompose = () => {
         style={{ overflow: "hidden" }}
       />
       <div className="flex gap-4">
-        <button className="font-semibold">Send</button>
+        <button className="font-semibold" onClick={sendMail}>
+          Send
+        </button>
         <button>Send later</button>
       </div>
     </div>
