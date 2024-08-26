@@ -3,7 +3,6 @@
 import { checkEmail, conversationAdapter } from "../utils";
 import { getMessageImap } from "@/lib/services/imap-service";
 import { debugImap } from "@/lib/debug";
-import { sendMessageSmtp } from "@/lib/services/smtp-service";
 
 // export const getConversationss = publicProcedure
 //   .input(z.string().optional())
@@ -55,8 +54,3 @@ export const getConversationById = async (idConversation: string) => {
 //       resolve(0);
 //     });
 //   });
-
-export const sendEmail = (to: string, subject: string, message: string) => {
-  const sended = sendMessageSmtp(to, subject, message);
-  console.log(sended);
-};
