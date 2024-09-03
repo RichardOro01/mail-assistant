@@ -1,7 +1,13 @@
-import MailCard from "@/components/card/mail-card";
-import { getConversationById } from "@/server/services/email";
+import MailCard from '@/components/card/mail-card';
+import { getConversationById } from '@/server/services/email';
 
-const MailContent: React.FC<any> = async ({ params }) => {
+interface MailContentProps {
+  params: {
+    id: string;
+  };
+}
+
+const MailContent: React.FC<MailContentProps> = async ({ params }) => {
   const conversation = await getConversationById(params.id);
 
   return <MailCard conversation={conversation} />;

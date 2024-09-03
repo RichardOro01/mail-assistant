@@ -1,4 +1,4 @@
-import Imap from "imap";
+import Imap from 'imap';
 
 export interface ImapWithConfig extends Imap {
   _config: {

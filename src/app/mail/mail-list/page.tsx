@@ -1,5 +1,5 @@
-import ShortcutTab from "@/components/tab/shortcut-tab";
-import { getConversations } from "@/server/services/email";
+import ShortcutTab from '@/components/tab/shortcut-tab';
+import { getConversations } from '@/server/services/email';
 
 const MailList = async () => {
   const conversations = await getConversations();

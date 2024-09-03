@@ -1,19 +1,17 @@
-"use client";
-import { createContext, useState } from "react";
-import MenuCard from "@/components/card/menu-card";
-import { IConversation } from "@/types/email";
-import { LayoutBaseProps } from "@/types/utils";
+'use client';
+import { createContext, useState } from 'react';
+import MenuCard from '@/components/card/menu-card';
+import { IConversation } from '@/types/email';
+import { LayoutBaseProps } from '@/types/utils';
 
 type MailSelectedContextType = {
   selectedMail: IConversation | undefined;
-  setSelectedMail: React.Dispatch<
-    React.SetStateAction<IConversation | undefined>
-  >;
+  setSelectedMail: React.Dispatch<React.SetStateAction<IConversation | undefined>>;
 };
 
 export const MailSelected = createContext<MailSelectedContextType>({
   selectedMail: undefined,
-  setSelectedMail: () => {},
+  setSelectedMail: () => {}
 });
 
 const CardLayout = ({ children }: LayoutBaseProps) => {
@@ -21,8 +19,8 @@ const CardLayout = ({ children }: LayoutBaseProps) => {
 
   return (
     <MailSelected.Provider value={{ selectedMail, setSelectedMail }}>
-      <div className="flex justify-between">
-        <main className="flex max-h-screen overflow-y-auto">{children}</main>
+      <div className='flex justify-between'>
+        <main className='flex max-h-screen overflow-y-auto'>{children}</main>
         <MenuCard conversation={selectedMail} />
       </div>
     </MailSelected.Provider>

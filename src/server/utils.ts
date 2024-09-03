@@ -1,14 +1,14 @@
 // import { TRPCError } from "@trpc/server";
 // import { getServerSession } from "next-auth";
-import { IMessageInfoImap, IMessagePerson } from "@/types/imap";
-import { IConversation } from "@/types/email";
-import { AddressObject } from "mailparser";
-import { debugImap } from "@/lib/debug";
-import { NEXT_MINE_MAIL } from "@/config";
+import { IMessageInfoImap, IMessagePerson } from '@/types/imap';
+import { IConversation } from '@/types/email';
+import { AddressObject } from 'mailparser';
+import { debugImap } from '@/lib/debug';
+import { NEXT_MINE_MAIL } from '@/config';
 
 export const checkEmail = async () => {
-  debugImap("Checking email");
-  debugImap("Getting session from server");
+  debugImap('Checking email');
+  debugImap('Getting session from server');
   // const session = await getServerSession();
   // const email = session?.user?.email;
   // if (!email) {
@@ -18,7 +18,7 @@ export const checkEmail = async () => {
   //     message: "Unauthorized request.",
   //   });
   // }
-  debugImap("\x1b[32mEmail check successfully");
+  debugImap('\x1b[32mEmail check successfully');
   return NEXT_MINE_MAIL;
 };
 
@@ -51,9 +51,7 @@ export const checkEmail = async () => {
 //   }));
 // };
 
-export const conversationAdapter = (
-  messages: IMessageInfoImap[]
-): IConversation[] => {
+export const conversationAdapter = (messages: IMessageInfoImap[]): IConversation[] => {
   return messages.map((message, i) => {
     const to = message.to;
     if (Array.isArray(to)) {
@@ -62,22 +60,22 @@ export const conversationAdapter = (
         emails: [
           {
             date: message.date,
-            id: "we",
+            id: 'we',
             from: {
-              email: message.from?.[0].address || "",
-              name: message.from?.[0].name || "",
+              email: message.from?.[0].address || '',
+              name: message.from?.[0].name || ''
             },
             to: to.map((toPerson) => ({
-              email: toPerson.address || "",
-              name: toPerson.name || "",
+              email: toPerson.address || '',
+              name: toPerson.name || ''
             })),
-            html: message.html || "",
-            text: message.text || "",
-          },
+            html: message.html || '',
+            text: message.text || ''
+          }
         ],
-        subject: message.subject || "",
+        subject: message.subject || '',
         id: `${i}`,
-        tags: [],
+        tags: []
       };
     } else {
       return {
@@ -85,32 +83,26 @@ export const conversationAdapter = (
         emails: [
           {
             date: message.date,
-            id: "we",
+            id: 'we',
             from: {
-              email: message.from?.[0].address || "",
-              name: message.from?.[0].name || "",
+              email: message.from?.[0].address || '',
+              name: message.from?.[0].name || ''
             },
             to: [],
-            html: message.html || "",
-            text: message.text || "",
-          },
+            html: message.html || '',
+            text: message.text || ''
+          }
         ],
-        subject: message.subject || "",
+        subject: message.subject || '',
         id: `${i}`,
-        tags: [],
+        tags: []
       };
     }
   });
 };
 
-export const emailToAdapter = (
-  tos: AddressObject | AddressObject[] | undefined
-): IMessagePerson[] => {
+export const emailToAdapter = (tos: AddressObject | AddressObject[] | undefined): IMessagePerson[] => {
   if (!tos) return [];
-  if (Array.isArray(tos))
-    return tos.reduce(
-      (prev: IMessagePerson[], current) => [...prev, ...current.value],
-      []
-    );
+  if (Array.isArray(tos)) return tos.reduce((prev: IMessagePerson[], current) => [...prev, ...current.value], []);
   return tos.value;
 };

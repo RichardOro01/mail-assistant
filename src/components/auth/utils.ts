@@ -1,4 +1,4 @@
-import { SESSION_EXPIRES_DAYS } from "@/config";
+import { SESSION_EXPIRES_DAYS } from '@/config';
 // import { debugAuth } from "@/lib/debug";
 // import { headers } from "next/headers";
 // import { redirect } from "next/navigation";
@@ -12,5 +12,4 @@ import { SESSION_EXPIRES_DAYS } from "@/config";
 // };
 
 export const sessionExpiresTime = SESSION_EXPIRES_DAYS * 24 * 60 * 60;
-export const sessionExpiresTimeMilliseconds =
-  SESSION_EXPIRES_DAYS * 24 * 60 * 60 * 1000;
+export const sessionExpiresTimeMilliseconds = SESSION_EXPIRES_DAYS * 24 * 60 * 60 * 1000;
