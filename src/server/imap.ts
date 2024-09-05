@@ -1,4 +1,4 @@
-import { sessionExpiresTimeMilliseconds } from '@/components/auth/utils';
+import { sessionExpiresTimeMilliseconds } from '@/auth/utils';
 import { NEXT_MAIL_SERVER_HOST, NEXT_IMAP_MAIL_SERVER_PORT } from '@/config';
 import { debugImap } from '@/lib/debug';
 import { ImapWithConfig } from '@/types/imap';

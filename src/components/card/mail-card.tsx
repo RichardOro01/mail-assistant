@@ -1,10 +1,10 @@
 'use client';
-import { MailSelected } from '@/app/mail/layout';
 import { IConversation } from '@/types/email';
 import { useContext, useEffect } from 'react';
 import MailCardHeader from '../layout/mail-card-header';
 import MailCardContent from '../layout/mail-card-content';
 import MailCardCompose from '../layout/mail-card-compose';
+import { MailSelected } from '@/app/(auth-protected)/mail/layout';
 
 type MailCardProps = {
   conversation?: IConversation;

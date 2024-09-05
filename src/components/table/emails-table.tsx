@@ -3,8 +3,8 @@ import { Table, TableBody, TableCell, TableRow } from '../ui/table';
 import { format } from 'date-fns';
 import { useContext, useState } from 'react';
 import { Check, Trash2 } from 'lucide-react';
-import { MailSelected } from '@/app/mail/layout';
 import { useRouter } from 'next/navigation';
+import { MailSelected } from '@/app/(auth-protected)/mail/layout';
 
 interface MailProps {
   conversations: IConversation[];

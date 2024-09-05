@@ -5,6 +5,7 @@ import { I18NProvider } from '@/i18n/context';
 import acceptLanguage from 'accept-language';
 import { getCurrentLanguage } from '@/i18n';
 import { languages } from '@/i18n/settings';
+import { AuthProvider } from '@/auth/context';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -23,7 +24,9 @@ export default function RootLayout({
   return (
     <html lang={lng} suppressHydrationWarning>
       <body className={`${inter.className} flex flex-1 flex-col min-h-screen`}>
-        <I18NProvider {...{ lng }}>{children}</I18NProvider>
+        <AuthProvider>
+          <I18NProvider {...{ lng }}>{children}</I18NProvider>
+        </AuthProvider>
       </body>
     </html>
   );
