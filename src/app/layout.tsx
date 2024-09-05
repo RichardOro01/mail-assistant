@@ -1,6 +1,10 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
+import { I18NProvider } from '@/i18n/context';
+import acceptLanguage from 'accept-language';
+import { getCurrentLanguage } from '@/i18n';
+import { languages } from '@/i18n/settings';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -14,9 +18,13 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  acceptLanguage.languages(languages);
+  const lng = getCurrentLanguage();
   return (
-    <html lang='en'>
-      <body className={inter.className}>{children}</body>
+    <html lang={lng} suppressHydrationWarning>
+      <body className={`${inter.className}`}>
+        <I18NProvider {...{ lng }}>{children}</I18NProvider>
+      </body>
     </html>
   );
 }
