@@ -22,7 +22,7 @@ export default function RootLayout({
   const lng = getCurrentLanguage();
   return (
     <html lang={lng} suppressHydrationWarning>
-      <body className={`${inter.className}`}>
+      <body className={`${inter.className} flex flex-1 flex-col min-h-screen`}>
         <I18NProvider {...{ lng }}>{children}</I18NProvider>
       </body>
     </html>

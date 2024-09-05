@@ -27,7 +27,7 @@ export function useTranslationClient(ns?: string, options?: UseTranslationOption
   const ret = useTranslationOrg(ns, options);
   const { i18n } = ret;
   const { language } = useI18NContext();
-  if (i18n.resolvedLanguage !== language) i18n.changeLanguage(language);
+  if (i18n.language !== language) i18n.changeLanguage(language);
 
   return ret;
 }
