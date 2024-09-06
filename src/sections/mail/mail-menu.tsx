@@ -1,7 +1,9 @@
 'use client';
 
+import { Button } from '@/components/ui/button';
 import { useMailContext } from '@/sections/mail/provider/hooks';
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
+import { signOut } from 'next-auth/react';
 
 const MailMenu: React.FC = () => {
   const { selectedMail: conversation } = useMailContext();
@@ -26,6 +28,9 @@ const MailMenu: React.FC = () => {
           </div>
         </div>
         <div className='mt-8 text-sm'>{conversation?.tags}</div>
+        <Button onClick={() => signOut()} variant='destructive'>
+          Logout
+        </Button>
       </div>
     </div>
   );

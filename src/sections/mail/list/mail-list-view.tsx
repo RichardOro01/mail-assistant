@@ -8,7 +8,6 @@ import MailListTable from '@/sections/mail/list/mail-list-table';
 const MailListView: React.FC = async () => {
   debugRendering('MailListView');
   const conversations = await getConversations();
-
   return (
     <Tabs defaultValue='0' className='w-full'>
       <MailListHeader />

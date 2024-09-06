@@ -5,6 +5,5 @@
   "invalid-credentials": "Las credenciales son incorrectas, por favor vuelva a intentarlo.",
   "email-required": "EL email es requerido",
   "email-invalid": "El email es inválido",
-  "password-required": "La contraseña es requerida",
-  "something-wrong": "Ha ocurrido un error con el servidor, por favor vuelva a intentarlo."
+  "password-required": "La contraseña es requerida"
 }

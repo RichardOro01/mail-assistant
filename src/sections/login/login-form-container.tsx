@@ -11,6 +11,7 @@ import FormProvider from '@/components/form-hook/form-provider';
 import { useLoginForm } from './login-hooks';
 import { useToast } from '@/hooks/use-toast';
 import { routes } from '@/lib/routes';
+import { useHandleError } from '@/lib/error/hooks';
 
 const LoginFormContainer = () => {
   debugRendering('LoginFormContainer');
@@ -19,6 +20,7 @@ const LoginFormContainer = () => {
   const returnTo = searchParams?.get('returnTo');
   const { t } = useTranslationClient('login');
 
+  const { handleStandardError } = useHandleError();
   const { toast } = useToast();
 
   const methods = useLoginForm();
@@ -30,34 +32,24 @@ const LoginFormContainer = () => {
         password,
         redirect: false
       });
-      if (typeof res?.error === 'string') {
-        toast({
-          variant: 'destructive',
-          title: t('failed-title'),
-          description: t(res.error)
-        });
-      } else if (res?.status === 200) {
+
+      if (res?.ok) {
         router.replace(returnTo || routes.mail.list);
       } else {
         toast({
           variant: 'destructive',
           title: t('failed-title'),
-          description: t('something-wrong')
+          description: t(res?.error ?? '')
         });
       }
     } catch (error) {
-      console.error(error);
-      toast({
-        variant: 'destructive',
-        title: t('failed-title'),
-        description: t('something-wrong')
-      });
+      handleStandardError(error);
     }
   });
 
   return (
     <FormProvider {...{ methods, onSubmit }}>
-      <LoginForm />;
+      <LoginForm />
     </FormProvider>
   );
 };

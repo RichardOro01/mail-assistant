@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { debugRendering } from '@/lib/debug/debuggers';
 import { TabsList, TabsTrigger } from '@/components/ui/tabs';

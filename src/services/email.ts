@@ -1,8 +1,11 @@
 // import { z } from "zod";
 // import { publicProcedure } from "../trpc";
 import { checkEmail, conversationAdapter } from '../server/utils';
-import { getMessageImap } from '@/services/imap-service';
+import { getMessageImap } from '@/services/imap';
 import { debugImap } from '@/lib/debug';
+// import { addImapInstance, createImapInstance } from '@/server/imap';
+// import { ImapWithConfig } from '@/types/imap';
+// import { CustomError } from '@/lib/error/custom-error';
 
 // export const getConversationss = publicProcedure
 //   .input(z.string().optional())

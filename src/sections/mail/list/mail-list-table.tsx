@@ -1,3 +1,5 @@
+'use client';
+
 import { IConversation } from '@/types/email';
 import { Table, TableBody, TableCell, TableRow } from '../../../components/ui/table';
 import { format } from 'date-fns';

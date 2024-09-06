@@ -6,6 +6,7 @@ import { languages } from '@/i18n/settings';
 import acceptLanguage from 'accept-language';
 import { I18NProvider } from '@/i18n/context';
 import { AuthProvider } from '@/auth/context';
+import { Toaster } from '@/components/ui/toaster';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -27,6 +28,7 @@ export default function RootLayout({
         <AuthProvider>
           <I18NProvider {...{ lng }}>{children}</I18NProvider>
         </AuthProvider>
+        <Toaster />
       </body>
     </html>
   );

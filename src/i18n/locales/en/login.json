@@ -5,6 +5,5 @@
   "invalid-credentials": "The credentials provided are invalid. Please try again.",
   "email-required": "Email is required",
   "email-invalid": "Invalid email",
-  "password-required": "Password is required",
-  "something-wrong": "Something went wrong. Please try again."
+  "password-required": "Password is required"
 }

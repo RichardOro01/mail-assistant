@@ -19,8 +19,13 @@ const LoginForm: React.FC = () => {
 
   return (
     <div className='flex flex-col gap-4'>
-      <FormInput name='email' startAdornment={<User />} />
-      <FormInputPassword name='password' startAdornment={<Lock />} />
+      <FormInput name='email' startAdornment={<User />} autoComplete='email' aria-label='Email' />
+      <FormInputPassword
+        name='password'
+        startAdornment={<Lock />}
+        autoComplete='current-password'
+        aria-label='Password'
+      />
       <Button variant='secondary' loading={isSubmitting} className='w-full'>
         {t('submit-button')}
       </Button>

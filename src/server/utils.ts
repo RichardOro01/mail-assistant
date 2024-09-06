@@ -4,7 +4,6 @@ import { IMessageInfoImap, IMessagePerson } from '@/types/imap';
 import { IConversation } from '@/types/email';
 import { AddressObject } from 'mailparser';
 import { debugImap } from '@/lib/debug';
-import { NEXT_MINE_MAIL } from '@/config';
 
 export const checkEmail = async () => {
   debugImap('Checking email');
@@ -19,7 +18,8 @@ export const checkEmail = async () => {
   //   });
   // }
   debugImap('\x1b[32mEmail check successfully');
-  return NEXT_MINE_MAIL;
+  //TODO check return
+  return true;
 };
 
 // export const conversationAdapter = (
