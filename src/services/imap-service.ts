@@ -2,7 +2,7 @@ import { simpleParser } from 'mailparser';
 import { addImapInstance, createImapInstance } from '@/server/imap';
 import { ImapWithConfig, IMessageInfoImap } from '@/types/imap';
 import { emailToAdapter } from '@/server/utils';
-import { debugImap } from '../debug';
+import { debugImap } from '../lib/debug';
 import { NEXT_MINE_MAIL, NEXTAUTH_PASSWORD_MINE } from '@/config';
 
 export const getMessageImap = (search?: string) => {

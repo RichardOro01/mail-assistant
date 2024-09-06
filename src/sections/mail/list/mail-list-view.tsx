@@ -1,6 +1,6 @@
 import React from 'react';
 import { debugRendering } from '@/lib/debug/debuggers';
-import { getConversations } from '@/server/services/email';
+import { getConversations } from '@/services/email';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import MailListHeader from './mail-list-header';
 import MailListTable from '@/sections/mail/list/mail-list-table';

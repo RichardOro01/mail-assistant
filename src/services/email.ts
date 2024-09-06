@@ -1,7 +1,7 @@
 // import { z } from "zod";
 // import { publicProcedure } from "../trpc";
-import { checkEmail, conversationAdapter } from '../utils';
-import { getMessageImap } from '@/lib/services/imap-service';
+import { checkEmail, conversationAdapter } from '../server/utils';
+import { getMessageImap } from '@/services/imap-service';
 import { debugImap } from '@/lib/debug';
 
 // export const getConversationss = publicProcedure
