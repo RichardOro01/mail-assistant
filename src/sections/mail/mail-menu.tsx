@@ -1,15 +1,13 @@
 'use client';
-import { IConversation } from '@/types/email';
+
+import { useMailContext } from '@/sections/mail/provider/hooks';
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
 
-interface MenuCardProps {
-  conversation: IConversation | undefined;
-}
-
-const MenuCard: React.FC<MenuCardProps> = ({ conversation }) => {
+const MailMenu: React.FC = () => {
+  const { selectedMail: conversation } = useMailContext();
   return (
     <div
-      className='h-screen max-w-[300px] min-w-[300px] border bg-slate-50 border-slate-100 lg:min-w-[400px]'
+      className='h-screen w-[300px] border bg-slate-50 border-slate-100 lg:w-[400px]'
       style={{
         boxShadow: 'rgba(0, 0, 0, 0.05) 0px 0px 14px 17px inset'
       }}>
@@ -33,4 +31,4 @@ const MenuCard: React.FC<MenuCardProps> = ({ conversation }) => {
   );
 };
 
-export default MenuCard;
+export default MailMenu;

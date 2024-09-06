@@ -5,14 +5,14 @@ type MailCardHeaderProps = {
   title: string | null;
 };
 
-const MailCardHeader: React.FC<MailCardHeaderProps> = ({ title }) => {
+const MailMessageCardHeader: React.FC<MailCardHeaderProps> = ({ title }) => {
   return (
     <div className='flex justify-between'>
       {title ? (
         <>
           <h2 className='text-2xl font-semibold'>{title}</h2>
           <div className='flex ml-2 gap-4 items-center'>
-            <button>
+            <button title='check'>
               <Check color='gray' size={18} />
             </button>
             <Clock color='gray' size={18} />
@@ -26,4 +26,4 @@ const MailCardHeader: React.FC<MailCardHeaderProps> = ({ title }) => {
   );
 };
 
-export default MailCardHeader;
+export default MailMessageCardHeader;

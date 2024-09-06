@@ -1,15 +1,16 @@
 'use client';
+
 import { IConversation } from '@/types/email';
 import { format } from 'date-fns';
 import DOMPurify from 'dompurify';
-import { Separator } from '../ui/separator';
+import { Separator } from '../../../../components/ui/separator';
 import { Ellipsis } from 'lucide-react';
 
 type MailCardContentProps = {
   conversation: IConversation;
 };
 
-const MailCardContent: React.FC<MailCardContentProps> = ({ conversation }) => {
+const MailMessageCardContent: React.FC<MailCardContentProps> = ({ conversation }) => {
   return (
     <div className='flex flex-col mx-5 my-3 gap-5'>
       {conversation?.emails.map((email, index) => (
@@ -26,11 +27,11 @@ const MailCardContent: React.FC<MailCardContentProps> = ({ conversation }) => {
           {index !== conversation?.emails.length - 1 && <Separator className='mt-6' />}
         </div>
       ))}
-      <button>
+      <button title='Ellipsis'>
         <Ellipsis />
       </button>
     </div>
   );
 };
 
-export default MailCardContent;
+export default MailMessageCardContent;

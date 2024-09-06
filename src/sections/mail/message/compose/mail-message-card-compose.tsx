@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
-import { Textarea } from '../ui/textarea';
-import { Input } from '../ui/input';
-import { Label } from '../ui/label';
+import { Textarea } from '../../../../components/ui/textarea';
+import { Input } from '../../../../components/ui/input';
+import { Label } from '../../../../components/ui/label';
 
-const MailCardCompose = () => {
+const MailMessageCardCompose = () => {
   const [text, setText] = useState('');
   const [to, setTo] = useState('');
   const [subject, setSubject] = useState('');
@@ -77,4 +77,4 @@ const MailCardCompose = () => {
   );
 };
 
-export default MailCardCompose;
+export default MailMessageCardCompose;

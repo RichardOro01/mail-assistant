@@ -1,10 +1,10 @@
+import './globals.css';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
-import './globals.css';
-import { I18NProvider } from '@/i18n/context';
-import acceptLanguage from 'accept-language';
 import { getCurrentLanguage } from '@/i18n';
 import { languages } from '@/i18n/settings';
+import acceptLanguage from 'accept-language';
+import { I18NProvider } from '@/i18n/context';
 import { AuthProvider } from '@/auth/context';
 
 const inter = Inter({ subsets: ['latin'] });

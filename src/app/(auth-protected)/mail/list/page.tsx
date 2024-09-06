@@ -1,10 +1,9 @@
-import ShortcutTab from '@/components/tab/shortcut-tab';
-import { getConversations } from '@/server/services/email';
+import { debugRendering } from '@/lib/debug';
+import MailListView from '@/sections/mail/list/mail-list-view';
 
 const MailList = async () => {
-  const conversations = await getConversations();
-
-  return <ShortcutTab conversations={conversations.reverse()} />;
+  debugRendering('MailList');
+  return <MailListView />;
 };
 
 export default MailList;

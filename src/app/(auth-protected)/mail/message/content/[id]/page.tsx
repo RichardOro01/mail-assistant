@@ -1,16 +1,13 @@
-import MailCard from '@/components/card/mail-card';
-import { getConversationById } from '@/server/services/email';
+import MailMessageContentView from '@/sections/mail/message/content/mail-message-content-view';
 
-interface MailContentProps {
+interface MailContentPageProps {
   params: {
     id: string;
   };
 }
 
-const MailContent: React.FC<MailContentProps> = async ({ params }) => {
-  const conversation = await getConversationById(params.id);
-
-  return <MailCard conversation={conversation} />;
+const MailContentPage: React.FC<MailContentPageProps> = async ({ params: { id } }) => {
+  return <MailMessageContentView conversationId={id} />;
 };
 
-export default MailContent;
+export default MailContentPage;

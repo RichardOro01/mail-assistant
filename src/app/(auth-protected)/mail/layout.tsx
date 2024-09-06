@@ -1,21 +1,13 @@
-'use client';
-import { useState } from 'react';
-import MenuCard from '@/components/card/menu-card';
-import { IConversation } from '@/types/email';
+import MailLayout from '@/sections/mail/mail-layout';
+import MailProvider from '@/sections/mail/provider/mail-provider';
 import { LayoutBaseProps } from '@/types/utils';
-import { MailSelected } from '@/components/layout/mail-context';
 
-const CardLayout = ({ children }: LayoutBaseProps) => {
-  const [selectedMail, setSelectedMail] = useState<IConversation | undefined>();
-
+const Layout = ({ children }: LayoutBaseProps) => {
   return (
-    <MailSelected.Provider value={{ selectedMail, setSelectedMail }}>
-      <div className='flex justify-between'>
-        <main className='flex max-h-screen overflow-y-auto'>{children}</main>
-        <MenuCard conversation={selectedMail} />
-      </div>
-    </MailSelected.Provider>
+    <MailProvider>
+      <MailLayout>{children}</MailLayout>
+    </MailProvider>
   );
 };
 
-export default CardLayout;
+export default Layout;

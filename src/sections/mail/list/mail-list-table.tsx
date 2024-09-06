@@ -1,18 +1,19 @@
 import { IConversation } from '@/types/email';
-import { Table, TableBody, TableCell, TableRow } from '../ui/table';
+import { Table, TableBody, TableCell, TableRow } from '../../../components/ui/table';
 import { format } from 'date-fns';
-import { useContext, useState } from 'react';
+import { useState } from 'react';
 import { Check, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { MailSelected } from '../layout/mail-context';
+import { routes } from '@/lib/routes';
+import { useMailContext } from '@/sections/mail/provider/hooks';
 
-interface MailProps {
+interface MailListTable {
   conversations: IConversation[];
 }
 
-const EmailsTable: React.FC<MailProps> = ({ conversations }) => {
+const MailListTable: React.FC<MailListTable> = ({ conversations }) => {
   const [showOptions, setShowOptions] = useState<number | null>(null);
-  const { selectedMail } = useContext(MailSelected);
+  const { selectedMail } = useMailContext();
   const route = useRouter();
 
   return (
@@ -28,14 +29,14 @@ const EmailsTable: React.FC<MailProps> = ({ conversations }) => {
             onMouseLeave={() => setShowOptions(null)}>
             <TableCell
               className={`w-[150px] py-3 ${selectedMail?.id === conversation.id ? 'border-l-4 border-blue-400' : ''}`}
-              onClick={() => route.push(`mail-message/mail-content/${conversation.id}`)}>
+              onClick={() => route.push(`${routes.mail.message.content}/${conversation.id}`)}>
               <span className='line-clamp-1'>
                 {conversation.emails[0].from.name
                   ? conversation.emails[0].from.name
                   : conversation.emails[0].from.email}
               </span>
             </TableCell>
-            <TableCell className='py-3' onClick={() => route.push(`mail-message/mail-content/${conversation.id}`)}>
+            <TableCell className='py-3' onClick={() => route.push(`${routes.mail.message.content}/${conversation.id}`)}>
               <span className='line-clamp-1'>
                 {conversation.subject}
                 <span className='ml-5'>{conversation.emails[0].text}</span>
@@ -64,4 +65,4 @@ const EmailsTable: React.FC<MailProps> = ({ conversations }) => {
   );
 };
 
-export default EmailsTable;
+export default MailListTable;
