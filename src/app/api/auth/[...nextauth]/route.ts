@@ -1,7 +1,7 @@
-import { paths } from '@/config';
 import NextAuth, { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { debugAuth } from '@/lib/debug';
+import { routes } from '@/lib/routes';
 
 const authOptions: NextAuthOptions = {
   providers: [
@@ -50,7 +50,7 @@ const authOptions: NextAuthOptions = {
   ],
 
   pages: {
-    signIn: paths.login
+    signIn: routes.login
   }
 };
 

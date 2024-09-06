@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { paths } from '@/config';
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { LoginRequest } from './types';
@@ -11,6 +10,7 @@ import { debugRendering } from '@/lib/debug';
 import FormProvider from '@/components/form-hook/form-provider';
 import { useLoginForm } from './login-hooks';
 import { useToast } from '@/hooks/use-toast';
+import { routes } from '@/lib/routes';
 
 const LoginFormContainer = () => {
   debugRendering('LoginFormContainer');
@@ -37,7 +37,7 @@ const LoginFormContainer = () => {
           description: t(res.error)
         });
       } else if (res?.status === 200) {
-        router.replace(returnTo || paths.app.root);
+        router.replace(returnTo || routes.mail.list);
       } else {
         toast({
           variant: 'destructive',

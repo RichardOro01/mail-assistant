@@ -7,10 +7,3 @@ export const NEXT_MINE_MAIL = process.env.NEXT_MINE_MAIL;
 export const NEXT_OPENAI_API_KEY = process.env.NEXT_OPENAI_API_KEY;
 export const SESSION_EXPIRES_DAYS = Number(process.env.SESSION_EXPIRES_DAYS) || 1;
 export const NEXTAUTH_PASSWORD_MINE = process.env.NEXTAUTH_PASSWORD_MINE;
-
-export const paths = {
-  app: {
-    root: '/'
-  },
-  login: '/login/'
-};

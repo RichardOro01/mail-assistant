@@ -5,7 +5,7 @@ import { routes } from '@/lib/routes';
 
 const ProtectedPage: React.FC = () => {
   debugRendering('ProtectedPage');
-  redirect(routes.mailList);
+  redirect(routes.mail.list);
 };
 
 export default ProtectedPage;

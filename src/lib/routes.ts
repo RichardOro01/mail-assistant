@@ -1,9 +1,9 @@
 export const routes = {
   root: '/',
   login: '/login/',
-  mail: '/mail/',
-  mailList: '/mail/list/',
-  mailView: '/mail/view/',
-  mailCompose: '/mail/compose/',
-  mailEdit: '/mail/edit/'
+  mail: {
+    root: '/mail/',
+    list: '/mail/list/',
+    message: { root: '/mail/message/', compose: '/mail/message/compose/', content: '/mail/message/content/' }
+  }
 };

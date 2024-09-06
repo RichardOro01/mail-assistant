@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 import { useContext, useState } from 'react';
 import { Check, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { MailSelected } from '@/app/(auth-protected)/mail/layout';
+import { MailSelected } from '../layout/mail-context';
 
 interface MailProps {
   conversations: IConversation[];
@@ -44,10 +44,10 @@ const EmailsTable: React.FC<MailProps> = ({ conversations }) => {
             <TableCell className='min-w-[100px] text-right py-0'>
               {showOptions === index ? (
                 <div className='flex gap-2 justify-end'>
-                  <button>
+                  <button title='check'>
                     <Check size={18} color='gray' />
                   </button>
-                  <button onClick={() => console.log('eliminar')}>
+                  <button title='delete' onClick={() => console.log('eliminar')}>
                     <Trash2 size={18} color='gray' />
                   </button>
                 </div>

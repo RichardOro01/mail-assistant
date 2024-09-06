@@ -4,7 +4,7 @@ import { useContext, useEffect } from 'react';
 import MailCardHeader from '../layout/mail-card-header';
 import MailCardContent from '../layout/mail-card-content';
 import MailCardCompose from '../layout/mail-card-compose';
-import { MailSelected } from '@/app/(auth-protected)/mail/layout';
+import { MailSelected } from '../layout/mail-context';
 
 type MailCardProps = {
   conversation?: IConversation;
