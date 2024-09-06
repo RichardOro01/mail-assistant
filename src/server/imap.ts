@@ -3,7 +3,7 @@ import { NEXT_MAIL_SERVER_HOST, NEXT_IMAP_MAIL_SERVER_PORT } from '@/config';
 import { debugImap } from '@/lib/debug';
 import { ImapWithConfig } from '@/types/imap';
 import Imap from 'imap';
-// import { getServerSession } from "next-auth";
+import { getServerSession } from 'next-auth';
 
 interface ImapInstance {
   expireTimer: NodeJS.Timeout;
@@ -68,19 +68,13 @@ export const createImapInstance = (email: string, password: string) => {
   return imap;
 };
 
-export const getImapInstance = () => {
+export const getImapInstance = async () => {
   debugImap('Getting IMAP instance');
-  // const session = await getServerSession();
-  // if (
-  //   session &&
-  //   session.user &&
-  //   session.user.email &&
-  //   session.user.email in imapInstances
-  // ) {
-  debugImap('\x1b[32mIMAP instance success');
-  //   return imapInstances[session.user.email].imap;
-  // }
-  // debugImap("\x1b[33mNo IMAP instance");
-  // return null;
-  return imapInstances['isabella.gl@avangenio.com'].imap;
+  const session = await getServerSession();
+  if (session && session.user && session.user.email && session.user.email in imapInstances) {
+    debugImap('\x1b[32mIMAP instance success');
+    return imapInstances[session.user.email].imap;
+  }
+  debugImap('\x1b[33mNo IMAP instance');
+  return null;
 };

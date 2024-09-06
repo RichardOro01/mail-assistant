@@ -1,4 +1,3 @@
-// import { TRPCError } from "@trpc/server";
 // import { getServerSession } from "next-auth";
 import { IMessageInfoImap, IMessagePerson } from '@/types/imap';
 import { IConversation } from '@/types/email';

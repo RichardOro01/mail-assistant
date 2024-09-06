@@ -1,8 +1,8 @@
 // import { z } from "zod";
 // import { publicProcedure } from "../trpc";
 import { checkEmail, conversationAdapter } from '../server/utils';
-import { getMessageImap } from '@/services/imap';
 import { debugImap } from '@/lib/debug';
+import { imapService } from './imap';
 // import { addImapInstance, createImapInstance } from '@/server/imap';
 // import { ImapWithConfig } from '@/types/imap';
 // import { CustomError } from '@/lib/error/custom-error';
@@ -20,7 +20,7 @@ import { debugImap } from '@/lib/debug';
 export const getConversations = async () => {
   debugImap('Getting conversations');
   await checkEmail();
-  const messages = await getMessageImap();
+  const messages = await imapService.getMessages();
   debugImap(`\x1b[32mConversations success (${messages.length} messages)`);
   return conversationAdapter(messages);
 };
@@ -40,7 +40,7 @@ export const getConversations = async () => {
 
 export const getConversationById = async (idConversation: string) => {
   debugImap(`Getting conversation by id: ${idConversation}`);
-  const messages = await getMessageImap();
+  const messages = await imapService.getMessages();
   const conversations = conversationAdapter(messages);
   debugImap('\x1b[32mConversation by id success');
   return conversations.find((conversation) => conversation.id === idConversation);
