@@ -4,6 +4,7 @@ import { debugAuth, debugImap } from '@/lib/debug';
 import { routes } from '@/lib/routes';
 import { imapService } from '@/services/imap';
 import { getStandardErrorMessageServer } from '@/lib/error/server-functions';
+import { sessionExpiresTime } from '@/auth/utils';
 
 const authOptions: NextAuthOptions = {
   providers: [
@@ -43,7 +44,9 @@ const authOptions: NextAuthOptions = {
       }
     })
   ],
-
+  session: {
+    maxAge: sessionExpiresTime
+  },
   pages: {
     signIn: routes.login
   }
