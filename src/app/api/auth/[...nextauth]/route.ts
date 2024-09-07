@@ -49,6 +49,20 @@ const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: routes.login
+  },
+  callbacks: {
+    jwt: ({ user, token }) => {
+      if (user && token) {
+        token.email = user.email;
+      }
+      return token;
+    },
+    session: ({ token, session }) => {
+      if (token && session) {
+        session.user.email = token.email ?? '';
+      }
+      return session;
+    }
   }
 };
 
