@@ -6,4 +6,15 @@ export interface ISendEmailRequest {
   text: string;
 }
 
+export interface IReplyEmailRequest {
+  text: string;
+  replyTo: string | string[];
+  messageId: string;
+}
+
+export interface IReplyEmailForm {
+  text: string;
+}
+
 export type ISendEmailResponse = SentMessageInfo;
+export type IReplyEmailResponse = SentMessageInfo;

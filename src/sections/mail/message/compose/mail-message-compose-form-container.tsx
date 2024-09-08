@@ -1,3 +1,5 @@
+'use client';
+
 import { emailService } from '@/services';
 import { useHandleError } from '@/lib/error/hooks';
 import FormProvider from '@/components/form-hook/form-provider';

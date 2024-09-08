@@ -1,10 +1,10 @@
 import React from 'react';
 import { debugRendering } from '@/lib/debug/debuggers';
-import MailMessageCard from '../mail-message-card';
+import MailMessageComposeCard from './mail-message-compose-card';
 
 const MailMessageComposeView: React.FC = () => {
   debugRendering('MailMessageComposeView');
-  return <MailMessageCard />;
+  return <MailMessageComposeCard />;
 };
 
 export default MailMessageComposeView;

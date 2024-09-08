@@ -1,7 +1,8 @@
-import { ISendEmailRequest } from '@/types/smtp';
+import { IReplyEmailRequest, ISendEmailRequest } from '@/types/smtp';
 import { fetcher } from './fetcher';
-import { sendEmail } from './smtp';
+import { replyEmail, sendEmail } from './smtp';
 
 export const emailService = {
-  sendEmail: (data: ISendEmailRequest) => fetcher(() => sendEmail(data))
+  sendEmail: (data: ISendEmailRequest) => fetcher(() => sendEmail(data)),
+  replyEmail: (data: IReplyEmailRequest) => fetcher(() => replyEmail(data))
 };

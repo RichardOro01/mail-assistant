@@ -25,8 +25,7 @@ const MailMessageComposeForm = () => {
         autoSize
         placeholder='Say hello'
         rows={5}
-        className='w-full px-0 text-lg font-medium resize-none bg-transparent border-none focus-visible:ring-0 focus-visible:ring-offset-0'
-        style={{ overflow: 'hidden' }}
+        className='w-full px-0 text-lg font-medium resize-none bg-transparent overflow-hidden border-none'
       />
       <MailMessageComposeButtons />
     </div>
