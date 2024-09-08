@@ -6,12 +6,17 @@ import { useFormContext } from 'react-hook-form';
 const MailMessageComposeButtons: React.FC = () => {
   debugRendering('MailMessageComposeButtons');
   const {
-    formState: { isSubmitting }
+    formState: { isSubmitting, isValid }
   } = useFormContext();
 
   return (
     <div className='flex gap-4'>
-      <Button className='font-semibold' type='submit' loading={isSubmitting} variant='secondary'>
+      <Button
+        className='font-semibold'
+        type='submit'
+        loading={isSubmitting}
+        disabled={isSubmitting || !isValid}
+        variant='secondary'>
         Send
       </Button>
       <Button variant='outline' type='button'>
