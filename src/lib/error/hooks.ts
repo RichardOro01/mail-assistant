@@ -1,9 +1,8 @@
 import { useTranslationClient } from '@/i18n/client';
 import { useCallback } from 'react';
-import { generalErrorCodes } from './error';
+import { generalErrorCodes, isInstanceOfStandardError } from './error';
 import { IHandleErrorOptions } from './types';
 import { toast } from '@/hooks/use-toast';
-import { StandardError } from './custom-error';
 
 export const useHandleError = (translateFile?: string) => {
   const { t } = useTranslationClient('error');
@@ -25,11 +24,11 @@ export const useHandleError = (translateFile?: string) => {
 
   const handleStandardError = useCallback(
     (error: unknown, options?: IHandleErrorOptions) => {
-      if (error instanceof StandardError) {
-        const isGeneral = generalErrorCodes.includes(error.code);
+      if (isInstanceOfStandardError(error)) {
+        const isGeneral = generalErrorCodes.includes(error.detail.code);
         const tFunction = isGeneral ? t : t2;
-        const errorCode = isGeneral ? error.code : `error.${error.code}`;
-        const message = tFunction(errorCode, { defaultValue: error.message });
+        const errorCode = isGeneral ? error.detail.code : `error.${error.detail.code}`;
+        const message = tFunction(errorCode, { defaultValue: error.detail.message });
         if (options?.showToast) toast({ title: message, variant: 'destructive' });
         return message;
       } else {

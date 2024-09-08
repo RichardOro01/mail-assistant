@@ -1,6 +1,5 @@
 import { translationServer } from '@/i18n';
-import { generalErrorCodes } from './error';
-import { StandardError } from './custom-error';
+import { generalErrorCodes, isInstanceOfStandardError } from './error';
 
 export const getGeneralErrorMessageServer = async (error: unknown) => {
   const { t } = await translationServer('error');
@@ -14,11 +13,11 @@ export const getGeneralErrorMessageServer = async (error: unknown) => {
 };
 
 export const getStandardErrorMessageServer = async (error: unknown, translateFile?: string) => {
-  if (error instanceof StandardError) {
-    const isGeneral = generalErrorCodes.includes(error.code);
+  if (isInstanceOfStandardError(error)) {
+    const isGeneral = generalErrorCodes.includes(error.detail.code);
     const { t } = await translationServer(isGeneral ? 'error' : translateFile);
-    const errorCode = isGeneral ? error.code : `error.${error.code}`;
-    const message = t(errorCode, { defaultValue: error.message });
+    const errorCode = isGeneral ? error.detail.code : `error.${error.detail.code}`;
+    const message = t(errorCode, { defaultValue: error.detail.message });
     return message;
   } else {
     return getGeneralErrorMessageServer(error);

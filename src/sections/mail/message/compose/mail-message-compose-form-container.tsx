@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 import { routes } from '@/lib/routes';
 
 const MailMessageComposeFormContainer = () => {
-  const { handleStandardError } = useHandleError();
+  const { handleStandardError } = useHandleError('message-compose');
   const { t } = useTranslationClient('message-compose');
   const router = useRouter();
 

@@ -1,11 +1,11 @@
 import { createImapInstance } from '@/server/imap';
 import { IMessageInfoImap, ImapWithConfig } from '@/types/imap';
 import { debugImap } from '../lib/debug';
-import { StandardError } from '@/lib/error/custom-error';
 import { simpleParser } from 'mailparser';
 import { emailToAdapter } from '@/server/utils';
 import { createSmtpInstance } from '@/server/smtp';
 import { addEmailInstance, getEmailInstance } from '@/server/email';
+import { FetchError, StandardError } from './types';
 
 export const imapService = {
   auth: (email: string, password: string) => {
@@ -25,8 +25,16 @@ export const imapService = {
       //TODO fix type
       imap.once('error', (error: { textCode: string }) => {
         if (error.textCode === 'AUTHENTICATIONFAILED')
-          reject(new StandardError('invalid_credentials', 'Invalid Credentials.'));
-        reject(new StandardError('unknown', 'Something wen wrong.'));
+          reject({
+            detail: { code: 'invalid_credentials', message: 'Invalid Credentials.' },
+            status: 401,
+            statusText: 'Invalid Credentials.'
+          } as FetchError<StandardError>);
+        reject({
+          detail: { code: 'unknown', message: 'Something wen wrong.' },
+          status: 500,
+          statusText: 'Internal Server Error.'
+        } as FetchError<StandardError>);
       });
       debugImap('Imap connecting \x1b[34m', email);
       imap.connect();
@@ -39,7 +47,11 @@ export const imapService = {
       const email = await getEmailInstance();
       if (!email) {
         debugImap('\x1b[31mRejecting cause no IMAP instance');
-        reject(new StandardError('imap_instance_not_found', 'No imap instance'));
+        reject({
+          detail: { code: 'imap_instance_not_found', message: 'No imap instance' },
+          status: 500,
+          statusText: 'Internal Server Error.'
+        } as FetchError<StandardError>);
       } else {
         const { imap } = email;
         imap.openBox('INBOX', true, function (err) {

@@ -1,3 +1,4 @@
 {
-  "success": "Correo enviado exitosamente."
+  "success": "Correo enviado exitosamente.",
+  "error": { "send_email_timeout": "Error al conectar con el servidor de correo." }
 }
