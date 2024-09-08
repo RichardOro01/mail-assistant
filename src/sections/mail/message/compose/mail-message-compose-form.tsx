@@ -1,7 +1,7 @@
-import { Textarea } from '../../../../components/ui/textarea';
 import { Label } from '../../../../components/ui/label';
 import FormInput from '@/components/form-hook/form-input';
 import MailMessageComposeButtons from './mail-message-compose-buttons';
+import FormTextarea from '@/components/form-hook/form-textarea';
 
 const MailMessageComposeForm = () => {
   return (
@@ -21,7 +21,8 @@ const MailMessageComposeForm = () => {
         placeholder='Subject'
         className='w-full px-0 mb-4 text-lg font-bold border-none focus-visible:ring-0 focus-visible:ring-offset-0'
       />
-      <Textarea
+      <FormTextarea
+        name='text'
         autoSize
         placeholder='Say hello'
         rows={5}
