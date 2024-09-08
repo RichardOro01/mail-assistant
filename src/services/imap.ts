@@ -1,16 +1,20 @@
-import { addImapInstance, createImapInstance, getImapInstance } from '@/server/imap';
+import { createImapInstance } from '@/server/imap';
 import { IMessageInfoImap, ImapWithConfig } from '@/types/imap';
 import { debugImap } from '../lib/debug';
 import { StandardError } from '@/lib/error/custom-error';
 import { simpleParser } from 'mailparser';
 import { emailToAdapter } from '@/server/utils';
+import { createSmtpInstance } from '@/server/smtp';
+import { addEmailInstance, getEmailInstance } from '@/server/email';
 
 export const imapService = {
   auth: (email: string, password: string) => {
     const imap = createImapInstance(email, password) as ImapWithConfig;
+
     return new Promise<ImapWithConfig>((resolve, reject) => {
       imap.once('ready', () => {
-        addImapInstance(imap);
+        const smtp = createSmtpInstance(email, password);
+        addEmailInstance(imap, smtp);
         debugImap('Imap open \x1b[34m', email);
         resolve(imap);
       });
@@ -32,11 +36,12 @@ export const imapService = {
     debugImap('Getting messages');
     const messages: IMessageInfoImap[] = [];
     return new Promise<IMessageInfoImap[]>(async (resolve, reject) => {
-      const imap = await getImapInstance();
-      if (!imap) {
+      const email = await getEmailInstance();
+      if (!email) {
         debugImap('\x1b[31mRejecting cause no IMAP instance');
         reject(new StandardError('imap_instance_not_found', 'No imap instance'));
       } else {
+        const { imap } = email;
         imap.openBox('INBOX', true, function (err) {
           if (err) throw err;
           debugImap('Searching', search);

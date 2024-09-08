@@ -2,12 +2,15 @@ import { useState, useRef, useEffect } from 'react';
 import { Textarea } from '../../../../components/ui/textarea';
 import { Input } from '../../../../components/ui/input';
 import { Label } from '../../../../components/ui/label';
+import { emailService } from '@/services';
+import { useHandleError } from '@/lib/error/hooks';
 
 const MailMessageCardCompose = () => {
   const [text, setText] = useState('');
   const [to, setTo] = useState('');
   const [subject, setSubject] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const { handleStandardError } = useHandleError();
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -18,22 +21,11 @@ const MailMessageCardCompose = () => {
 
   const sendMail = async () => {
     try {
-      const response = await fetch('/api/smtp-service', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ to, subject, text })
-      });
+      const response = await emailService.sendEmail({ to, subject, text });
 
-      if (!response.ok) {
-        throw new Error('Failed to send email');
-      }
-
-      const result = await response.json();
-      console.log('Email sent:', result.messageId);
+      console.log('Email sent:', response);
     } catch (error) {
-      console.error('Error sending email:', error);
+      handleStandardError(error, { showToast: true });
     }
   };
 
