@@ -1,6 +1,7 @@
 import { Textarea } from '../../../../components/ui/textarea';
 import { Label } from '../../../../components/ui/label';
 import FormInput from '@/components/form-hook/form-input';
+import MailMessageComposeButtons from './mail-message-compose-buttons';
 
 const MailMessageComposeForm = () => {
   return (
@@ -27,12 +28,7 @@ const MailMessageComposeForm = () => {
         className='w-full px-0 text-lg font-medium resize-none bg-transparent border-none focus-visible:ring-0 focus-visible:ring-offset-0'
         style={{ overflow: 'hidden' }}
       />
-      <div className='flex gap-4'>
-        <button className='font-semibold' type='submit'>
-          Send
-        </button>
-        <button>Send later</button>
-      </div>
+      <MailMessageComposeButtons />
     </div>
   );
 };
