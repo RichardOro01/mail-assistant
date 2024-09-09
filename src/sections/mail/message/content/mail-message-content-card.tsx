@@ -5,8 +5,9 @@ import { format } from 'date-fns';
 import DOMPurify from 'dompurify';
 import { Separator } from '../../../../components/ui/separator';
 import { Reply } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import MailMessageReplyContainer from './reply/mail-message-reply-container';
+import { useMailContext } from '../../provider/hooks';
 
 type MailMessageContentCardProps = {
   conversation: IConversation;
@@ -14,6 +15,12 @@ type MailMessageContentCardProps = {
 
 const MailMessageContentCard: React.FC<MailMessageContentCardProps> = ({ conversation }) => {
   const [showReply, setShowReply] = useState(false);
+  const { setSelectedMail } = useMailContext();
+
+  useEffect(() => {
+    setSelectedMail(conversation);
+  }, [conversation, setSelectedMail]);
+
   const htmlContent = useMemo(
     () => (
       <div className='flex flex-col gap-5'>
