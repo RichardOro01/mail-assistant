@@ -1,6 +1,8 @@
 {
   "ai": "AI",
   "title": "Messages",
+  "view": "View",
+  "delete": "Delete",
   "summary": "Summary",
   "compose": "Compose",
   "search": "Search",

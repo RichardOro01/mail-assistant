@@ -30,11 +30,14 @@ export const imapService = {
             status: 401,
             statusText: 'Invalid Credentials.'
           } as FetchError<StandardError>);
-        reject({
-          detail: { code: 'unknown', message: 'Something wen wrong.' },
-          status: 500,
-          statusText: 'Internal Server Error.'
-        } as FetchError<StandardError>);
+        else {
+          console.error(error);
+          reject({
+            detail: { code: 'unknown', message: 'Something wen wrong.' },
+            status: 500,
+            statusText: 'Internal Server Error.'
+          } as FetchError<StandardError>);
+        }
       });
       debugImap('Imap connecting \x1b[34m', email);
       imap.connect();

@@ -1,6 +1,8 @@
 {
   "ai": "IA",
   "title": "Mensajes",
+  "view": "View",
+  "delete": "Delete",
   "summary": "Resumen",
   "compose": "Redactar",
   "search": "Buscar",
