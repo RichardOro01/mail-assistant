@@ -1,6 +1,6 @@
 import React from 'react';
 import { debugRendering } from '@/lib/debug/debuggers';
-import { getConversationById } from '@/services/email';
+import { getEmailById } from '@/services/email';
 import GeneralError from '@/components/error/general-error';
 import { routes } from '@/lib/routes';
 import { redirect } from 'next/navigation';
@@ -16,15 +16,16 @@ interface MailMessageContentViewProps {
 const MailMessageContentView: React.FC<MailMessageContentViewProps> = async ({ conversationId }) => {
   try {
     debugRendering('MailMessageContentView');
-    const conversation = await getConversationById(conversationId);
+    const conversation = await getEmailById(conversationId);
     if (!conversation) redirect(routes.mail.list);
     return (
-      <div className='flex flex-col my-4 px-8'>
+      <div className='flex flex-col my-4 px-8 w-full'>
         <MailMessageContentHeader subject={conversation.subject} />
         <MailMessageContentCard conversation={conversation} />
       </div>
     );
-  } catch {
+  } catch (e) {
+    console.error(e);
     return <GeneralError />;
   }
 };

@@ -32,7 +32,7 @@ const MailMessageContentCard: React.FC<MailMessageContentCardProps> = ({ convers
             </div>
             <div
               dangerouslySetInnerHTML={{
-                __html: `${DOMPurify.sanitize(conversation ? email.html : '')}`
+                __html: `${DOMPurify.sanitize(conversation ? (email.html ? email.html : email.text) : '')}`
               }}
               className='mt-2 text-sm'></div>
             {index !== conversation?.emails.length - 1 && <Separator className='mt-6' />}

@@ -27,6 +27,7 @@ export interface IMessageInfoImap {
   subject?: string;
   html: string | false;
   text?: string;
+  id?: string;
 }
 
 export interface IMessagePerson {

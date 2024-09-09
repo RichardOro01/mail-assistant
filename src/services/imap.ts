@@ -45,6 +45,11 @@ export const imapService = {
     const messages: IMessageInfoImap[] = [];
     return new Promise<IMessageInfoImap[]>(async (resolve, reject) => {
       const email = await getEmailInstance();
+      let receiving = true;
+      const finish = () => {
+        if (!receiving) resolve(messages);
+        else setTimeout(finish, 100);
+      };
       if (!email) {
         debugImap('\x1b[31mRejecting cause no IMAP instance');
         reject({
@@ -69,6 +74,7 @@ export const imapService = {
               let headerBuffer = '';
               msg.on('body', function (stream) {
                 stream.on('data', function (chunk) {
+                  receiving = true;
                   headerBuffer += chunk.toString('utf8');
                 });
                 stream.once('end', async function () {
@@ -79,8 +85,10 @@ export const imapService = {
                     date: parsed.date,
                     subject: parsed.subject,
                     html: parsed.html,
-                    text: parsed.text
+                    text: parsed.text,
+                    id: parsed.messageId
                   });
+                  receiving = false;
                 });
               });
             });
@@ -89,7 +97,72 @@ export const imapService = {
               reject(err);
             });
             fetcher.once('end', function () {
-              resolve(messages);
+              finish();
+            });
+          });
+        });
+      }
+    });
+  },
+  getMessageById: (id: string) => {
+    return new Promise<IMessageInfoImap>(async (resolve, reject) => {
+      const email = await getEmailInstance();
+      let message: IMessageInfoImap;
+      let receiving = true;
+
+      const finish = () => {
+        if (!receiving) resolve(message);
+        else setTimeout(finish, 100);
+      };
+      if (!email) {
+        debugImap('\x1b[31mRejecting cause no IMAP instance');
+        reject({
+          detail: { code: 'imap_instance_not_found', message: 'No imap instance' },
+          status: 500,
+          statusText: 'Internal Server Error.'
+        } as FetchError<StandardError>);
+      } else {
+        const { imap } = email;
+        imap.openBox('INBOX', true, function (err) {
+          if (err) throw err;
+          const decodedID = decodeURIComponent(id);
+          debugImap('Searching', decodedID);
+          imap.search([['HEADER', 'Message-ID', decodedID]], function (err, results) {
+            if (err) throw err;
+            debugImap('Fetching messages');
+            const fetcher = imap.seq.fetch(results[0], {
+              bodies: '',
+              struct: true
+            });
+            fetcher.on('message', function (msg) {
+              let headerBuffer = '';
+              msg.on('body', function (stream) {
+                receiving = true;
+                stream.on('data', function (chunk) {
+                  headerBuffer += chunk.toString('utf8');
+                });
+                stream.once('end', async function () {
+                  const parsed = await simpleParser(headerBuffer);
+                  message = {
+                    from: parsed.from?.value,
+                    to: emailToAdapter(parsed.to),
+                    date: parsed.date,
+                    subject: parsed.subject,
+                    html: parsed.html,
+                    text: parsed.text,
+                    id: parsed.messageId
+                  };
+                  message = message;
+                  receiving = false;
+                });
+              });
+            });
+            fetcher.once('error', function (err) {
+              console.log(err);
+              reject(err);
+            });
+            fetcher.once('end', function () {
+              finish();
             });
           });
         });

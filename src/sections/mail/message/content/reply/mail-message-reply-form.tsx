@@ -29,7 +29,7 @@ const MailMessageReplyForm: React.FC = () => {
     <div className='flex flex-col gap-2'>
       <FormTextarea
         name='text'
-        className='w-full text-lg font-medium resize-none bg-transparent'
+        className='w-full text-lg font-medium  bg-transparent'
         rows={5}
         placeholder={isLoading ? t('thinking') : ''}
         disabled={isLoading}
