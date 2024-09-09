@@ -10,4 +10,5 @@ export type LanguageOptions = (typeof languages)[number];
 
 export interface LanguageObject {
   readonly code: string;
+  readonly name: string;
 }

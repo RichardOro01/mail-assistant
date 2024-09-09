@@ -1,10 +1,10 @@
 import { createInstance } from 'i18next';
 import resourcesToBackend from 'i18next-resources-to-backend';
 import { initReactI18next } from 'react-i18next/initReactI18next';
-import { cookieI18Name, fallbackLng, getOptions, languages } from './settings';
+import { cookieI18Name, fallbackLng, getOptions, languageObjects, languages } from './settings';
 import { cookies } from 'next/headers';
 import acceptLanguage from 'accept-language';
-import { LanguageOptions } from './types';
+import { LanguageObject, LanguageOptions } from './types';
 
 acceptLanguage.languages(languages);
 
@@ -31,3 +31,5 @@ export async function translationServer(ns?: string, options: { keyPrefix?: stri
     i18n: i18nextInstance
   };
 }
+
+export const getLocales = (lang: string) => languageObjects.find(({ code }) => code === lang) as LanguageObject;

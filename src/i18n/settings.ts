@@ -2,10 +2,12 @@ import { LanguageObject, LanguageOptions } from './types';
 
 export const languageObjects: LanguageObject[] = [
   {
-    code: 'en'
+    code: 'en',
+    name: 'English'
   },
   {
-    code: 'es'
+    code: 'es',
+    name: 'Spanish'
   }
 ] as const;
 
