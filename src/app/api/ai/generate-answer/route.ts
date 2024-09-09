@@ -11,7 +11,7 @@ export async function POST(req: Request) {
   const { prompt }: IGenerateMessageRequest = await req.json();
 
   const result = await streamText({
-    system: systems.generateAnswer,
+    system: systems.generateAnswer(),
     model: openai.completion('gpt-3.5-turbo-instruct'),
     maxTokens: 2000,
     prompt

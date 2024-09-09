@@ -20,7 +20,7 @@ export async function POST(req: Request) {
   }
 
   const result = await streamText({
-    system: systems.generateSummary,
+    system: systems.generateSummary(),
     model: openai.completion('gpt-3.5-turbo-instruct'),
     maxTokens: 2000,
     prompt: messagesString
