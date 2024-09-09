@@ -7,10 +7,12 @@ import { Button } from '@/components/ui/button';
 import { useFormContext } from 'react-hook-form';
 import { IReplyEmailForm } from '@/types/smtp';
 import { useGenerateAnswerAI } from '@/services/hooks';
+import { useTranslationClient } from '@/i18n/client';
 
 const MailMessageReplyForm: React.FC = () => {
   const { completion, complete, isLoading, stop } = useGenerateAnswerAI();
   const { selectedMail } = useMailContext();
+  const { t } = useTranslationClient('message-reply');
 
   const generateAnswer = () => {
     if (selectedMail) complete(selectedMail.emails[0].text);
@@ -29,7 +31,7 @@ const MailMessageReplyForm: React.FC = () => {
         name='text'
         className='w-full text-lg font-medium resize-none bg-transparent'
         rows={5}
-        placeholder={isLoading ? 'Thinking...' : ''}
+        placeholder={isLoading ? t('thinking') : ''}
         disabled={isLoading}
       />
       <MailMessageReplyButtons />

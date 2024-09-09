@@ -1,10 +1,7 @@
 {
-  "title": "New message",
-  "to": "To",
-  "subject_placeholder": "Subject",
-  "text_placeholder": "Say hello",
   "send": "Send",
   "send_later": "Send later",
   "success": "Email sended successfully.",
+  "thinking": "Thinking...",
   "error": { "send_email_timeout": "Error connecting to email server." }
 }

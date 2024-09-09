@@ -11,10 +11,12 @@ import {
 } from '@/components/ui/dialog';
 import { useMailContext } from '../provider/hooks';
 import { useSummaryAI } from '@/services/hooks';
+import { useTranslationClient } from '@/i18n/client';
 
 const MailListSummary: React.FC = () => {
   debugRendering('MailListSummary');
 
+  const { t } = useTranslationClient('mail-list');
   const { complete, completion, isLoading } = useSummaryAI();
   const { mails } = useMailContext();
 
@@ -25,12 +27,12 @@ const MailListSummary: React.FC = () => {
 
   return (
     <Dialog modal>
-      <DialogTrigger onClick={handleGenerateSummary}>Summary</DialogTrigger>
+      <DialogTrigger onClick={handleGenerateSummary}>{t('summary')}</DialogTrigger>
       <DialogContent className='w-full max-w-[700px]'>
         <DialogHeader>
-          <DialogTitle>AI</DialogTitle>
+          <DialogTitle>{t('ai')}</DialogTitle>
           <DialogDescription>
-            <pre className='text-balance'>{isLoading && !completion ? 'Summing up...' : completion}</pre>
+            <pre className='text-balance'>{isLoading && !completion ? t('summing_up') : completion}</pre>
           </DialogDescription>
         </DialogHeader>
       </DialogContent>

@@ -1,10 +1,7 @@
 {
-  "title": "Nuevo mensaje",
-  "to": "Para",
-  "subject_placeholder": "Asunto",
-  "text_placeholder": "Di hola",
   "send": "Enviar",
   "send_later": "Enviar luego",
   "success": "Correo enviado exitosamente.",
+  "thinking": "Pensando...",
   "error": { "send_email_timeout": "Error al conectar con el servidor de correo." }
 }

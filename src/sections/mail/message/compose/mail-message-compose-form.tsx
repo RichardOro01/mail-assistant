@@ -2,13 +2,15 @@ import { Label } from '../../../../components/ui/label';
 import FormInput from '@/components/form-hook/form-input';
 import MailMessageComposeButtons from './mail-message-compose-buttons';
 import FormTextarea from '@/components/form-hook/form-textarea';
+import { useTranslationClient } from '@/i18n/client';
 
 const MailMessageComposeForm = () => {
+  const { t } = useTranslationClient('message-compose');
   return (
     <div className='flex flex-col mx-5 my-3 gap-3'>
       <div className='flex items-center gap-4 mb-4'>
         <Label htmlFor='to' className='text-lg font-semibold'>
-          To
+          {t('to')}
         </Label>
         <FormInput
           name='to'
@@ -18,13 +20,13 @@ const MailMessageComposeForm = () => {
       </div>
       <FormInput
         name='subject'
-        placeholder='Subject'
+        placeholder={t('subject_placeholder')}
         className='w-full px-0 mb-4 text-lg font-bold border-none focus-visible:ring-0 focus-visible:ring-offset-0'
       />
       <FormTextarea
         name='text'
         autoSize
-        placeholder='Say hello'
+        placeholder={t('text_placeholder')}
         rows={5}
         className='w-full px-0 text-lg font-medium resize-none bg-transparent overflow-hidden border-none'
       />

@@ -1,13 +1,12 @@
 'use client';
 
-import LanguageSwitcher from '@/components/language-switcher/language-switcher';
-import { Button } from '@/components/ui/button';
 import { useMailContext } from '@/sections/mail/provider/hooks';
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar';
-import { signOut } from 'next-auth/react';
+import MailMenuBottom from './mail-menu-bottom';
 
 const MailMenu: React.FC = () => {
   const { selectedMail: conversation } = useMailContext();
+
   return (
     <div
       className='h-screen w-[300px] flex flex-col justify-between border p-8 bg-slate-50 border-slate-100 lg:w-[400px]'
@@ -30,12 +29,7 @@ const MailMenu: React.FC = () => {
         </div>
         <div className='text-sm'>{conversation?.tags}</div>
       </div>
-      <div className='flex gap-2 justify-between'>
-        <LanguageSwitcher />
-        <Button onClick={() => signOut()} variant='destructive'>
-          Logout
-        </Button>
-      </div>
+      <MailMenuBottom />
     </div>
   );
 };
