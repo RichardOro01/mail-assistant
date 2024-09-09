@@ -3,7 +3,7 @@
 import { IConversation } from '@/types/email';
 import { Table, TableBody, TableCell, TableRow } from '../../../components/ui/table';
 import { format } from 'date-fns';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Check, Trash2 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { routes } from '@/lib/routes';
@@ -15,8 +15,12 @@ interface MailListTable {
 
 const MailListTable: React.FC<MailListTable> = ({ conversations }) => {
   const [showOptions, setShowOptions] = useState<number | null>(null);
-  const { selectedMail } = useMailContext();
+  const { selectedMail, setMails } = useMailContext();
   const route = useRouter();
+
+  useEffect(() => {
+    setMails(conversations);
+  }, [conversations, setMails]);
 
   return (
     <Table>
