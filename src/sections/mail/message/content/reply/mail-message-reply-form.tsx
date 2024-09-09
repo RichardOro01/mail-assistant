@@ -2,15 +2,14 @@ import React, { useEffect } from 'react';
 import { debugRendering } from '@/lib/debug/debuggers';
 import FormTextarea from '@/components/form-hook/form-textarea';
 import MailMessageReplyButtons from './mail-message-reply-buttons';
-import { useCompletion } from 'ai/react';
-import { endpoints } from '@/lib/endpoints';
 import { useMailContext } from '@/sections/mail/provider/hooks';
 import { Button } from '@/components/ui/button';
 import { useFormContext } from 'react-hook-form';
 import { IReplyEmailForm } from '@/types/smtp';
+import { useGenerateAnswerAI } from '@/services/hooks';
 
 const MailMessageReplyForm: React.FC = () => {
-  const { completion, complete, isLoading, stop } = useCompletion({ api: endpoints.ai.generateAnswer });
+  const { completion, complete, isLoading, stop } = useGenerateAnswerAI();
   const { selectedMail } = useMailContext();
 
   const generateAnswer = () => {

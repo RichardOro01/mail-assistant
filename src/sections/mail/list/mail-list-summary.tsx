@@ -9,34 +9,29 @@ import {
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog';
-import { useCompletion } from 'ai/react';
-import { endpoints } from '@/lib/endpoints';
 import { useMailContext } from '../provider/hooks';
-
-const MESSAGE_LIMIT = 5;
+import { useSummaryAI } from '@/services/hooks';
 
 const MailListSummary: React.FC = () => {
   debugRendering('MailListSummary');
 
-  const { complete, completion, isLoading } = useCompletion({ api: endpoints.ai.generateSummary });
+  const { complete, completion, isLoading } = useSummaryAI();
   const { mails } = useMailContext();
-  const handleGenerateSummary = () => {
-    let messages = '';
-    for (let i = 0; i < mails.length && i < MESSAGE_LIMIT; i++) {
-      const { emails } = mails[i];
-      messages += `Message ${i}\n`;
-      messages += `${emails[0].text}\n`;
-    }
 
+  const handleGenerateSummary = () => {
+    const messages = mails.map(({ emails }) => `${emails[0].text}`);
     complete(messages);
   };
+
   return (
     <Dialog modal>
       <DialogTrigger onClick={handleGenerateSummary}>Summary</DialogTrigger>
-      <DialogContent>
+      <DialogContent className='w-full max-w-[700px]'>
         <DialogHeader>
-          <DialogTitle>Summary</DialogTitle>
-          <DialogDescription>{isLoading && !completion ? 'Summing up...' : completion}</DialogDescription>
+          <DialogTitle>AI</DialogTitle>
+          <DialogDescription>
+            <pre className='text-balance'>{isLoading && !completion ? 'Summing up...' : completion}</pre>
+          </DialogDescription>
         </DialogHeader>
       </DialogContent>
     </Dialog>
