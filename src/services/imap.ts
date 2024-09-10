@@ -70,7 +70,7 @@ export const imapService = {
           imap.openBox('INBOX', true, function (err) {
             if (err) throw err;
             debugImap('Searching', search);
-            imap.search([['TEXT', search ?? '']], function (err, results) {
+            imap.seq.search([['TEXT', search ?? '']], function (err, results) {
               if (err) throw err;
               debugImap('Fetching messages');
               const reversedResults = results.reverse().slice(0, 20);
