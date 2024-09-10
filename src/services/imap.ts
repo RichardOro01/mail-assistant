@@ -16,6 +16,7 @@ export const imapService = {
         const smtp = createSmtpInstance(email, password);
         addEmailInstance(imap, smtp);
         debugImap('Imap open \x1b[34m', email);
+        imap.end();
         resolve(imap);
       });
       imap.once('end', () => {
@@ -38,6 +39,7 @@ export const imapService = {
             statusText: 'Internal Server Error.'
           } as FetchError<StandardError>);
         }
+        imap.end();
       });
       debugImap('Imap connecting \x1b[34m', email);
       imap.connect();
@@ -49,10 +51,6 @@ export const imapService = {
     return new Promise<IMessageInfoImap[]>(async (resolve, reject) => {
       const email = await getEmailInstance();
       let receiving = true;
-      const finish = () => {
-        if (!receiving) resolve(messages);
-        else setTimeout(finish, 100);
-      };
       if (!email) {
         debugImap('\x1b[31mRejecting cause no IMAP instance');
         reject({
@@ -62,48 +60,58 @@ export const imapService = {
         } as FetchError<StandardError>);
       } else {
         const { imap } = email;
-        imap.openBox('INBOX', true, function (err) {
-          if (err) throw err;
-          debugImap('Searching', search);
-          imap.search([['TEXT', search ?? '']], function (err, results) {
+        const finish = () => {
+          if (!receiving) {
+            imap.end();
+            resolve(messages);
+          } else setTimeout(finish, 100);
+        };
+        imap.once('ready', function () {
+          imap.openBox('INBOX', true, function (err) {
             if (err) throw err;
-            debugImap('Fetching messages');
-            const reversedResults = results.reverse().slice(0, 20);
-            const fetcher = imap.seq.fetch(reversedResults, {
-              bodies: '',
-              struct: true
-            });
-            fetcher.on('message', function (msg) {
-              let headerBuffer = '';
-              msg.on('body', function (stream) {
-                stream.on('data', function (chunk) {
-                  receiving = true;
-                  headerBuffer += chunk.toString('utf8');
-                });
-                stream.once('end', async function () {
-                  const parsed = await simpleParser(headerBuffer);
-                  messages.push({
-                    from: parsed.from?.value,
-                    to: emailToAdapter(parsed.to),
-                    date: parsed.date,
-                    subject: parsed.subject,
-                    html: parsed.html,
-                    text: parsed.text,
-                    id: parsed.messageId
+            debugImap('Searching', search);
+            imap.search([['TEXT', search ?? '']], function (err, results) {
+              if (err) throw err;
+              debugImap('Fetching messages');
+              const reversedResults = results.reverse().slice(0, 20);
+              const fetcher = imap.seq.fetch(reversedResults, {
+                bodies: '',
+                struct: true
+              });
+              fetcher.on('message', function (msg) {
+                let headerBuffer = '';
+                msg.on('body', function (stream) {
+                  stream.on('data', function (chunk) {
+                    receiving = true;
+                    headerBuffer += chunk.toString('utf8');
                   });
-                  receiving = false;
+                  stream.once('end', async function () {
+                    const parsed = await simpleParser(headerBuffer);
+                    messages.push({
+                      from: parsed.from?.value,
+                      to: emailToAdapter(parsed.to),
+                      date: parsed.date,
+                      subject: parsed.subject,
+                      html: parsed.html,
+                      text: parsed.text,
+                      id: parsed.messageId
+                    });
+                    receiving = false;
+                  });
                 });
               });
-            });
-            fetcher.once('error', function (err) {
-              console.log(err);
-              reject(err);
-            });
-            fetcher.once('end', function () {
-              finish();
+              fetcher.once('error', function (err) {
+                console.log(err);
+                imap.end();
+                reject(err);
+              });
+              fetcher.once('end', function () {
+                finish();
+              });
             });
           });
         });
+        imap.connect();
       }
     });
   },
@@ -113,10 +121,6 @@ export const imapService = {
       let message: IMessageInfoImap;
       let receiving = true;
 
-      const finish = () => {
-        if (!receiving) resolve(message);
-        else setTimeout(finish, 100);
-      };
       if (!email) {
         debugImap('\x1b[31mRejecting cause no IMAP instance');
         reject({
@@ -126,49 +130,59 @@ export const imapService = {
         } as FetchError<StandardError>);
       } else {
         const { imap } = email;
-        imap.openBox('INBOX', true, function (err) {
-          if (err) throw err;
-          const decodedID = decodeURIComponent(id);
-          debugImap('Searching', decodedID);
-          imap.search([['HEADER', 'Message-ID', decodedID]], function (err, results) {
+        const finish = () => {
+          if (!receiving) {
+            imap.end();
+            resolve(message);
+          } else setTimeout(finish, 100);
+        };
+        imap.once('ready', function () {
+          imap.openBox('INBOX', true, function (err) {
             if (err) throw err;
-            debugImap('Fetching messages');
-            const fetcher = imap.seq.fetch(results[0], {
-              bodies: '',
-              struct: true
-            });
-            fetcher.on('message', function (msg) {
-              let headerBuffer = '';
-              msg.on('body', function (stream) {
-                receiving = true;
-                stream.on('data', function (chunk) {
-                  headerBuffer += chunk.toString('utf8');
-                });
-                stream.once('end', async function () {
-                  const parsed = await simpleParser(headerBuffer);
-                  message = {
-                    from: parsed.from?.value,
-                    to: emailToAdapter(parsed.to),
-                    date: parsed.date,
-                    subject: parsed.subject,
-                    html: parsed.html,
-                    text: parsed.text,
-                    id: parsed.messageId
-                  };
-                  message = message;
-                  receiving = false;
+            const decodedID = decodeURIComponent(id);
+            debugImap('Searching', decodedID);
+            imap.search([['HEADER', 'Message-ID', decodedID]], function (err, results) {
+              if (err) throw err;
+              debugImap('Fetching messages');
+              const fetcher = imap.seq.fetch(results[0], {
+                bodies: '',
+                struct: true
+              });
+              fetcher.on('message', function (msg) {
+                let headerBuffer = '';
+                msg.on('body', function (stream) {
+                  receiving = true;
+                  stream.on('data', function (chunk) {
+                    headerBuffer += chunk.toString('utf8');
+                  });
+                  stream.once('end', async function () {
+                    const parsed = await simpleParser(headerBuffer);
+                    message = {
+                      from: parsed.from?.value,
+                      to: emailToAdapter(parsed.to),
+                      date: parsed.date,
+                      subject: parsed.subject,
+                      html: parsed.html,
+                      text: parsed.text,
+                      id: parsed.messageId
+                    };
+                    message = message;
+                    receiving = false;
+                  });
                 });
               });
-            });
-            fetcher.once('error', function (err) {
-              console.log(err);
-              reject(err);
-            });
-            fetcher.once('end', function () {
-              finish();
+              fetcher.once('error', function (err) {
+                console.log(err);
+                imap.end();
+                reject(err);
+              });
+              fetcher.once('end', function () {
+                finish();
+              });
             });
           });
         });
+        imap.connect();
       }
     });
   }
