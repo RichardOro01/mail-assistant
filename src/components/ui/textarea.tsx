@@ -20,6 +20,7 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
     React.useEffect(() => {
       if (textAreaRef.current) {
         if (autoSize) {
+          textAreaRef.current.style.height = 'auto';
           textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`;
         } else {
           textAreaRef.current.style.height = 'auto';
