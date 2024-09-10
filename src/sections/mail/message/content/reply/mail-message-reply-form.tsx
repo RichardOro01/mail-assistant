@@ -38,8 +38,9 @@ const MailMessageReplyForm: React.FC = () => {
         />
       </div>
       <FormTextarea
+        autoSize
         name='text'
-        className='w-full text-lg font-medium  bg-transparent'
+        className='w-full text-lg font-medium  bg-transparent resize-none overflow-hidden'
         rows={5}
         placeholder={isLoading ? t('thinking') : ''}
         disabled={isLoading}
