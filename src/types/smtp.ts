@@ -13,6 +13,7 @@ export interface IReplyEmailRequest {
 }
 
 export interface IReplyEmailForm {
+  to: string;
   text: string;
 }
 

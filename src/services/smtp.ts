@@ -49,6 +49,7 @@ export const replyEmail = async ({
         const info = await smtp.sendMail({
           from: `<${session?.user.email}>`,
           replyTo,
+          to: replyTo,
           text,
           inReplyTo: messageId
         });

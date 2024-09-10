@@ -9,19 +9,21 @@ import { useTranslationClient } from '@/i18n/client';
 import { routes } from '@/lib/routes';
 import FormProvider from '@/components/form-hook/form-provider';
 import MailMessageReplyForm from './mail-message-reply-form';
+import { useMailContext } from '@/sections/mail/provider/hooks';
 
 const MailMessageReplyContainer: React.FC = () => {
   debugRendering('MailMessageReplyContainer');
-  const { t } = useTranslationClient('mail-message-reply');
-  const methods = useMailMessageReplyForm();
+  const { t } = useTranslationClient('message-reply');
+  const { selectedMail } = useMailContext();
+  const mail = selectedMail?.emails[0];
+  const methods = useMailMessageReplyForm({ defaultTo: mail?.from.email ?? '' });
   const { handleStandardError } = useHandleError();
   const { handleSubmit } = methods;
   const router = useRouter();
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      //TODO
-      await emailService.replyEmail({ text: data.text, messageId: '', replyTo: '' });
+      await emailService.replyEmail({ text: data.text, messageId: mail?.id ?? '', replyTo: data.to });
 
       toast({ title: t('success'), variant: 'success' });
       router.push(routes.mail.list);
