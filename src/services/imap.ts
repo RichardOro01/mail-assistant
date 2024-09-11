@@ -68,10 +68,10 @@ export const imapService = {
         };
         imap.once('ready', function () {
           imap.openBox('INBOX', true, function (err) {
-            if (err) throw err;
+            if (err) reject(err);
             debugImap('Searching', search);
             imap.seq.search([['TEXT', search ?? '']], function (err, results) {
-              if (err) throw err;
+              if (err) reject(err);
               debugImap('Fetching messages');
               const reversedResults = results.reverse().slice(0, 20);
               const fetcher = imap.seq.fetch(reversedResults, {
@@ -101,7 +101,6 @@ export const imapService = {
                 });
               });
               fetcher.once('error', function (err) {
-                console.log(err);
                 imap.end();
                 reject(err);
               });
@@ -138,11 +137,11 @@ export const imapService = {
         };
         imap.once('ready', function () {
           imap.openBox('INBOX', true, function (err) {
-            if (err) throw err;
+            if (err) reject(err);
             const decodedID = decodeURIComponent(id);
             debugImap('Searching', decodedID);
             imap.search([['HEADER', 'Message-ID', decodedID]], function (err, results) {
-              if (err) throw err;
+              if (err) reject(err);
               debugImap('Fetching messages');
               const fetcher = imap.seq.fetch(results[0], {
                 bodies: '',
@@ -172,7 +171,6 @@ export const imapService = {
                 });
               });
               fetcher.once('error', function (err) {
-                console.log(err);
                 imap.end();
                 reject(err);
               });
