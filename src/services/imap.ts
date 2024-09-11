@@ -143,7 +143,7 @@ export const imapService = {
             imap.search([['HEADER', 'Message-ID', decodedID]], function (err, results) {
               if (err) reject(err);
               debugImap('Fetching messages');
-              const fetcher = imap.seq.fetch(results[0], {
+              const fetcher = imap.fetch(results[0], {
                 bodies: '',
                 struct: true
               });
