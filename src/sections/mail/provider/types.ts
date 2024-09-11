@@ -1,8 +1,8 @@
-import { IConversation } from '@/types/email';
+import { IMessage } from '@/types/imap';
 
 export type MailContextType = {
-  selectedMail: IConversation | undefined;
-  mails: IConversation[];
-  setSelectedMail: React.Dispatch<React.SetStateAction<IConversation | undefined>>;
-  setMails: React.Dispatch<React.SetStateAction<IConversation[]>>;
+  selectedMail: IMessage | undefined;
+  mails: IMessage[];
+  setSelectedMail: React.Dispatch<React.SetStateAction<IMessage | undefined>>;
+  setMails: React.Dispatch<React.SetStateAction<IMessage[]>>;
 };

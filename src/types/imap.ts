@@ -1,21 +1,16 @@
 import { ImapFlow } from 'imapflow';
+import { ParsedMail } from 'mailparser';
 
-export interface ImapFlowWithOptions extends ImapFlow {
-  options: {
-    host: string;
-    port: number;
-    auth: { user: string; pass: string };
-  };
+export interface ImapInstance {
+  email: string;
+  connect: () => Promise<ImapFlow>;
 }
 
-export interface IMessageInfoImap {
-  from?: IMessagePerson[];
-  to?: IMessagePerson[];
-  date?: Date;
-  subject?: string;
-  html: string | false;
-  text?: string;
-  id?: string;
+export interface IMessage extends Omit<ParsedMail, 'to' | 'from'> {
+  uid: number;
+  to: IMessagePerson[];
+  from: IMessagePerson;
+  read?: boolean;
 }
 
 export interface IMessagePerson {

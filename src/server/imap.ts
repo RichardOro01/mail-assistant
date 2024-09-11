@@ -1,8 +1,9 @@
 import { NEXT_MAIL_SERVER_HOST, NEXT_IMAP_MAIL_SERVER_PORT } from '@/config';
 import { debugImap } from '@/lib/debug';
+import { ImapInstance } from '@/types/imap';
 import { ImapFlow } from 'imapflow';
 
-export const createImapInstance = (email: string, password: string) => {
+const createImapFlowInstance = (email: string, password: string) => {
   debugImap('Creating Imap instance \x1b[34m', email);
   const imap = new ImapFlow({
     host: NEXT_MAIL_SERVER_HOST,
@@ -13,7 +14,18 @@ export const createImapInstance = (email: string, password: string) => {
       pass: password
     }
   });
+  return imap;
+};
+
+export const createImapInstance = (email: string, password: string): ImapInstance => {
+  debugImap('Creating Imap instance \x1b[34m', email);
+
+  const connect = async () => {
+    const imap = createImapFlowInstance(email, password);
+    await imap.connect();
+    return imap;
+  };
 
   debugImap('\x1b[32mImap instance created \x1b[34m', email);
-  return imap;
+  return { email, connect };
 };

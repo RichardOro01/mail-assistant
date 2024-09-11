@@ -17,7 +17,7 @@ const MailMessageReplyForm: React.FC = () => {
   const { t } = useTranslationClient('message-reply');
 
   const generateAnswer = () => {
-    if (selectedMail) complete(selectedMail.emails[0].text);
+    if (selectedMail && selectedMail.text) complete(selectedMail.text);
   };
 
   const { setValue } = useFormContext<IReplyEmailForm>();

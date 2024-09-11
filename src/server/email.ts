@@ -1,13 +1,12 @@
 import { sessionExpiresTimeMilliseconds } from '@/auth/utils';
 import { debugImap } from '@/lib/debug';
-import { ImapFlowWithOptions } from '@/types/imap';
-import { ImapFlow } from 'imapflow';
+import { ImapInstance } from '@/types/imap';
 import { getServerSession } from 'next-auth';
 import { Transporter } from 'nodemailer';
 
 interface EmailInstance {
   expireTimer: NodeJS.Timeout;
-  imap: ImapFlow;
+  imap: ImapInstance;
   smtp: Transporter;
 }
 
@@ -25,17 +24,18 @@ export const hasEmailInstance = (email: string) => {
   return email in emailInstances;
 };
 
-export const addEmailInstance = (imap: ImapFlowWithOptions, smtp: Transporter) => {
-  debugImap('Adding Email instance \x1b[34m', imap.options.auth.user);
+export const addEmailInstance = (imap: ImapInstance, smtp: Transporter) => {
+  debugImap('Adding Email instance \x1b[34m', imap.email);
   debugImap('Expires in \x1b[34m', sessionExpiresTimeMilliseconds, 'ms');
   const emailInstance: EmailInstance = {
     imap,
     smtp,
     expireTimer: setTimeout(() => {
-      removeEmailInstance(imap.options.auth.user);
+      removeEmailInstance(imap.email);
     }, sessionExpiresTimeMilliseconds)
   };
-  emailInstances[imap.options.auth.user] = emailInstance;
+  emailInstances[imap.email] = emailInstance;
+  return emailInstance;
 };
 
 export const refreshEmailInstance = (email: string) => {
@@ -52,7 +52,6 @@ export const refreshEmailInstance = (email: string) => {
 export const removeEmailInstance = (email: string) => {
   debugImap('Removing Imap instance \x1b[34m', email);
   if (hasEmailInstance(email)) {
-    emailInstances[email].imap.logout();
     emailInstances[email].smtp.close();
     delete emailInstances[email];
   }

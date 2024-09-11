@@ -21,8 +21,7 @@ const MailListSummary: React.FC = () => {
   const { mails } = useMailContext();
 
   const handleGenerateSummary = () => {
-    const messages = mails.map(({ emails }) => `${emails[0].text}`);
-    complete(messages);
+    complete(mails.map(({ text }) => text ?? ''));
   };
 
   return (

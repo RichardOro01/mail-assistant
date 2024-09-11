@@ -2,7 +2,7 @@
 
 import { getEmailInstance } from '@/server/email';
 import { getServerSession } from 'next-auth';
-import { FetchError, FetchServerResponse, StandardError } from './types';
+import { FetchError, FetchServerResponse, StandardError } from '../types';
 import { IReplyEmailRequest, ISendEmailRequest, ISendEmailResponse } from '@/types/smtp';
 import { NEXT_SMTP_TIMEOUT_SEND_EMAIL } from '@/config';
 

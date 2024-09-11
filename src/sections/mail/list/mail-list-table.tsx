@@ -1,27 +1,27 @@
 'use client';
 
-import { IConversation } from '@/types/email';
 import { Table, TableBody } from '../../../components/ui/table';
 import { useEffect } from 'react';
 import { useMailContext } from '@/sections/mail/provider/hooks';
 import MailListRow from './mail-list-row';
+import { IMessage } from '@/types/imap';
 
 interface MailListTable {
-  conversations: IConversation[];
+  messages: IMessage[];
 }
 
-const MailListTable: React.FC<MailListTable> = ({ conversations }) => {
+const MailListTable: React.FC<MailListTable> = ({ messages }) => {
   const { setMails } = useMailContext();
 
   useEffect(() => {
-    setMails(conversations);
-  }, [conversations, setMails]);
+    setMails(messages);
+  }, [messages, setMails]);
 
   return (
     <Table>
       <TableBody>
-        {conversations.map((conversation, index) => (
-          <MailListRow key={index} {...{ conversation }} />
+        {messages.map((message, index) => (
+          <MailListRow key={index} {...{ message }} />
         ))}
       </TableBody>
     </Table>

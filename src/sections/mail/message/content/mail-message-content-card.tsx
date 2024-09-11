@@ -1,46 +1,40 @@
 'use client';
 
-import { IConversation } from '@/types/email';
 import { format } from 'date-fns';
 import DOMPurify from 'dompurify';
-import { Separator } from '../../../../components/ui/separator';
 import { Reply } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import MailMessageReplyContainer from './reply/mail-message-reply-container';
 import { useMailContext } from '../../provider/hooks';
+import { IMessage } from '@/types/imap';
 
 type MailMessageContentCardProps = {
-  conversation: IConversation;
+  message: IMessage;
 };
 
-const MailMessageContentCard: React.FC<MailMessageContentCardProps> = ({ conversation }) => {
+const MailMessageContentCard: React.FC<MailMessageContentCardProps> = ({ message }) => {
   const [showReply, setShowReply] = useState(false);
   const { setSelectedMail } = useMailContext();
 
   useEffect(() => {
-    setSelectedMail(conversation);
-  }, [conversation, setSelectedMail]);
+    setSelectedMail(message);
+  }, [message, setSelectedMail]);
 
   const htmlContent = useMemo(
     () => (
       <div className='flex flex-col gap-5'>
-        {conversation?.emails.map((email, index) => (
-          <div key={email.id}>
-            <div className='flex justify-between'>
-              <h2 className='font-semibold text-lg'>{email.from.name}</h2>
-              <p className='opacity-50 text-lg'>{email.date ? format(email.date, 'hh:mm a') : ''}</p>
-            </div>
-            <div
-              dangerouslySetInnerHTML={{
-                __html: `${DOMPurify.sanitize(conversation ? (email.html ? email.html : email.text) : '')}`
-              }}
-              className='mt-2 text-sm'></div>
-            {index !== conversation?.emails.length - 1 && <Separator className='mt-6' />}
-          </div>
-        ))}
+        <div className='flex justify-between'>
+          <h2 className='font-semibold text-lg'>{message.from.name}</h2>
+          <p className='opacity-50 text-lg'>{message.date ? format(message.date, 'hh:mm a') : ''}</p>
+        </div>
+        <div
+          dangerouslySetInnerHTML={{
+            __html: `${DOMPurify.sanitize(message.html || message.text || '')}`
+          }}
+          className='mt-2 text-sm'></div>
       </div>
     ),
-    [conversation]
+    [message]
   );
 
   return (

@@ -15,15 +15,14 @@ const MailMessageReplyContainer: React.FC = () => {
   debugRendering('MailMessageReplyContainer');
   const { t } = useTranslationClient('message-reply');
   const { selectedMail } = useMailContext();
-  const mail = selectedMail?.emails[0];
-  const methods = useMailMessageReplyForm({ defaultTo: mail?.from.email ?? '' });
+  const methods = useMailMessageReplyForm({ defaultTo: selectedMail?.from.address ?? '' });
   const { handleStandardError } = useHandleError();
   const { handleSubmit } = methods;
   const router = useRouter();
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await emailService.replyEmail({ text: data.text, messageId: mail?.id ?? '', replyTo: data.to });
+      await emailService.replyEmail({ text: data.text, messageId: selectedMail?.messageId ?? '', replyTo: data.to });
 
       toast({ title: t('success'), variant: 'success' });
       router.push(routes.mail.list);

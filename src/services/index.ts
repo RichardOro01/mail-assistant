@@ -1,6 +1,6 @@
 import { IReplyEmailRequest, ISendEmailRequest } from '@/types/smtp';
 import { fetcher } from './fetcher';
-import { replyEmail, sendEmail } from './smtp';
+import { replyEmail, sendEmail } from './email/smtp';
 
 export const emailService = {
   sendEmail: (data: ISendEmailRequest) => fetcher(() => sendEmail(data)),

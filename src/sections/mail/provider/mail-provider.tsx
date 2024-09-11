@@ -2,12 +2,12 @@
 
 import { LayoutBaseProps } from '@/types/utils';
 import React, { useState } from 'react';
-import { IConversation } from '@/types/email';
 import { MailContext } from './mail-context';
+import { IMessage } from '@/types/imap';
 
 const MailProvider: React.FC<LayoutBaseProps> = ({ children }) => {
-  const [selectedMail, setSelectedMail] = useState<IConversation>();
-  const [mails, setMails] = useState<IConversation[]>([]);
+  const [selectedMail, setSelectedMail] = useState<IMessage>();
+  const [mails, setMails] = useState<IMessage[]>([]);
 
   return (
     <MailContext.Provider value={{ selectedMail, setSelectedMail, mails, setMails }}>{children}</MailContext.Provider>
