@@ -21,17 +21,6 @@ const authOptions: NextAuthOptions = {
           try {
             debugImap('Trying to auth with IMAP server');
             await imapService.auth(email, password);
-            debugImap('\x1b[32mIMAP server auth success');
-            debugAuth('Verifying user in DB');
-            // TODO bd
-            // if (
-            //   !(await prisma.users.findFirst({
-            //     where: { email: credentials.email }
-            //   }))
-            // ) {
-            //   debugAuth('Creating user in DB');
-            //   await prisma.users.create({ data: { email: credentials.email } });
-            // }
             debugAuth('\x1b[32mAuthentication success');
             return { id: credentials.email, email: credentials.email };
           } catch (error) {

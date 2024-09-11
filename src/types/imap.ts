@@ -1,22 +1,10 @@
-import Imap from 'imap';
+import { ImapFlow } from 'imapflow';
 
-export interface ImapWithConfig extends Imap {
-  _config: {
-    localAddress: unknown;
-    socket: unknown;
-    socketTimeout: number;
+export interface ImapFlowWithOptions extends ImapFlow {
+  options: {
     host: string;
     port: number;
-    tls: boolean;
-    tlsOptions: unknown;
-    autotls: unknown;
-    user: string;
-    password: string;
-    xoauth: unknown;
-    xoauth2: unknown;
-    connTimeout: number;
-    authTimeout: number;
-    keepalive: boolean;
+    auth: { user: string; pass: string };
   };
 }
 
