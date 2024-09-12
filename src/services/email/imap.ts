@@ -90,14 +90,14 @@ export const getMessageByUid = async (uid: number) => {
   const lock = await connection.getMailboxLock('INBOX');
   try {
     debugImap('Fetching message', uid);
-    const messageFetch = await connection.fetchOne(`${uid}`, { source: true });
+    const messageFetch = await connection.fetchOne(`${uid}`, { source: true }, { uid: true });
     const parsed = await simpleParser(messageFetch.source);
 
     message = emailAdapter(parsed, messageFetch);
   } catch (error) {
     console.log(error);
     return {
-      detail: { code: 'unknown', message: 'Something wen wrong.' },
+      detail: { code: 'unknown', message: 'Something went wrong.' },
       status: 500,
       statusText: 'Internal Server Error.'
     } as FetchError<StandardError>;
