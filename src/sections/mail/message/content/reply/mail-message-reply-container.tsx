@@ -1,7 +1,7 @@
 import React from 'react';
 import { debugRendering } from '@/lib/debug/debuggers';
 import { useMailMessageReplyForm } from './mail-message-hooks';
-import { emailService } from '@/services';
+import { emailService } from '@/services/email';
 import { toast } from '@/hooks/use-toast';
 import { useRouter } from 'next/navigation';
 import { useHandleError } from '@/lib/error/hooks';

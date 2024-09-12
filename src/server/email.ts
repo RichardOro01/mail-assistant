@@ -4,7 +4,7 @@ import { ImapInstance } from '@/types/imap';
 import { getServerSession } from 'next-auth';
 import { Transporter } from 'nodemailer';
 
-interface EmailInstance {
+export interface EmailInstance {
   expireTimer: NodeJS.Timeout;
   imap: ImapInstance;
   smtp: Transporter;
