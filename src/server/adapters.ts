@@ -6,7 +6,17 @@ export const emailAdapter = (parsedEmail: ParsedMail, fetchMessageObject: FetchM
   const from: IMessagePerson = emailFromAdapter(parsedEmail.from);
   const to: IMessagePerson[] = emailToAdapter(parsedEmail.to);
 
-  return { ...parsedEmail, uid: fetchMessageObject.uid, to, from };
+  return {
+    uid: fetchMessageObject.uid,
+    to,
+    from,
+    date: parsedEmail.date,
+    html: parsedEmail.html,
+    messageId: parsedEmail.messageId,
+    subject: parsedEmail.subject,
+    text: parsedEmail.text,
+    inReplyTo: parsedEmail.inReplyTo
+  };
 };
 
 const emailToAdapter = (tos: AddressObject | AddressObject[] | undefined): IMessagePerson[] => {
