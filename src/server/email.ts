@@ -62,7 +62,7 @@ export const getEmailInstance = async () => {
   const session = await getServerSession();
   if (session && session.user && session.user.email && session.user.email in emailInstances) {
     debugImap('\x1b[32mIMAP instance success');
-    return emailInstances[session.user.email];
+    return { ...emailInstances[session.user.email], email: session.user.email };
   }
   debugImap('\x1b[33mNo IMAP instance');
   return null;

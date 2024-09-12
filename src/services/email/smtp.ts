@@ -1,7 +1,6 @@
 'use server';
 
 import { getEmailInstance } from '@/server/email';
-import { getServerSession } from 'next-auth';
 import { FetchError, FetchServerResponse, StandardError } from '../types';
 import { IReplyEmailRequest, ISendEmailRequest, ISendEmailResponse } from '@/types/smtp';
 import { NEXT_SMTP_TIMEOUT_SEND_EMAIL } from '@/config';
@@ -13,14 +12,13 @@ export const sendEmail = async ({
 }: ISendEmailRequest): Promise<FetchServerResponse<ISendEmailResponse>> =>
   new Promise(async (resolve) => {
     try {
-      const email = await getEmailInstance();
-      const session = await getServerSession();
-      if (!email) resolve(email_instance_not_found_error);
+      const emailInstance = await getEmailInstance();
+      if (!emailInstance) resolve(email_instance_not_found_error);
       else {
-        const { smtp } = email;
+        const { smtp } = emailInstance;
         setTimeout(() => resolve(send_email_timeout), NEXT_SMTP_TIMEOUT_SEND_EMAIL);
         const info = await smtp.sendMail({
-          from: `<${session?.user.email}>`,
+          from: `<${emailInstance.email}>`,
           to,
           subject,
           text
@@ -40,14 +38,13 @@ export const replyEmail = async ({
 }: IReplyEmailRequest): Promise<FetchServerResponse<ISendEmailResponse>> =>
   new Promise(async (resolve) => {
     try {
-      const email = await getEmailInstance();
-      const session = await getServerSession();
-      if (!email) resolve(email_instance_not_found_error);
+      const emailInstance = await getEmailInstance();
+      if (!emailInstance) resolve(email_instance_not_found_error);
       else {
-        const { smtp } = email;
+        const { smtp } = emailInstance;
         setTimeout(() => resolve(send_email_timeout), NEXT_SMTP_TIMEOUT_SEND_EMAIL);
         const info = await smtp.sendMail({
-          from: `<${session?.user.email}>`,
+          from: `<${emailInstance.email}>`,
           replyTo,
           to: replyTo,
           text,
