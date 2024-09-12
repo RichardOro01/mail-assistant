@@ -113,7 +113,7 @@ export const deleteMessage = async (uid: number) => {
   const lock = await connection.getMailboxLock('INBOX');
   try {
     debugImap('Deleting message', uid);
-    await connection.messageMove(`${uid}`, 'TRASH');
+    await connection.messageDelete(`${uid}`, { uid: true });
   } catch (error) {
     console.log(error);
     return {

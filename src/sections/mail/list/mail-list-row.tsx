@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 import { debugRendering } from '@/lib/debug/debuggers';
 import { TableCell, TableRow } from '@/components/ui/table';
-import { Eye, Trash2 } from 'lucide-react';
+import { Eye, LoaderCircle, Trash2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { useMailContext } from '../provider/hooks';
 import { useTranslationClient } from '@/i18n/client';
 import { useRouter } from 'next/navigation';
 import { routes } from '@/lib/routes';
 import { IMessage } from '@/types/imap';
+import { emailService } from '@/services/email';
+import { useHandleError } from '@/lib/error/hooks';
+import { toast } from '@/hooks/use-toast';
 
 interface MailListRowProps {
   message: IMessage;
@@ -17,12 +20,27 @@ const MailListRow: React.FC<MailListRowProps> = ({ message }) => {
   debugRendering('MailListRow');
 
   const [showOptions, setShowOptions] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const { selectedMail, setSelectedMail } = useMailContext();
   const { t } = useTranslationClient('mail-list');
   const route = useRouter();
+  const { handleStandardError } = useHandleError();
+  const router = useRouter();
 
   const viewMessage = (id: number) => {
     route.push(`${routes.mail.message.content}/${id}`);
+  };
+
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    try {
+      await emailService.deleteEmail(message.uid);
+      router.refresh();
+      toast({ title: t('message_deleted'), variant: 'success' });
+    } catch (error) {
+      handleStandardError(error);
+    }
+    setIsDeleting(false);
   };
 
   return (
@@ -44,14 +62,20 @@ const MailListRow: React.FC<MailListRowProps> = ({ message }) => {
         </span>
       </TableCell>
       <TableCell className='min-w-[100px] text-right py-0'>
-        {showOptions ? (
+        {showOptions || isDeleting ? (
           <div className='flex gap-2 justify-end'>
-            <button title={t('view')}>
-              <Eye size={18} color='gray' onClick={() => viewMessage(message.uid)} />
-            </button>
-            <button title={t('delete')} onClick={() => console.log('eliminar')}>
-              <Trash2 size={18} color='gray' />
-            </button>
+            {!isDeleting ? (
+              <>
+                <button title={t('view')}>
+                  <Eye size={18} color='gray' onClick={() => viewMessage(message.uid)} />
+                </button>
+                <button title={t('delete')} onClick={handleDelete}>
+                  <Trash2 size={18} color='gray' />
+                </button>
+              </>
+            ) : (
+              <LoaderCircle size={18} color='gray' className='animate-spin animate-duration-[2000ms]' />
+            )}
           </div>
         ) : message.date ? (
           format(message.date, 'hh:mm a')

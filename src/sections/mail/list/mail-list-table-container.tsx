@@ -8,7 +8,7 @@ const MailListTableContainer: React.FC = async () => {
   debugRendering('MailListTableContainer');
   try {
     const { data } = await emailService.getMails();
-    return <MailListTable messages={data} />;
+    return <MailListTable messages={data.reverse()} />;
   } catch (error) {
     console.log(error);
     return <GeneralError />;
