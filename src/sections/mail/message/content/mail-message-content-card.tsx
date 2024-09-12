@@ -40,7 +40,7 @@ const MailMessageContentCard: React.FC<MailMessageContentCardProps> = ({ message
   return (
     <div className='flex flex-col my-4 justify-between shadow-lg border-l-4 border-slate-400 rounded-lg lg:min-w-[400px] overflow-auto'>
       <div className='flex flex-col mx-5 my-3'>{htmlContent}</div>
-      <div className='sticky bottom-0 bg-white border-t border-slate-300 mt-4 py-2 px-4 items-center justify-end '>
+      <div className='bg-white border-t border-slate-300 mt-4 py-2 px-4 items-center justify-end '>
         <button title='Reply' onClick={() => setShowReply(true)}>
           <Reply />
         </button>
