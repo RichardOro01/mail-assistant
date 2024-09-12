@@ -9,10 +9,11 @@ const getMessages = async () => {
   return messages;
 };
 
-const getEmailById = async (id: string) => {
+const getEmailByUid = async (id: number) => {
   await checkEmail();
+  const message = await imapService.getMessageByUid(id);
   debugImap('\x1b[32mMessage found)');
-  console.log(id);
+  return message;
 };
 
 const auth = (email: string, password: string) => {
@@ -22,5 +23,5 @@ const auth = (email: string, password: string) => {
 export const emailServiceBackend = {
   auth,
   getMessages,
-  getEmailById
+  getEmailByUid
 };

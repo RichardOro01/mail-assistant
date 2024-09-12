@@ -87,74 +87,47 @@ export const imapService = {
     await connection.logout();
     return messages;
   },
-  getMessageById: (id: string) => {
-    console.log('Getting message by id', id);
-    // return new Promise<IMessageInfoImap>(async (resolve, reject) => {
-    //   const email = await getEmailInstance();
-    //   let message: IMessageInfoImap;
-    //   let receiving = true;
-    //   if (!email) {
-    //     debugImap('\x1b[31mRejecting cause no IMAP instance');
-    //     reject({
-    //       detail: { code: 'imap_instance_not_found', message: 'No imap instance' },
-    //       status: 500,
-    //       statusText: 'Internal Server Error.'
-    //     } as FetchError<StandardError>);
-    //   } else {
-    //     const { imap } = email;
-    //     const finish = () => {
-    //       if (!receiving) {
-    //         imap.end();
-    //         resolve(message);
-    //       } else setTimeout(finish, 100);
-    //     };
-    //     imap.once('ready', function () {
-    //       imap.openBox('INBOX', true, function (err) {
-    //         if (err) reject(err);
-    //         const decodedID = decodeURIComponent(id);
-    //         debugImap('Searching', decodedID);
-    //         imap.search([['HEADER', 'Message-ID', decodedID]], function (err, results) {
-    //           if (err) reject(err);
-    //           debugImap('Fetching messages');
-    //           const fetcher = imap.fetch(results[0], {
-    //             bodies: '',
-    //             struct: true
-    //           });
-    //           fetcher.on('message', function (msg) {
-    //             let headerBuffer = '';
-    //             msg.on('body', function (stream) {
-    //               receiving = true;
-    //               stream.on('data', function (chunk) {
-    //                 headerBuffer += chunk.toString('utf8');
-    //               });
-    //               stream.once('end', async function () {
-    //                 const parsed = await simpleParser(headerBuffer);
-    //                 message = {
-    //                   from: parsed.from?.value,
-    //                   to: emailToAdapter(parsed.to),
-    //                   date: parsed.date,
-    //                   subject: parsed.subject,
-    //                   html: parsed.html,
-    //                   text: parsed.text,
-    //                   id: parsed.messageId
-    //                 };
-    //                 message = message;
-    //                 receiving = false;
-    //               });
-    //             });
-    //           });
-    //           fetcher.once('error', function (err) {
-    //             imap.end();
-    //             reject(err);
-    //           });
-    //           fetcher.once('end', function () {
-    //             finish();
-    //           });
-    //         });
-    //       });
-    //     });
-    //     imap.connect();
-    //   }
-    // });
+  getMessageByUid: async (uid: number) => {
+    const email = await getEmailInstance();
+    let message: IMessage;
+    if (!email) {
+      debugImap('\x1b[31mRejecting cause no IMAP instance');
+      throw {
+        detail: { code: 'imap_instance_not_found', message: 'No imap instance' },
+        status: 500,
+        statusText: 'Internal Server Error.'
+      } as FetchError<StandardError>;
+    }
+    const { imap } = email;
+    let connection: ImapFlow;
+    try {
+      connection = await imap.connect();
+    } catch (error) {
+      console.log(error);
+      throw {
+        detail: { code: 'imap_connect_error', message: 'Something went wrong.' },
+        status: 500,
+        statusText: 'Internal Server Error.'
+      } as FetchError<StandardError>;
+    }
+    const lock = await connection.getMailboxLock('INBOX');
+    try {
+      debugImap('Fetching message', uid);
+      const messageFetch = await connection.fetchOne(`${uid}`, { source: true });
+      const parsed = await simpleParser(messageFetch.source);
+
+      message = emailAdapter(parsed, messageFetch);
+    } catch (error) {
+      console.log(error);
+      throw {
+        detail: { code: 'unknown', message: 'Something wen wrong.' },
+        status: 500,
+        statusText: 'Internal Server Error.'
+      } as FetchError<StandardError>;
+    } finally {
+      lock.release();
+    }
+    await connection.logout();
+    return message;
   }
 };

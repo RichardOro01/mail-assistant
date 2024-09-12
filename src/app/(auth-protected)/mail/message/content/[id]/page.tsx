@@ -7,7 +7,7 @@ interface MailContentPageProps {
 }
 
 const MailContentPage: React.FC<MailContentPageProps> = async ({ params: { id } }) => {
-  return <MailMessageContentView conversationId={id} />;
+  return <MailMessageContentView messageId={id} />;
 };
 
 export default MailContentPage;

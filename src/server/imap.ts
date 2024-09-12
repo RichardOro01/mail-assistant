@@ -2,6 +2,10 @@ import { NEXT_MAIL_SERVER_HOST, NEXT_IMAP_MAIL_SERVER_PORT } from '@/config';
 import { debugImap } from '@/lib/debug';
 import { ImapInstance } from '@/types/imap';
 import { ImapFlow } from 'imapflow';
+import pino from 'pino';
+
+const pinoInstance = pino();
+pinoInstance.level = 'silent';
 
 const createImapFlowInstance = (email: string, password: string) => {
   debugImap('Creating Imap instance \x1b[34m', email);
@@ -12,7 +16,8 @@ const createImapFlowInstance = (email: string, password: string) => {
     auth: {
       user: email,
       pass: password
-    }
+    },
+    logger: pinoInstance
   });
   return imap;
 };

@@ -24,14 +24,14 @@ const MailMessageContentCard: React.FC<MailMessageContentCardProps> = ({ message
     () => (
       <div className='flex flex-col gap-5'>
         <div className='flex justify-between'>
-          <h2 className='font-semibold text-lg'>{message.from.name}</h2>
+          <h2 className='font-semibold text-lg'>{message.from.name || message.from.address}</h2>
           <p className='opacity-50 text-lg'>{message.date ? format(message.date, 'hh:mm a') : ''}</p>
         </div>
         <div
           dangerouslySetInnerHTML={{
             __html: `${DOMPurify.sanitize(message.html || message.text || '')}`
           }}
-          className='mt-2 text-sm'></div>
+          className='mt-2 text-base'></div>
       </div>
     ),
     [message]
