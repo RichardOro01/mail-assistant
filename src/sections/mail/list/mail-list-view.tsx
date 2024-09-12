@@ -3,6 +3,9 @@ import { debugRendering } from '@/lib/debug/debuggers';
 import { Tabs, TabsContent } from '@/components/ui/tabs';
 import MailListHeader from './mail-list-header';
 import MailListTableContainer from './mail-list-table-container';
+import MailListSkeleton from './mail-list-skeleton';
+
+const MESSAGES_COUNT = 20;
 
 const MailListView: React.FC = async () => {
   debugRendering('MailListView');
@@ -10,8 +13,8 @@ const MailListView: React.FC = async () => {
     <Tabs defaultValue='0' className='w-full'>
       <MailListHeader />
       <TabsContent key={'0'} value={'0'}>
-        <Suspense fallback='loading'>
-          <MailListTableContainer />
+        <Suspense fallback={<MailListSkeleton rows={MESSAGES_COUNT} />}>
+          <MailListTableContainer messagesCount={MESSAGES_COUNT} />
         </Suspense>
       </TabsContent>
     </Tabs>

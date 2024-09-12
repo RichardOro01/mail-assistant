@@ -22,3 +22,8 @@ export interface IMessagePerson {
   name?: string;
   address?: string;
 }
+
+export interface IGetMailsRequest {
+  search?: string;
+  limit?: number;
+}

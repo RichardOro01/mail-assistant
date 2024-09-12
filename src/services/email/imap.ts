@@ -9,7 +9,7 @@ import { isObjectWithProperties } from '@/lib/utils';
 import { ImapFlow } from 'imapflow';
 import { simpleParser } from 'mailparser';
 import { emailAdapter } from '@/server/adapters';
-import { IMessage } from '@/types/imap';
+import { IGetMailsRequest, IMessage } from '@/types/imap';
 import { createImapConnection } from './utils';
 
 export const auth = async (email: string, password: string) => {
@@ -39,8 +39,12 @@ export const auth = async (email: string, password: string) => {
     }
   }
 };
-export const getMessages = async (search?: string) => {
+export const getMessages = async (options?: IGetMailsRequest) => {
   debugImap('Getting messages');
+
+  const search = options?.search;
+  const limit = options?.limit || 20;
+
   const messages: IMessage[] = [];
 
   let connection: ImapFlow;
@@ -53,7 +57,7 @@ export const getMessages = async (search?: string) => {
   try {
     debugImap('Searching', search);
     const list = (await connection.search({ ...(search ? { body: search } : {}) })) || [];
-    const reverseList = list.reverse().slice(0, 20);
+    const reverseList = list.reverse().slice(0, limit);
 
     debugImap('Fetching messages');
     for await (const message of connection.fetch(reverseList, {
