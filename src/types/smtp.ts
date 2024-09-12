@@ -10,6 +10,7 @@ export interface IReplyEmailRequest {
   text: string;
   replyTo: string | string[];
   messageId: string;
+  subject: string;
 }
 
 export interface IReplyEmailForm {

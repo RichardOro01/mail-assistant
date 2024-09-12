@@ -22,7 +22,12 @@ const MailMessageReplyContainer: React.FC = () => {
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await emailService.replyEmail({ text: data.text, messageId: selectedMail?.messageId ?? '', replyTo: data.to });
+      await emailService.replyEmail({
+        text: data.text,
+        messageId: selectedMail?.messageId ?? '',
+        replyTo: data.to,
+        subject: selectedMail?.subject ?? ''
+      });
 
       toast({ title: t('success'), variant: 'success' });
       router.push(routes.mail.list);

@@ -34,7 +34,8 @@ export const sendEmail = async ({
 export const replyEmail = async ({
   messageId,
   replyTo,
-  text
+  text,
+  subject
 }: IReplyEmailRequest): Promise<FetchServerResponse<ISendEmailResponse>> =>
   new Promise(async (resolve) => {
     try {
@@ -48,7 +49,8 @@ export const replyEmail = async ({
           replyTo,
           to: replyTo,
           text,
-          inReplyTo: messageId
+          inReplyTo: messageId,
+          subject: `Re: ${subject}`
         });
         resolve({ data: info, status: 200, statusText: 'Ok' });
       }
