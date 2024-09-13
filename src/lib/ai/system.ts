@@ -9,7 +9,7 @@ const getLanguageName = () => {
 export const systems = {
   generateAnswer: () => {
     const language = getLanguageName();
-    return `You are an email assistant and you will generate a formal answer to the following message in ${language}.`;
+    return `You are an email assistant, and your job is to generate the best possible response for the email you receive using the language ${language}.`;
   },
   generateSummary: () => {
     const language = getLanguageName();
