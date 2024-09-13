@@ -12,15 +12,19 @@ import FormInput from '@/components/form-hook/form-input';
 import { Label } from '@/components/ui/label';
 
 const MailMessageReplyForm: React.FC = () => {
-  const { completion, complete, isLoading, stop } = useGenerateAnswerAI();
+  const { setValue, trigger } = useFormContext<IReplyEmailForm>();
   const { selectedMail } = useMailContext();
   const { t } = useTranslationClient('message-reply');
+
+  const onFinish = () => {
+    trigger('text');
+  };
+
+  const { completion, complete, isLoading, stop } = useGenerateAnswerAI({ onFinish });
 
   const generateAnswer = () => {
     if (selectedMail && selectedMail.text) complete(selectedMail.text);
   };
-
-  const { setValue } = useFormContext<IReplyEmailForm>();
 
   useEffect(() => {
     setValue('text', completion);
