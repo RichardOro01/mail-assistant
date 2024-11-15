@@ -3,9 +3,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import { I18NContext } from './i18n-context';
 import { updateCookieLanguage } from '../actions';
-import { languageObjects, languages } from '../settings';
+import { cookieI18Name, languageObjects, languages } from '../settings';
 import { LanguageObject, LanguageOptions } from '../types';
 import { debugRendering } from '@/lib/debug/debuggers';
+import { getCookies } from '@/lib/utils/cookies';
 
 // ----------------------------------------------------------------------
 
@@ -27,7 +28,9 @@ export function I18NProvider({ children, lng }: I18NProviderProps) {
   }, [language]);
 
   useEffect(() => {
-    updateCookieLanguage(language);
+    if (getCookies()[cookieI18Name] != language) {
+      updateCookieLanguage(language);
+    }
   }, [language]);
 
   return <I18NContext.Provider value={{ language, changeLanguage, getLocales }}>{children}</I18NContext.Provider>;

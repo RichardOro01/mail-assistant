@@ -8,6 +8,7 @@ export interface EmailInstance {
   expireTimer: NodeJS.Timeout;
   imap: ImapInstance;
   smtp: Transporter;
+  fetching: number;
 }
 
 type EmailInstances = { [key: string]: EmailInstance };
@@ -32,7 +33,8 @@ export const addEmailInstance = (imap: ImapInstance, smtp: Transporter) => {
     smtp,
     expireTimer: setTimeout(() => {
       removeEmailInstance(imap.email);
-    }, sessionExpiresTimeMilliseconds)
+    }, sessionExpiresTimeMilliseconds),
+    fetching: 0
   };
   emailInstances[imap.email] = emailInstance;
   return emailInstance;
@@ -62,8 +64,24 @@ export const getEmailInstance = async () => {
   const session = await getServerSession();
   if (session && session.user && session.user.email && session.user.email in emailInstances) {
     debugImap('\x1b[32mIMAP instance success');
-    return { ...emailInstances[session.user.email], email: session.user.email };
+    return {
+      ...emailInstances[session.user.email],
+      email: session.user.email,
+      fetching: emailInstances[session.user.email].fetching
+    };
   }
   debugImap('\x1b[33mNo IMAP instance');
   return null;
+};
+
+export const updateEmailCurrentFetching = async () => {
+  const session = await getServerSession();
+  if (session && session.user && session.user.email && session.user.email in emailInstances) {
+    return ++emailInstances[session.user.email].fetching;
+  }
+};
+
+export const getEmailCurrentFetching = async () => {
+  const session = await getServerSession();
+  if (session && session.user.email in emailInstances) return emailInstances[session.user.email].fetching;
 };

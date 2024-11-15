@@ -3,7 +3,7 @@
 import { createImapInstance } from '@/server/imap';
 import { debugImap } from '../../lib/debug';
 import { createSmtpInstance } from '@/server/smtp';
-import { EmailInstance, addEmailInstance } from '@/server/email';
+import { EmailInstance, addEmailInstance, getEmailCurrentFetching, updateEmailCurrentFetching } from '@/server/email';
 import { FetchError, FetchOkResponse, StandardError } from '../types';
 import { isObjectWithProperties } from '@/lib/utils';
 import { ImapFlow } from 'imapflow';
@@ -58,13 +58,17 @@ export const getMessages = async (options?: IGetMailsRequest) => {
     debugImap('Searching', search);
     const list = (await connection.search({ ...(search ? { body: search } : {}) })) || [];
     const reverseList = list.reverse().slice(0, limit);
-
-    debugImap('Fetching messages');
+    const thisFetching = await updateEmailCurrentFetching();
+    debugImap(`Fetching ${reverseList.length} messages`);
+    let current = 0;
     for await (const message of connection.fetch(reverseList, {
       source: true
     })) {
+      const currentFetching = await getEmailCurrentFetching();
+      if (thisFetching !== currentFetching) break;
       const parsed = await simpleParser(message.source);
       messages.push(emailAdapter(parsed, message));
+      debugImap(`Status: ${((++current / reverseList.length) * 100).toFixed()}%`);
     }
   } catch (error) {
     console.log(error);
@@ -109,6 +113,7 @@ export const getMessageByUid = async (uid: number) => {
 };
 export const deleteMessage = async (uid: number) => {
   let connection: ImapFlow;
+
   try {
     connection = await createImapConnection();
   } catch (error) {
