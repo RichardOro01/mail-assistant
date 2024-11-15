@@ -5,6 +5,7 @@ import { ImapFlow } from 'imapflow';
 import { checkEmail } from '@/server/utils';
 
 export const createImapConnection = async () => {
+  debugImap('Creating IMAP connection');
   await checkEmail();
   const email = await getEmailInstance();
   if (!email) {
@@ -18,7 +19,9 @@ export const createImapConnection = async () => {
   const { imap } = email;
   let connection: ImapFlow;
   try {
+    debugImap('Connecting to IMAP');
     connection = await imap.connect();
+    debugImap('Connected to IMAP');
   } catch (error) {
     console.log(error);
     throw {

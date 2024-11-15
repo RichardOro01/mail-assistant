@@ -53,11 +53,13 @@ export const getMessages = async (options?: IGetMailsRequest) => {
   } catch (error) {
     return error as FetchError<StandardError>;
   }
+  debugImap('Getting Mailbox Lock');
   const lock = await connection.getMailboxLock('INBOX');
   try {
     debugImap('Searching', search);
     const list = (await connection.search({ ...(search ? { body: search } : {}) })) || [];
     const reverseList = list.reverse().slice(0, limit);
+    debugImap('Updating fetching');
     const thisFetching = await updateEmailCurrentFetching();
     debugImap(`Fetching ${reverseList.length} messages`);
     let current = 0;
@@ -108,7 +110,7 @@ export const getMessageByUid = async (uid: number) => {
   } finally {
     lock.release();
   }
-  await connection.logout();
+  connection.logout();
   return { data: message, status: 200, statusText: 'OK.' } as FetchOkResponse<IMessage>;
 };
 export const deleteMessage = async (uid: number) => {
@@ -133,6 +135,6 @@ export const deleteMessage = async (uid: number) => {
   } finally {
     lock.release();
   }
-  await connection.logout();
+  connection.logout();
   return { data: { ok: true }, status: 200, statusText: 'OK' } as FetchOkResponse<{ ok: true }>;
 };

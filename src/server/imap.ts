@@ -23,8 +23,6 @@ const createImapFlowInstance = (email: string, password: string) => {
 };
 
 export const createImapInstance = (email: string, password: string): ImapInstance => {
-  debugImap('Creating Imap instance \x1b[34m', email);
-
   const connect = async () => {
     const imap = createImapFlowInstance(email, password);
     await imap.connect();

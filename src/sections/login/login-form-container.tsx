@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { LoginRequest } from './types';
@@ -46,6 +46,10 @@ const LoginFormContainer = () => {
       handleStandardError(error);
     }
   });
+
+  useEffect(() => {
+    router.refresh();
+  }, [router]);
 
   return (
     <FormProvider {...{ methods, onSubmit }}>
