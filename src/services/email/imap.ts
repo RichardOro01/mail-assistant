@@ -56,7 +56,7 @@ export const getMessages = async (options?: IGetMailsRequest) => {
   debugImap('Getting Mailbox Lock');
   const lock = await connection.getMailboxLock('INBOX');
   try {
-    debugImap('Searching', search);
+    debugImap('Searching:\x1b[33m', search);
     const list = (await connection.search({ ...(search ? { body: search } : {}) })) || [];
     const reverseList = list.reverse().slice(0, limit);
     debugImap('Updating fetching');

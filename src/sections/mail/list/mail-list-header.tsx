@@ -2,13 +2,19 @@
 
 import React from 'react';
 import { debugRendering } from '@/lib/debug/debuggers';
-import { PencilLine, Search } from 'lucide-react';
+import { PencilLine } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { routes } from '@/lib/routes';
 import MailListSummary from './mail-list-summary';
 import { useTranslationClient } from '@/i18n/client';
+import MailListSearch from './mail-list-search';
+import { EmailFilters } from '@/types/filters';
 
-const MailListHeader: React.FC = () => {
+interface MailListHeaderProps {
+  filters: EmailFilters;
+}
+
+const MailListHeader: React.FC<MailListHeaderProps> = ({ filters }) => {
   debugRendering('MailListHeader');
 
   const router = useRouter();
@@ -20,12 +26,10 @@ const MailListHeader: React.FC = () => {
       <div className='flex gap-6'>
         <MailListSummary />
 
-        <button title={t('compose')} onClick={() => router.push(routes.mail.message.compose)}>
+        <button type='button' title={t('compose')} onClick={() => router.push(routes.mail.message.compose)}>
           <PencilLine color='gray' size={18} />
         </button>
-        <button title={t('search')} onClick={() => router.push(routes.mail.message.compose)}>
-          <Search color='gray' size={18} />
-        </button>
+        <MailListSearch initialValue={filters.search} />
       </div>
     </div>
   );
