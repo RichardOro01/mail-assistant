@@ -7,5 +7,6 @@
   "compose": "Compose",
   "search": "Search",
   "summing_up": "Summing up...",
-  "message_deleted": "Message deleted"
+  "message_deleted": "Message deleted",
+  "empty": "No messages found"
 }

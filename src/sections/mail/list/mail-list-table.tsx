@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { useMailContext } from '@/sections/mail/provider/hooks';
 import MailListRow from './mail-list-row';
 import { IMessage } from '@/types/imap';
+import MailListEmpty from './mail-list-empty';
 
 interface MailListTable {
   messages: IMessage[];
@@ -16,6 +17,8 @@ const MailListTable: React.FC<MailListTable> = ({ messages }) => {
   useEffect(() => {
     setMails(messages);
   }, [messages, setMails]);
+
+  if (!messages.length) return <MailListEmpty />;
 
   return (
     <Table>

@@ -7,5 +7,6 @@
   "compose": "Redactar",
   "search": "Buscar",
   "summing_up": "Resumiendo...",
-  "message_deleted": "Mensaje eliminado"
+  "message_deleted": "Mensaje eliminado",
+  "empty": "No se encontraron mensajes"
 }

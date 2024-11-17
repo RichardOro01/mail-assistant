@@ -1,24 +1,21 @@
-'use client';
-
 import React from 'react';
 import { debugRendering } from '@/lib/debug/debuggers';
 import { PencilLine } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import { routes } from '@/lib/routes';
 import MailListSummary from './mail-list-summary';
-import { useTranslationClient } from '@/i18n/client';
 import MailListSearch from './mail-list-search';
 import { EmailFilters } from '@/types/filters';
+import Link from 'next/link';
+import { translationServer } from '@/i18n';
 
 interface MailListHeaderProps {
   filters: EmailFilters;
 }
 
-const MailListHeader: React.FC<MailListHeaderProps> = ({ filters }) => {
+const MailListHeader: React.FC<MailListHeaderProps> = async ({ filters }) => {
   debugRendering('MailListHeader');
 
-  const router = useRouter();
-  const { t } = useTranslationClient('mail-list');
+  const { t } = await translationServer('mail-list');
 
   return (
     <div className='flex justify-between py-5 px-7 text-xl items-center sticky top-0 bg-white z-10'>
@@ -26,9 +23,9 @@ const MailListHeader: React.FC<MailListHeaderProps> = ({ filters }) => {
       <div className='flex gap-6'>
         <MailListSummary />
 
-        <button type='button' title={t('compose')} onClick={() => router.push(routes.mail.message.compose)}>
+        <Link aria-label={t('compose')} href={routes.mail.message.compose} className='content-center'>
           <PencilLine color='gray' size={18} />
-        </button>
+        </Link>
         <MailListSearch initialValue={filters.search} />
       </div>
     </div>
