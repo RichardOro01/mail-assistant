@@ -11,6 +11,7 @@ import { simpleParser } from 'mailparser';
 import { emailAdapter } from '@/server/adapters';
 import { IGetMailsRequest, IMessage } from '@/types/imap';
 import { createImapConnection } from './utils';
+import { IPaginatedData } from '@/types/pagination';
 
 export const auth = async (email: string, password: string) => {
   try {
@@ -18,7 +19,7 @@ export const auth = async (email: string, password: string) => {
     debugImap('Imap connecting \x1b[34m', email);
     const connection = await imap.connect();
     debugImap('Imap open \x1b[34m', email);
-    await connection.logout();
+    connection.logout();
     const smtp = createSmtpInstance(email, password);
     const emailInstance = addEmailInstance(imap, smtp);
     return { data: emailInstance, status: 200, statusText: 'OK.' } as FetchOkResponse<EmailInstance>;
@@ -44,6 +45,7 @@ export const getMessages = async (options?: IGetMailsRequest) => {
 
   const search = options?.search;
   const limit = options?.limit || 20;
+  const page = options?.page || 1;
 
   const messages: IMessage[] = [];
 
@@ -53,12 +55,14 @@ export const getMessages = async (options?: IGetMailsRequest) => {
   } catch (error) {
     return error as FetchError<StandardError>;
   }
+  let totalPages: number;
   debugImap('Getting Mailbox Lock');
   const lock = await connection.getMailboxLock('INBOX');
   try {
     debugImap('Searching:\x1b[33m', search);
     const list = (await connection.search({ ...(search ? { body: search } : {}) })) || [];
-    const reverseList = list.reverse().slice(0, limit);
+    totalPages = Math.ceil(list.length / limit) || 1;
+    const reverseList = list.reverse().slice((page - 1) * limit, page * limit);
     debugImap('Updating fetching');
     const thisFetching = await updateEmailCurrentFetching();
     debugImap(`Fetching ${reverseList.length} messages`);
@@ -82,8 +86,12 @@ export const getMessages = async (options?: IGetMailsRequest) => {
   } finally {
     lock.release();
   }
-  await connection.logout();
-  return { data: messages, status: 200, statusText: 'OK.' } as FetchOkResponse<IMessage[]>;
+  connection.logout();
+  return {
+    data: { items: messages, totalPages },
+    status: 200,
+    statusText: 'OK.'
+  } as FetchOkResponse<IPaginatedData<IMessage>>;
 };
 export const getMessageByUid = async (uid: number) => {
   let message: IMessage;

@@ -26,4 +26,5 @@ export interface IMessagePerson {
 export interface IGetMailsRequest {
   search?: string;
   limit?: number;
+  page?: number;
 }
