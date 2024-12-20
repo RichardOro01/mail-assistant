@@ -10,7 +10,8 @@ export const config = {
 };
 
 export function middleware(req: NextRequest) {
-  const lng = acceptLanguage.get(req.cookies.get(cookieI18Name)?.value) || fallbackLng;
+  const lngCookieValue = req.cookies.get(cookieI18Name)?.value;
+  const lng = acceptLanguage.get(lngCookieValue) || fallbackLng;
   const requestHeaders = new Headers(req.headers);
   requestHeaders.set('x-url', req.url);
   const response = NextResponse.next({
@@ -18,8 +19,10 @@ export function middleware(req: NextRequest) {
       headers: requestHeaders
     }
   });
-  response.cookies.set(cookieI18Name, lng, {
-    expires: getNextYear()
-  });
+  if (lngCookieValue !== lng) {
+    response.cookies.set(cookieI18Name, lng, {
+      expires: getNextYear()
+    });
+  }
   return response;
 }
