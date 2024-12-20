@@ -10,7 +10,7 @@ const HelperText: React.FC<HelperTextProps> = ({ text, error }) => {
   return (
     <p
       className={clsx('animate-flip-down animate-once animate-duration-200 animate-ease-in', {
-        'text-error-400': error
+        'text-red-500': error
       })}>
       {text}
     </p>
