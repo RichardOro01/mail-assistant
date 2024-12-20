@@ -13,7 +13,7 @@ export const useLoginForm = () => {
 
   const LoginSchema = z.object({
     email: z.string().min(1, t('email-required')).email(t('email-invalid')),
-    password: z.string().min(1, 'password-required')
+    password: z.string().min(1, t('password-required'))
   });
 
   const methods = useForm({ resolver: zodResolver(LoginSchema), defaultValues });
