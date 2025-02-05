@@ -1,3 +1,5 @@
+'use client';
+
 import React, { useState } from 'react';
 import { debugRendering } from '@/lib/debug/debuggers';
 import { TableCell, TableRow } from '@/components/ui/table';
@@ -14,9 +16,10 @@ import { toast } from '@/hooks/use-toast';
 
 interface MailListRowProps {
   message: IMessage;
+  priorityComponent: React.ReactNode;
 }
 
-const MailListRow: React.FC<MailListRowProps> = ({ message }) => {
+const MailListRow: React.FC<MailListRowProps> = ({ message, priorityComponent }) => {
   debugRendering('MailListRow');
 
   const [showOptions, setShowOptions] = useState(false);
@@ -83,6 +86,7 @@ const MailListRow: React.FC<MailListRowProps> = ({ message }) => {
           ''
         )}
       </TableCell>
+      <TableCell className='w-2 py-0'>{priorityComponent}</TableCell>
     </TableRow>
   );
 };

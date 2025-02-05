@@ -5,3 +5,7 @@ export interface IGenerateMessageRequest {
 export interface IGenerateSummaryRequest {
   messages: string[];
 }
+
+export const MessagePriorityEnum = ['high', 'medium', 'low', 'none'] as const;
+
+export type MessagePriorityType = (typeof MessagePriorityEnum)[number];
