@@ -8,7 +8,7 @@ export const runtime = 'edge';
 export async function POST(req: Request) {
   const { prompt }: IGenerateMessageRequest = await req.json();
 
-  const result = await aiService.generateAnswer(prompt);
+  const result = await aiService.getMessagePriority(prompt);
 
-  return result.toDataStreamResponse();
+  return result.text;
 }
