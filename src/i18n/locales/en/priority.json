@@ -1,0 +1,12 @@
+{
+  "priority": "Priority",
+  "low": "Low",
+  "medium": "Medium",
+  "high": "High",
+  "none": "None",
+  "low_explain": "This message is not important enough to be a priority.",
+  "medium_explain": "This message is important enough to be a priority.",
+  "high_explain": "This message is very important and should be a priority.",
+  "none_explain": "Unable to calculate priority for this message.",
+  "loading": "Loading priority..."
+}

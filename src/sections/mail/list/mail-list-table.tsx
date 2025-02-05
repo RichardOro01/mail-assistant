@@ -4,6 +4,7 @@ import { IMessage } from '@/types/imap';
 import MailListEmpty from './mail-list-empty';
 import MailListRowPriorityContainer from './mail-list-row-priority-container';
 import { Suspense } from 'react';
+import MailListRowPriority from './mail-list-row-priority';
 
 interface MailListTable {
   messages: IMessage[];
@@ -20,7 +21,7 @@ const MailListTable: React.FC<MailListTable> = ({ messages }) => {
             key={index}
             {...{ message }}
             priorityComponent={
-              <Suspense fallback={'loading'}>
+              <Suspense fallback={<MailListRowPriority priority='loading' />}>
                 <MailListRowPriorityContainer message={message.text} />
               </Suspense>
             }
