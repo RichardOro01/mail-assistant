@@ -5,6 +5,8 @@ import { MessagePriorityType } from '@/types/ai';
 import { openai } from '@ai-sdk/openai';
 import { generateText } from 'ai';
 
+//TODO use generate structure data
+
 export const getMessagePriority = async (prompt: string): Promise<MessagePriorityType> => {
   const { text } = await generateText({
     system: systems.getMessagePriority(),

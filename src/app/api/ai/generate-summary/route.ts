@@ -1,4 +1,4 @@
-import { aiService } from '@/services/ai';
+import { generateSummary } from '@/services/ai/generate-summary';
 import { IGenerateSummaryRequest } from '@/types/ai';
 
 export const maxDuration = 30;
@@ -10,7 +10,7 @@ const MESSAGE_LIMIT = 5;
 export async function POST(req: Request) {
   const { messages }: IGenerateSummaryRequest = await req.json();
 
-  const result = await aiService.generateSummary(messages, MESSAGE_LIMIT);
+  const result = await generateSummary(messages, MESSAGE_LIMIT);
 
   return result.toDataStreamResponse();
 }

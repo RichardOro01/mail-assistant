@@ -6,29 +6,58 @@ import { useMailContext } from '@/sections/mail/provider/hooks';
 import { Button } from '@/components/ui/button';
 import { useFormContext } from 'react-hook-form';
 import { IReplyEmailForm } from '@/types/smtp';
-import { useGenerateAnswerAI } from '@/services/hooks';
+import { useGenerateAnswerAI, useSpeechToTextAI } from '@/services/hooks';
 import { useTranslationClient } from '@/i18n/client';
 import FormInput from '@/components/form-hook/form-input';
 import { Label } from '@/components/ui/label';
+import { useAudioRecord } from '@/lib/audio/hook';
+import { useHandleError } from '@/lib/error/hooks';
+import MailSpeechToTextButtons from '../../speech-to-text/mail-speech-to-text-buttons';
 
 const MailMessageReplyForm: React.FC = () => {
-  const { setValue, trigger } = useFormContext<IReplyEmailForm>();
+  const { setValue, getValues, trigger } = useFormContext<IReplyEmailForm>();
   const { selectedMail } = useMailContext();
   const { t } = useTranslationClient('message-reply');
+  const { handleStandardError } = useHandleError();
 
   const onFinish = () => {
     trigger('text');
   };
 
-  const { completion, complete, isLoading, stop } = useGenerateAnswerAI({ onFinish });
+  const { generateTextFromAudio, isLoading: speechToTexIsLoading } = useSpeechToTextAI();
+
+  const {
+    completion: generateCompletion,
+    complete: generateComplete,
+    isLoading: generateIsLoading,
+    stop: generateStop
+  } = useGenerateAnswerAI({ onFinish });
+
+  const handleRecord = async (audio: Blob) => {
+    try {
+      const text = await generateTextFromAudio(audio);
+      if (text) {
+        const currentTextValue = getValues('text');
+        setValue('text', `${currentTextValue} ${text}`);
+      }
+    } catch (e) {
+      handleStandardError(e, { showToast: true });
+    }
+  };
+
+  const { isRecording, startRecording, stopRecording } = useAudioRecord({ onRecord: handleRecord });
 
   const generateAnswer = () => {
-    if (selectedMail && selectedMail.text) complete(selectedMail.text);
+    if (selectedMail && selectedMail.text) generateComplete(selectedMail.text);
+  };
+
+  const handleSpeechToText = async () => {
+    startRecording();
   };
 
   useEffect(() => {
-    setValue('text', completion);
-  }, [completion, setValue]);
+    setValue('text', generateCompletion);
+  }, [generateCompletion, setValue]);
 
   debugRendering('MailMessageReplyForm');
   return (
@@ -46,16 +75,27 @@ const MailMessageReplyForm: React.FC = () => {
         name='text'
         className='w-full text-lg font-medium  bg-transparent resize-none overflow-hidden'
         rows={5}
-        placeholder={isLoading ? t('thinking') : ''}
-        disabled={isLoading}
+        placeholder={generateIsLoading ? t('thinking') : isRecording || speechToTexIsLoading ? t('hearing') : ''}
+        disabled={generateIsLoading || speechToTexIsLoading || isRecording}
       />
       <MailMessageReplyButtons />
-      {!isLoading ? (
-        <Button type='button' variant='secondary' onClick={generateAnswer}>
+      <MailSpeechToTextButtons
+        disabled={generateIsLoading}
+        isRecording={isRecording}
+        speechToTexIsLoading={speechToTexIsLoading}
+        stopRecording={stopRecording}
+        handleSpeechToText={handleSpeechToText}
+      />
+      {!generateIsLoading ? (
+        <Button
+          type='button'
+          variant='secondary'
+          onClick={generateAnswer}
+          disabled={speechToTexIsLoading || isRecording}>
           Generate
         </Button>
       ) : (
-        <Button type='button' variant='secondary' onClick={stop}>
+        <Button type='button' variant='secondary' onClick={generateStop}>
           Stop
         </Button>
       )}

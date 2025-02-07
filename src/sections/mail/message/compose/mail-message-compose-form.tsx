@@ -3,9 +3,38 @@ import FormInput from '@/components/form-hook/form-input';
 import MailMessageComposeButtons from './mail-message-compose-buttons';
 import FormTextarea from '@/components/form-hook/form-textarea';
 import { useTranslationClient } from '@/i18n/client';
+import { useSpeechToTextAI } from '@/services/hooks';
+import MailSpeechToTextButtons from '../speech-to-text/mail-speech-to-text-buttons';
+import { useHandleError } from '@/lib/error/hooks';
+import { useFormContext } from 'react-hook-form';
+import { IReplyEmailForm } from '@/types/smtp';
+import { useAudioRecord } from '@/lib/audio/hook';
 
 const MailMessageComposeForm = () => {
   const { t } = useTranslationClient('message-compose');
+  const { handleStandardError } = useHandleError();
+  const { getValues, setValue } = useFormContext<IReplyEmailForm>();
+
+  const { generateTextFromAudio, isLoading: speechToTexIsLoading } = useSpeechToTextAI();
+
+  const handleRecord = async (audio: Blob) => {
+    try {
+      const text = await generateTextFromAudio(audio);
+      if (text) {
+        const currentTextValue = getValues('text');
+        setValue('text', `${currentTextValue} ${text}`);
+      }
+    } catch (e) {
+      handleStandardError(e, { showToast: true });
+    }
+  };
+
+  const { isRecording, startRecording, stopRecording } = useAudioRecord({ onRecord: handleRecord });
+
+  const handleSpeechToText = async () => {
+    startRecording();
+  };
+
   return (
     <div className='flex flex-col mx-5 my-3 gap-3'>
       <div className='flex items-center gap-4 mb-4'>
@@ -31,6 +60,12 @@ const MailMessageComposeForm = () => {
         className='w-full px-0 text-lg font-medium resize-none bg-transparent overflow-hidden border-none'
       />
       <MailMessageComposeButtons />
+      <MailSpeechToTextButtons
+        handleSpeechToText={handleSpeechToText}
+        stopRecording={stopRecording}
+        isRecording={isRecording}
+        speechToTexIsLoading={speechToTexIsLoading}
+      />
     </div>
   );
 };

@@ -9,3 +9,7 @@ export interface IGenerateSummaryRequest {
 export const MessagePriorityEnum = ['high', 'medium', 'low', 'none'] as const;
 
 export type MessagePriorityType = (typeof MessagePriorityEnum)[number];
+
+export interface ISpeechToTextResponse {
+  text: string;
+}
