@@ -14,7 +14,7 @@ const MailListRowPriorityContainer: React.FC<MailListRowPriorityContainerProps> 
     return <MailListRowPriority {...{ priority }} />;
   } catch (error) {
     console.log(error);
-    return 'error';
+    return <MailListRowPriority priority='none' />;
   }
 };
 

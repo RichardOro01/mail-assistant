@@ -12,12 +12,15 @@ export const speechToText = async (audio: Uint8Array) => {
   createFile(filePatch, audio);
   const audioStream = fs.createReadStream(filePatch);
 
-  const response = await openaiClient.audio.transcriptions.create({
-    file: audioStream,
-    model: 'whisper-1'
-  });
-
-  fs.unlinkSync(filePatch);
-
-  return response.text;
+  try {
+    const response = await openaiClient.audio.transcriptions.create({
+      file: audioStream,
+      model: 'whisper-1'
+    });
+    fs.unlinkSync(filePatch);
+    return response.text;
+  } catch (error) {
+    fs.unlinkSync(filePatch);
+    throw error;
+  }
 };
