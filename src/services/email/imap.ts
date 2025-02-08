@@ -105,8 +105,11 @@ export const getMessageByUid = async (uid: number) => {
   try {
     debugImap('Fetching message', uid);
     const messageFetch = await connection.fetchOne(`${uid}`, { source: true }, { uid: true });
+
+    debugImap('Parsing message', uid);
     const parsed = await simpleParser(messageFetch.source);
 
+    debugImap('Parsed message', uid);
     message = emailAdapter(parsed, messageFetch);
   } catch (error) {
     console.log(error);

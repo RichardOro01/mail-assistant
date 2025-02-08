@@ -4,5 +4,6 @@
   "send_later": "Enviar luego",
   "success": "Correo enviado exitosamente.",
   "thinking": "Pensando...",
+  "read": "Leer",
   "error": { "send_email_timeout": "Error al conectar con el servidor de correo." }
 }

@@ -8,7 +8,8 @@ import MailSpeechToTextButtons from '../speech-to-text/mail-speech-to-text-butto
 import { useHandleError } from '@/lib/error/hooks';
 import { useFormContext } from 'react-hook-form';
 import { IReplyEmailForm } from '@/types/smtp';
-import { useAudioRecord } from '@/lib/audio/hook';
+import { useAudioRecord } from '@/lib/audio/use-audio-record';
+import { useCallback } from 'react';
 
 const MailMessageComposeForm = () => {
   const { t } = useTranslationClient('message-compose');
@@ -17,17 +18,20 @@ const MailMessageComposeForm = () => {
 
   const { generateTextFromAudio, isLoading: speechToTexIsLoading } = useSpeechToTextAI();
 
-  const handleRecord = async (audio: Blob) => {
-    try {
-      const text = await generateTextFromAudio(audio);
-      if (text) {
-        const currentTextValue = getValues('text');
-        setValue('text', `${currentTextValue} ${text}`);
+  const handleRecord = useCallback(
+    async (audio: Blob) => {
+      try {
+        const text = await generateTextFromAudio(audio);
+        if (text) {
+          const currentTextValue = getValues('text');
+          setValue('text', `${currentTextValue} ${text}`);
+        }
+      } catch (e) {
+        handleStandardError(e, { showToast: true });
       }
-    } catch (e) {
-      handleStandardError(e, { showToast: true });
-    }
-  };
+    },
+    [generateTextFromAudio, getValues, handleStandardError, setValue]
+  );
 
   const { isRecording, startRecording, stopRecording } = useAudioRecord({ onRecord: handleRecord });
 

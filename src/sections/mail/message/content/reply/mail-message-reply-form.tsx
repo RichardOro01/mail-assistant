@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { debugRendering } from '@/lib/debug/debuggers';
 import FormTextarea from '@/components/form-hook/form-textarea';
 import MailMessageReplyButtons from './mail-message-reply-buttons';
@@ -10,7 +10,7 @@ import { useGenerateAnswerAI, useSpeechToTextAI } from '@/services/hooks';
 import { useTranslationClient } from '@/i18n/client';
 import FormInput from '@/components/form-hook/form-input';
 import { Label } from '@/components/ui/label';
-import { useAudioRecord } from '@/lib/audio/hook';
+import { useAudioRecord } from '@/lib/audio/use-audio-record';
 import { useHandleError } from '@/lib/error/hooks';
 import MailSpeechToTextButtons from '../../speech-to-text/mail-speech-to-text-buttons';
 
@@ -33,17 +33,20 @@ const MailMessageReplyForm: React.FC = () => {
     stop: generateStop
   } = useGenerateAnswerAI({ onFinish });
 
-  const handleRecord = async (audio: Blob) => {
-    try {
-      const text = await generateTextFromAudio(audio);
-      if (text) {
-        const currentTextValue = getValues('text');
-        setValue('text', `${currentTextValue} ${text}`);
+  const handleRecord = useCallback(
+    async (audio: Blob) => {
+      try {
+        const text = await generateTextFromAudio(audio);
+        if (text) {
+          const currentTextValue = getValues('text');
+          setValue('text', `${currentTextValue} ${text}`);
+        }
+      } catch (e) {
+        handleStandardError(e, { showToast: true });
       }
-    } catch (e) {
-      handleStandardError(e, { showToast: true });
-    }
-  };
+    },
+    [generateTextFromAudio, getValues, handleStandardError, setValue]
+  );
 
   const { isRecording, startRecording, stopRecording } = useAudioRecord({ onRecord: handleRecord });
 

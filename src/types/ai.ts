@@ -13,3 +13,7 @@ export type MessagePriorityType = (typeof MessagePriorityEnum)[number];
 export interface ISpeechToTextResponse {
   text: string;
 }
+
+export interface ITextToSpeechRequest {
+  text: string;
+}

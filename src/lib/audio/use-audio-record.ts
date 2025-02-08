@@ -1,6 +1,6 @@
 import { useToast } from '@/hooks/use-toast';
 import { useTranslationClient } from '@/i18n/client';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 interface useAudioRecordProps {
   onRecord: (blob: Blob) => void;
@@ -12,7 +12,7 @@ export const useAudioRecord = ({ onRecord }: useAudioRecordProps) => {
   const { toast } = useToast();
   const { t } = useTranslationClient('audio');
 
-  const startRecording = async () => {
+  const startRecording = useCallback(async () => {
     navigator.mediaDevices
       .getUserMedia({ audio: true })
       .then((stream) => {
@@ -41,12 +41,12 @@ export const useAudioRecord = ({ onRecord }: useAudioRecordProps) => {
           description: t('microphone_not_enabled')
         });
       });
-  };
+  }, [onRecord, t, toast]);
 
-  const stopRecording = () => {
+  const stopRecording = useCallback(() => {
     mediaRecorder?.stop();
     setIsRecording(false);
-  };
+  }, [mediaRecorder]);
 
   return {
     isRecording,

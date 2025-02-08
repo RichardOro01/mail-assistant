@@ -4,5 +4,6 @@
   "send_later": "Send later",
   "success": "Email sended successfully.",
   "thinking": "Thinking...",
+  "read": "Read",
   "error": { "send_email_timeout": "Error connecting to email server." }
 }
