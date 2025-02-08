@@ -18,8 +18,8 @@ export async function POST(req: Request) {
     const result = await textToSpeech(text);
     return new Response(result, {
       headers: {
-        'Content-Type': 'audio/webm',
-        'Content-Disposition': 'attachment; filename="audio.webm"'
+        'Content-Type': 'audio/mp3',
+        'Content-Disposition': 'attachment; filename="audio.mp3"'
       }
     });
   } catch (error) {
