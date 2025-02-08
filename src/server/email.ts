@@ -79,6 +79,7 @@ export const updateEmailCurrentFetching = async () => {
   if (session && session.user && session.user.email && session.user.email in emailInstances) {
     return ++emailInstances[session.user.email].fetching;
   }
+  throw new Error('No session or email instance');
 };
 
 export const getEmailCurrentFetching = async () => {

@@ -1,5 +1,5 @@
 import { debugImap } from '@/lib/debug';
-import { getEmailInstance } from '@/server/email';
+import { getEmailCurrentFetching, getEmailInstance } from '@/server/email';
 import { FetchError, StandardError } from '../types';
 import { ImapFlow } from 'imapflow';
 import { checkEmail } from '@/server/utils';
@@ -31,4 +31,9 @@ export const createImapConnection = async () => {
     } as FetchError<StandardError>;
   }
   return connection;
+};
+
+export const verifyImapFetching = async (fetching: number) => {
+  const currentFetching = await getEmailCurrentFetching();
+  if (fetching !== currentFetching) throw new Error('Abort by other fetching');
 };

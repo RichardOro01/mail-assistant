@@ -3,14 +3,14 @@
 import { createImapInstance } from '@/server/imap';
 import { debugImap } from '../../lib/debug';
 import { createSmtpInstance } from '@/server/smtp';
-import { EmailInstance, addEmailInstance, getEmailCurrentFetching, updateEmailCurrentFetching } from '@/server/email';
+import { EmailInstance, addEmailInstance, updateEmailCurrentFetching } from '@/server/email';
 import { FetchError, FetchOkResponse, StandardError } from '../types';
 import { isObjectWithProperties } from '@/lib/utils';
 import { ImapFlow } from 'imapflow';
 import { simpleParser } from 'mailparser';
 import { emailAdapter } from '@/server/adapters';
 import { IGetMailsRequest, IMessage } from '@/types/imap';
-import { createImapConnection } from './utils';
+import { createImapConnection, verifyImapFetching } from './utils';
 import { IPaginatedData } from '@/types/pagination';
 
 export const auth = async (email: string, password: string) => {
@@ -60,18 +60,19 @@ export const getMessages = async (options?: IGetMailsRequest) => {
   const lock = await connection.getMailboxLock('INBOX');
   try {
     debugImap('Searching:\x1b[33m', search);
+    const thisFetching = await updateEmailCurrentFetching();
     const list = (await connection.search({ ...(search ? { body: search } : {}) })) || [];
     totalPages = Math.ceil(list.length / limit) || 1;
     const reverseList = list.reverse().slice((page - 1) * limit, page * limit);
     debugImap('Updating fetching');
-    const thisFetching = await updateEmailCurrentFetching();
     debugImap(`Fetching ${reverseList.length} messages`);
     let current = 0;
-    for await (const message of connection.fetch(reverseList, {
-      source: true
-    })) {
-      const currentFetching = await getEmailCurrentFetching();
-      if (thisFetching !== currentFetching) break;
+
+    verifyImapFetching(thisFetching);
+    const resMessages = await connection.fetchAll(reverseList, { source: true });
+
+    verifyImapFetching(thisFetching);
+    for (const message of resMessages) {
       const parsed = await simpleParser(message.source);
       messages.push(emailAdapter(parsed, message));
       debugImap(`Status: ${((++current / reverseList.length) * 100).toFixed()}%`);
@@ -96,13 +97,16 @@ export const getMessages = async (options?: IGetMailsRequest) => {
 export const getMessageByUid = async (uid: number) => {
   let message: IMessage;
   let connection: ImapFlow;
+  const thisFetching = await updateEmailCurrentFetching();
   try {
     connection = await createImapConnection();
   } catch (error) {
     return error as FetchError<StandardError>;
   }
+  verifyImapFetching(thisFetching);
   const lock = await connection.getMailboxLock('INBOX');
   try {
+    verifyImapFetching(thisFetching);
     debugImap('Fetching message', uid);
     const messageFetch = await connection.fetchOne(`${uid}`, { source: true }, { uid: true });
 
