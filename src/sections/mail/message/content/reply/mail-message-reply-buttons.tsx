@@ -21,9 +21,6 @@ const MailMessageReplyButtons: React.FC = () => {
         variant='secondary'>
         {t('send')}
       </Button>
-      <Button variant='outline' type='button'>
-        {t('send_later')}
-      </Button>
     </div>
   );
 };

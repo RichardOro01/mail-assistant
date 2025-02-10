@@ -19,7 +19,7 @@ const MailListSummary: React.FC = () => {
   debugRendering('MailListSummary');
 
   const { t } = useTranslationClient('mail-list');
-  const { complete, completion, isLoading } = useSummaryAI();
+  const { complete, completion, isLoading, error } = useSummaryAI();
   const { mails } = useMailContext();
 
   const handleGenerateSummary = () => {
@@ -33,7 +33,9 @@ const MailListSummary: React.FC = () => {
         <DialogHeader>
           <DialogTitle>{t('ai')}</DialogTitle>
           <DialogDescription>
-            <pre className='text-balance'>{isLoading && !completion ? t('summing_up') : completion}</pre>
+            <pre className='text-balance'>
+              {error ? t('summing_error') : isLoading && !completion ? t('summing_up') : completion}
+            </pre>
           </DialogDescription>
         </DialogHeader>
       </DialogContent>

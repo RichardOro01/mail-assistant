@@ -7,6 +7,7 @@
   "compose": "Compose",
   "search": "Search",
   "summing_up": "Summing up...",
+  "summing_error": "Ups. Something went wrong summing up the messages.",
   "message_deleted": "Message deleted",
   "empty": "No messages found"
 }

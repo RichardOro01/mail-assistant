@@ -63,6 +63,9 @@ export const useTextToSpeechAI = () => {
         setIsLoading(true);
         const body: ITextToSpeechRequest = { text };
         const res = await fetch(endpoints.ai.textToSpeech, { method: 'POST', body: JSON.stringify(body) });
+        if (res.status >= 400) {
+          throw new Error('Something went wrong');
+        }
         const blob = await res.blob();
         return blob;
       } catch (e) {
