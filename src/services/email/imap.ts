@@ -63,7 +63,10 @@ export const getMessages = async (options?: IGetMailsRequest) => {
   try {
     debugImap('Searching:\x1b[33m', search);
     const thisFetching = await updateEmailCurrentFetching();
-    const list = (await connection.search({ ...(search ? { body: search } : {}) })) || [];
+    const list =
+      (await connection.search({
+        ...(search ? { or: [{ body: search }, { subject: search }, { from: search }] } : {})
+      })) || [];
     totalPages = Math.ceil(list.length / limit) || 1;
     const reverseList = list.reverse().slice((page - 1) * limit, page * limit);
 
