@@ -1,5 +1,6 @@
 import { translationServer } from '@/i18n';
 import { generalErrorCodes, isInstanceOfStandardError } from './error';
+import { isObjectWithProperties } from '../utils';
 
 export const getGeneralErrorMessageServer = async (error: unknown) => {
   const { t } = await translationServer('error');
@@ -21,5 +22,17 @@ export const getStandardErrorMessageServer = async (error: unknown, translateFil
     return message;
   } else {
     return getGeneralErrorMessageServer(error);
+  }
+};
+
+export const handleLogApiError = async (error: unknown) => {
+  if (
+    isObjectWithProperties(error, ['data']) &&
+    isObjectWithProperties(error.data, ['error']) &&
+    isObjectWithProperties(error.data.error, ['message'])
+  ) {
+    console.log(error.data.error.message);
+  } else {
+    console.log(error);
   }
 };

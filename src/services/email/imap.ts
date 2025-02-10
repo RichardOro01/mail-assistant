@@ -68,10 +68,10 @@ export const getMessages = async (options?: IGetMailsRequest) => {
     debugImap(`Fetching ${reverseList.length} messages`);
     let current = 0;
 
-    verifyImapFetching(thisFetching);
+    await verifyImapFetching(thisFetching);
     const resMessages = await connection.fetchAll(reverseList, { source: true });
 
-    verifyImapFetching(thisFetching);
+    await verifyImapFetching(thisFetching);
     for (const message of resMessages) {
       const parsed = await simpleParser(message.source);
       messages.push(emailAdapter(parsed, message));
@@ -103,10 +103,10 @@ export const getMessageByUid = async (uid: number) => {
   } catch (error) {
     return error as FetchError<StandardError>;
   }
-  verifyImapFetching(thisFetching);
+  await verifyImapFetching(thisFetching);
   const lock = await connection.getMailboxLock('INBOX');
   try {
-    verifyImapFetching(thisFetching);
+    await verifyImapFetching(thisFetching);
     debugImap('Fetching message', uid);
     const messageFetch = await connection.fetchOne(`${uid}`, { source: true }, { uid: true });
 
