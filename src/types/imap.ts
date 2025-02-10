@@ -11,7 +11,7 @@ export interface IMessage {
   from: IMessagePerson;
   read?: boolean;
   date?: Date;
-  html: string | false;
+  html?: string | false;
   messageId?: string;
   subject?: string;
   text?: string;

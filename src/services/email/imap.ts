@@ -6,12 +6,13 @@ import { createSmtpInstance } from '@/server/smtp';
 import { EmailInstance, addEmailInstance, updateEmailCurrentFetching } from '@/server/email';
 import { FetchError, FetchOkResponse, StandardError } from '../types';
 import { isObjectWithProperties } from '@/lib/utils';
-import { ImapFlow } from 'imapflow';
+import { FetchMessageObject, ImapFlow } from 'imapflow';
 import { simpleParser } from 'mailparser';
 import { emailAdapter } from '@/server/adapters';
 import { IGetMailsRequest, IMessage } from '@/types/imap';
-import { createImapConnection, verifyImapFetching } from './utils';
+import { createImapConnection, findPlainTextPart, streamToString, verifyImapFetching } from './utils';
 import { IPaginatedData } from '@/types/pagination';
+import quotedPrintable from 'quoted-printable';
 
 export const auth = async (email: string, password: string) => {
   try {
@@ -48,6 +49,7 @@ export const getMessages = async (options?: IGetMailsRequest) => {
   const page = options?.page || 1;
 
   const messages: IMessage[] = [];
+  let fetchedMessages: FetchMessageObject[] = [];
 
   let connection: ImapFlow;
   try {
@@ -64,19 +66,16 @@ export const getMessages = async (options?: IGetMailsRequest) => {
     const list = (await connection.search({ ...(search ? { body: search } : {}) })) || [];
     totalPages = Math.ceil(list.length / limit) || 1;
     const reverseList = list.reverse().slice((page - 1) * limit, page * limit);
-    debugImap('Updating fetching');
+
     debugImap(`Fetching ${reverseList.length} messages`);
-    let current = 0;
-
     await verifyImapFetching(thisFetching);
-    const resMessages = await connection.fetchAll(reverseList, { source: true });
-
-    await verifyImapFetching(thisFetching);
-    for (const message of resMessages) {
-      const parsed = await simpleParser(message.source);
-      messages.push(emailAdapter(parsed, message));
-      debugImap(`Status: ${((++current / reverseList.length) * 100).toFixed()}%`);
-    }
+    fetchedMessages = await connection.fetchAll(reverseList, {
+      uid: true,
+      envelope: true,
+      bodyStructure: true,
+      bodyParts: ['1', '1.1']
+    });
+    debugImap('Fetched messages', fetchedMessages.length);
   } catch (error) {
     console.log(error);
     return {
@@ -87,7 +86,46 @@ export const getMessages = async (options?: IGetMailsRequest) => {
   } finally {
     lock.release();
   }
+
+  for (const msg of fetchedMessages) {
+    let textoPlano = '';
+    let type = msg.bodyStructure.childNodes?.[0]?.type;
+    if (type?.includes('multipart')) type = msg.bodyStructure.childNodes?.[0]?.childNodes?.[0]?.type;
+    if (type && !type?.includes('plain')) {
+      const partId = findPlainTextPart(msg.bodyStructure);
+      if (partId) {
+        debugImap('New mail lock', msg.uid);
+        const lock2 = await connection.getMailboxLock('INBOX');
+        try {
+          debugImap('Downloading message', msg.uid);
+          const { content } = await connection.download(String(msg.uid), partId, { uid: true });
+
+          debugImap('Reading message', msg.uid);
+          textoPlano = await streamToString(content);
+        } finally {
+          lock2.release();
+        }
+      }
+    } else {
+      const decodedBinary = quotedPrintable
+        .decode((msg.bodyParts.get('1.1') || msg.bodyParts.get('1'))?.toString() || '')
+        .replaceAll('*', '"');
+      const buffer = Buffer.from(decodedBinary, 'binary');
+      textoPlano = buffer.toString('utf-8');
+    }
+
+    messages.push({
+      from: msg.envelope.from[0],
+      subject: msg.envelope.subject,
+      date: msg.envelope.date,
+      text: textoPlano,
+      uid: Number(msg.uid),
+      to: msg.envelope.to
+    });
+  }
   connection.logout();
+
+  debugImap('Returning messages');
   return {
     data: { items: messages, totalPages },
     status: 200,
