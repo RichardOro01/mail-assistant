@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { debugRendering } from '@/lib/debug/debuggers';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { Eye, LoaderCircle, Trash2 } from 'lucide-react';
-import { format } from 'date-fns';
+import { format, isSameDay } from 'date-fns';
 import { useMailContext } from '../provider/hooks';
 import { useTranslationClient } from '@/i18n/client';
 import { useRouter } from 'next/navigation';
@@ -61,10 +61,10 @@ const MailListRow: React.FC<MailListRowProps> = ({ message, priorityComponent })
       <TableCell className='py-3'>
         <span className='line-clamp-1'>
           {message.subject}
-          <span className='ml-5'>{message.text}</span>
+          <span className='ml-5 opacity-60'>{message.text}</span>
         </span>
       </TableCell>
-      <TableCell className='min-w-[100px] text-right py-0'>
+      <TableCell className='w-[120px] text-right py-0'>
         {showOptions || isDeleting ? (
           <div className='flex gap-2 justify-end'>
             {!isDeleting ? (
@@ -81,12 +81,12 @@ const MailListRow: React.FC<MailListRowProps> = ({ message, priorityComponent })
             )}
           </div>
         ) : message.date ? (
-          format(message.date, 'hh:mm a')
+          format(message.date, isSameDay(message.date, new Date()) ? 'hh:mm a' : 'yyyy/MM/dd')
         ) : (
           ''
         )}
       </TableCell>
-      <TableCell className='w-2 py-0'>{priorityComponent}</TableCell>
+      <TableCell className='py-0 w-32'>{priorityComponent}</TableCell>
     </TableRow>
   );
 };
