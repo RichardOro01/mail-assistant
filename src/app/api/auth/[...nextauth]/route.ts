@@ -5,6 +5,7 @@ import { routes } from '@/lib/routes';
 import { getStandardErrorMessageServer } from '@/lib/error/server-functions';
 import { sessionExpiresTime } from '@/auth/utils';
 import { emailService } from '@/services/email';
+import prisma from '@/lib/prisma';
 
 const authOptions: NextAuthOptions = {
   providers: [
@@ -21,6 +22,10 @@ const authOptions: NextAuthOptions = {
           try {
             debugImap('Trying to auth with IMAP server');
             await emailService.auth(email, password);
+            const user = await prisma.users.findUnique({ where: { email } });
+            if (!user) {
+              await prisma.users.create({ data: { email } });
+            }
             debugAuth('\x1b[32mAuthentication success');
             return { id: credentials.email, email: credentials.email };
           } catch (error) {
