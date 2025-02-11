@@ -7,12 +7,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model ia_use_count {
+model ai_use_count {
   id            String      @id @default(uuid()) @db.Uuid
   user_id       String      @db.Uuid
   count         Int
   last_use_date DateTime    @db.Date
-  type          ia_use_type
+  type          ai_use_type
   users         users       @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
   @@unique([user_id, type])
@@ -33,11 +33,11 @@ model users {
   email              String               @unique @db.VarChar(256)
   display_name       String?
   picture            String?
-  ia_use_count       ia_use_count[]
+  ai_use_count       ai_use_count[]
   message_priorities message_priorities[]
 }
 
-enum ia_use_type {
+enum ai_use_type {
   summary
   generate_answer
   text_to_speech
