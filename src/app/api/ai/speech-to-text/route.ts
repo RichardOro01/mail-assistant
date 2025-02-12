@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { speechToText } from '@/services/ai/speech-to-text';
 import { ISpeechToTextResponse } from '@/types/ai';
 import { StandardError } from '@/services/types';
+import { isInstanceOfStandardError } from '@/lib/error/error';
 
 export const maxDuration = 30;
 
@@ -20,8 +21,11 @@ export async function POST(req: Request) {
     const uint8Array = new Uint8Array(buffer);
     const result = await speechToText(uint8Array);
     return NextResponse.json({ text: result } as ISpeechToTextResponse);
-  } catch (error) {
-    console.log(error);
-    return NextResponse.json({ code: 'unknown', message: 'Something went wrong' } as StandardError, { status: 500 });
+  } catch (e) {
+    if (isInstanceOfStandardError(e)) {
+      return NextResponse.json(e.detail, { status: e.status, statusText: e.statusText });
+    }
+    console.log(e);
+    return NextResponse.json({ code: 'unknown', message: 'Something went wrong' }, { status: 500 });
   }
 }

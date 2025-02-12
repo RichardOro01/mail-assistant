@@ -24,6 +24,9 @@ export const useHandleError = (translateFile?: string) => {
 
   const handleStandardError = useCallback(
     (error: unknown, options?: IHandleErrorOptions) => {
+      if (options?.directDetail) {
+        error = { detail: error, status: 400, statusText: 'Bad Request' };
+      }
       if (isInstanceOfStandardError(error)) {
         const isGeneral = generalErrorCodes.includes(error.detail.code);
         const tFunction = isGeneral ? t : t2;

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { ITextToSpeechRequest } from '@/types/ai';
 import { StandardError } from '@/services/types';
 import { textToSpeech } from '@/services/ai/text-to-speech';
+import { isInstanceOfStandardError } from '@/lib/error/error';
 
 export const maxDuration = 30;
 
@@ -22,8 +23,11 @@ export async function POST(req: Request) {
         'Content-Disposition': 'attachment; filename="audio.mp3"'
       }
     });
-  } catch (error) {
-    console.log(error);
-    return NextResponse.json({ code: 'unknown', message: 'Something went wrong' } as StandardError, { status: 500 });
+  } catch (e) {
+    if (isInstanceOfStandardError(e)) {
+      return NextResponse.json(e.detail, { status: e.status, statusText: e.statusText });
+    }
+    console.log(e);
+    return NextResponse.json({ code: 'unknown', message: 'Something went wrong' }, { status: 500 });
   }
 }

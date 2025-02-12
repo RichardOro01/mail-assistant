@@ -7,8 +7,13 @@ import { handleFetchAPIResponse } from './fetcher';
 import { ISpeechToTextResponse, ITextToSpeechRequest } from '@/types/ai';
 
 export const useSummaryAI = (options?: UseCompletionOptions) => {
+  const { handleStandardError } = useHandleError();
+
   const { complete: oldComplete, ...rest } = useCompletion({
     api: endpoints.ai.generateSummary,
+    onResponse: async (res) => {
+      if (res.status >= 400) handleStandardError(await res.json(), { showToast: true, directDetail: true });
+    },
     ...options
   });
 
@@ -20,8 +25,13 @@ export const useSummaryAI = (options?: UseCompletionOptions) => {
 };
 
 export const useGenerateAnswerAI = (options?: UseCompletionOptions) => {
+  const { handleStandardError } = useHandleError();
+
   const methods = useCompletion({
     api: endpoints.ai.generateAnswer,
+    onResponse: async (res) => {
+      if (res.status >= 400) handleStandardError(await res.json(), { showToast: true, directDetail: true });
+    },
     ...options
   });
 
