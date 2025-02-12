@@ -7,6 +7,7 @@ import { Eye, LoaderCircle, Trash2 } from 'lucide-react';
 import { useTranslationClient } from '@/i18n/client';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { AlertDialogDefault } from '@/components/ui/alert-dialog';
 
 interface MailListRowDesktopProps {
   message: IMessage;
@@ -65,9 +66,13 @@ const MailListRowDesktop: React.FC<MailListRowDesktopProps> = ({
                 <button title={t('view')}>
                   <Eye size={18} color='gray' onClick={() => onViewMessage()} />
                 </button>
-                <button title={t('delete')} onClick={onDelete}>
-                  <Trash2 size={18} color='gray' />
-                </button>
+                <AlertDialogDefault
+                  onOk={onDelete}
+                  description={t('delete_alert')}
+                  variant={'destructive'}
+                  disabled={isDeleting}>
+                  <Trash2 color='gray' size={18} />
+                </AlertDialogDefault>
               </>
             ) : (
               <LoaderCircle size={18} color='gray' className='animate-spin animate-duration-[2000ms]' />

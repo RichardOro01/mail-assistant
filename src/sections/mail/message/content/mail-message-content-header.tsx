@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { debugRendering } from '@/lib/debug/debuggers';
 import { ChevronLeft, Speech, Trash } from 'lucide-react';
 import LoadingCircle from '@/components/ui/loading-circle';
@@ -8,15 +8,21 @@ import { routes } from '@/lib/routes';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import MailOpenMenuButton from '../../mail-open-menu-button';
+import { AlertDialogDefault } from '@/components/ui/alert-dialog';
+import { useRouter } from 'next/navigation';
+import { emailService } from '@/services/email';
+import { useHandleError } from '@/lib/error/hooks';
 
 interface MailMessageContentHeaderProps {
+  uid: number;
   subject: string;
-  isSpeechLoading: boolean;
   isSpeaking: boolean;
+  isSpeechLoading: boolean;
   onSpeech: () => void;
 }
 
 const MailMessageContentHeader: React.FC<MailMessageContentHeaderProps> = ({
+  uid,
   subject,
   onSpeech,
   isSpeaking,
@@ -24,6 +30,20 @@ const MailMessageContentHeader: React.FC<MailMessageContentHeaderProps> = ({
 }) => {
   debugRendering('MailMessageContentHeader');
   const { t } = useTranslationClient('message-reply');
+  const [isDeleting, setIsDeleting] = useState(false);
+  const router = useRouter();
+  const { handleStandardError } = useHandleError();
+
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    try {
+      await emailService.deleteEmail(uid);
+      router.replace(routes.mail.list);
+    } catch (error) {
+      handleStandardError(error, { showToast: true });
+    }
+    setIsDeleting(false);
+  };
 
   return (
     <div className='flex flex-col md:flex-row justify-between gap-8'>
@@ -46,7 +66,13 @@ const MailMessageContentHeader: React.FC<MailMessageContentHeaderProps> = ({
             <LoadingCircle />
           )}
         </button>
-        <Trash color='gray' size={18} />
+        <AlertDialogDefault
+          onOk={handleDelete}
+          description={t('delete_alert')}
+          variant={'destructive'}
+          disabled={isDeleting}>
+          {isDeleting ? <LoadingCircle color='gray' size={18} /> : <Trash color='gray' size={18} />}
+        </AlertDialogDefault>
         <MailOpenMenuButton className='hidden md:flex' />
       </div>
     </div>

@@ -10,5 +10,6 @@
   "summing_up": "Resumiendo...",
   "summing_error": "Ups. Algo salió mal resumiendo los mensajes.",
   "message_deleted": "Mensaje eliminado",
+  "delete_alert": "Si eliminas este mensaje, no lo podrás recuperar.",
   "empty": "No se encontraron mensajes"
 }

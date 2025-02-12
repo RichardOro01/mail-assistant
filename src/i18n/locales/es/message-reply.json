@@ -5,5 +5,6 @@
   "success": "Correo enviado exitosamente.",
   "thinking": "Pensando...",
   "read": "Leer",
+  "delete_alert": "Si eliminas este mensaje, no lo podrás recuperar.",
   "error": { "send_email_timeout": "Error al conectar con el servidor de correo." }
 }

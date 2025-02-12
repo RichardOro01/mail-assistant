@@ -10,5 +10,6 @@
   "summing_up": "Summing up...",
   "summing_error": "Ups. Something went wrong summing up the messages.",
   "message_deleted": "Message deleted",
+  "delete_alert": "If you delete this message, it will be lost forever.",
   "empty": "No messages found"
 }

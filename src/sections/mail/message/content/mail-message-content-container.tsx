@@ -49,6 +49,7 @@ const MailMessageContentContainer: React.FC<MailMessageContentContainerProps> = 
         onSpeech={handleSpeech}
         isSpeaking={isPlaying}
         isSpeechLoading={isLoading}
+        uid={message.uid}
       />
       <MailMessageContentCard message={message} />
     </>

@@ -4,8 +4,10 @@ import { IMessage } from '@/types/imap';
 import { TableCell, TableRow } from '@/components/ui/table';
 import { twMerge } from 'tailwind-merge';
 import { format, isSameDay } from 'date-fns';
-import { LoaderCircle, Trash2 } from 'lucide-react';
+import { Trash2 } from 'lucide-react';
 import { useTranslationClient } from '@/i18n/client';
+import { AlertDialogDefault } from '@/components/ui/alert-dialog';
+import LoadingCircle from '@/components/ui/loading-circle';
 
 interface MailListRowMobileProps {
   message: IMessage;
@@ -28,11 +30,6 @@ const MailListRowMobile: React.FC<MailListRowMobileProps> = ({
 
   const { t } = useTranslationClient('mail-list');
 
-  const handleDeleteClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.stopPropagation();
-    onDelete();
-  };
-
   return (
     <TableRow className={twMerge(className)} onClick={onViewMessage}>
       <TableCell className='flex flex-col min-h-28 gap-2'>
@@ -50,13 +47,13 @@ const MailListRowMobile: React.FC<MailListRowMobileProps> = ({
         </div>
         <div className='flex justify-between gap-3 items-end'>
           <span className='opacity-60 line-clamp-2'>{message.text}</span>
-          <button title={t('delete')} onClick={handleDeleteClick} disabled={isDeleting}>
-            {!isDeleting ? (
-              <Trash2 size={18} color='gray' />
-            ) : (
-              <LoaderCircle size={18} color='gray' className='animate-spin animate-duration-[2000ms]' />
-            )}
-          </button>
+          <AlertDialogDefault
+            onOk={onDelete}
+            description={t('delete_alert')}
+            variant={'destructive'}
+            disabled={isDeleting}>
+            {isDeleting ? <LoadingCircle color='gray' size={18} /> : <Trash2 color='gray' size={18} />}
+          </AlertDialogDefault>
         </div>
       </TableCell>
     </TableRow>

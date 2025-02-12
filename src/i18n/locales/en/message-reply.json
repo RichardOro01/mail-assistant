@@ -5,5 +5,6 @@
   "success": "Email sended successfully.",
   "thinking": "Thinking...",
   "read": "Read",
+  "delete_alert": "If you delete this message, it will be lost forever.",
   "error": { "send_email_timeout": "Error connecting to email server." }
 }
