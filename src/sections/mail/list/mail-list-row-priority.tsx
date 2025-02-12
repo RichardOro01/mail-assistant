@@ -1,11 +1,13 @@
+'use client';
+
 import React from 'react';
 import { debugRendering } from '@/lib/debug/debuggers';
 import { MessagePriorityType } from '@/types/ai';
 import { AlertCircle, AlertTriangle, CheckCircle2, Frown } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { translationServer } from '@/i18n';
 import LoadingCircle from '@/components/ui/loading-circle';
+import { useTranslationClient } from '@/i18n/client';
 
 interface MailListRowPriorityProps {
   priority: MessagePriorityType | 'loading';
@@ -26,14 +28,14 @@ const getPriorityIcon = (priority: MailListRowPriorityProps['priority']) => {
   }
 };
 
-const MailListRowPriority: React.FC<MailListRowPriorityProps> = async ({ priority }) => {
+const MailListRowPriority: React.FC<MailListRowPriorityProps> = ({ priority }) => {
   debugRendering('MailListRowPriority');
-  const { t } = await translationServer('priority');
+  const { t } = useTranslationClient('priority');
   return (
     <div className='flex items-center space-x-2'>
       <TooltipProvider>
         <Tooltip>
-          <TooltipTrigger>{getPriorityIcon(priority)}</TooltipTrigger>
+          <TooltipTrigger onClick={(e) => e.stopPropagation()}>{getPriorityIcon(priority)}</TooltipTrigger>
           <TooltipContent>
             <p>{t(`${priority}_explain`)}</p>
           </TooltipContent>

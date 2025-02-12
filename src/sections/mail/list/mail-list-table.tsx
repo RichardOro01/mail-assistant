@@ -14,7 +14,7 @@ const MailListTable: React.FC<MailListTable> = ({ messages }) => {
   if (!messages.length) return <MailListEmpty />;
 
   return (
-    <Table>
+    <Table className='table-fixed'>
       <TableBody>
         {messages.map((message, index) => (
           <MailListRow
