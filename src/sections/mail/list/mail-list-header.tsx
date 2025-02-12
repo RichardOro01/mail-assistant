@@ -7,6 +7,7 @@ import MailListSearch from './mail-list-search';
 import { EmailFilters } from '@/types/filters';
 import Link from 'next/link';
 import { translationServer } from '@/i18n';
+import MailMenuButton from '../mail-menu-button';
 
 interface MailListHeaderProps {
   filters: EmailFilters;
@@ -27,6 +28,7 @@ const MailListHeader: React.FC<MailListHeaderProps> = async ({ filters }) => {
           <PencilLine color='gray' size={18} />
         </Link>
         <MailListSearch initialValue={filters.search} />
+        <MailMenuButton />
       </div>
     </div>
   );

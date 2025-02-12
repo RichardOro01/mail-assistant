@@ -11,11 +11,7 @@ const MailMenu: React.FC = () => {
   const date = selectedMail?.date ? format(selectedMail?.date, 'dd/mm/yyyy hh:mm a') : '';
 
   return (
-    <div
-      className='h-screen w-[300px] flex flex-col justify-between border p-8 bg-slate-50 border-slate-100 lg:w-[400px]'
-      style={{
-        boxShadow: 'rgba(0, 0, 0, 0.05) 0px 0px 14px 17px inset'
-      }}>
+    <div className='h-full flex flex-col justify-between w-full'>
       <div className='grid grid-rows-3[1fr]'>
         <h3 className=' font-semibold text-lg self-center'>{selectedMail?.from.name}</h3>
         <div className='flex items-center gap-4 text-sm'>
