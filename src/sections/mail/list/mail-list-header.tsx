@@ -18,8 +18,8 @@ const MailListHeader: React.FC<MailListHeaderProps> = async ({ filters }) => {
 
   return (
     <div className='flex justify-between py-5 px-7 text-xl items-center sticky top-0 bg-white z-10'>
-      <div className='flex gap-5'>{t('title')}</div>
-      <div className='flex gap-6'>
+      <div className='hidden sm:flex gap-5'>{t('title')}</div>
+      <div className='flex gap-6 w-full sm:w-fit'>
         <MailListSummary />
         <MailListCompose />
         <MailListSearch initialValue={filters.search} />

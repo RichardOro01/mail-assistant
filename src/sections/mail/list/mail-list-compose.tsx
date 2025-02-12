@@ -14,7 +14,7 @@ const MailListCompose: React.FC = async () => {
   return (
     <TooltipProvider>
       <Tooltip>
-        <TooltipTrigger>
+        <TooltipTrigger className='hidden sm:flex'>
           <Link aria-label={t('compose')} href={routes.mail.message.compose} className='content-center'>
             <PencilLine color='gray' size={18} />
           </Link>
