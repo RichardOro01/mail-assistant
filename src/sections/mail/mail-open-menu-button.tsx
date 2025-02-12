@@ -1,29 +1,26 @@
+'use client';
+
 import React from 'react';
 import { debugRendering } from '@/lib/debug/debuggers';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import MailMenu from './mail-menu';
 import { Menu } from 'lucide-react';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { translationServer } from '@/i18n';
+import { useTranslationClient } from '@/i18n/client';
+import { twMerge } from 'tailwind-merge';
 
-const MailMenuButton: React.FC = async () => {
+interface MailOpenMenuButtonProps {
+  className?: string;
+}
+
+const MailOpenMenuButton: React.FC<MailOpenMenuButtonProps> = ({ className }) => {
   debugRendering('MailMenuButton');
 
-  const { t } = await translationServer('mail-list');
+  const { t } = useTranslationClient('mail-list');
 
   return (
     <Sheet>
-      <SheetTrigger className='flex items-center 2xl:hidden'>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger>
-              <Menu color='gray' />
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>{t('menu')}</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+      <SheetTrigger className={twMerge('flex items-center 2xl:hidden', className)} title={t('menu')}>
+        <Menu color='gray' />
       </SheetTrigger>
       <SheetContent className='bg-slate-50'>
         <SheetHeader className='h-full'>
@@ -37,4 +34,4 @@ const MailMenuButton: React.FC = async () => {
   );
 };
 
-export default MailMenuButton;
+export default MailOpenMenuButton;

@@ -4,7 +4,7 @@ import MailListSummary from './mail-list-summary';
 import MailListSearch from './mail-list-search';
 import { EmailFilters } from '@/types/filters';
 import { translationServer } from '@/i18n';
-import MailMenuButton from '../mail-menu-button';
+import MailOpenMenuButton from '../mail-open-menu-button';
 import MailListCompose from './mail-list-compose';
 
 interface MailListHeaderProps {
@@ -23,7 +23,7 @@ const MailListHeader: React.FC<MailListHeaderProps> = async ({ filters }) => {
         <MailListSummary />
         <MailListCompose />
         <MailListSearch initialValue={filters.search} />
-        <MailMenuButton />
+        <MailOpenMenuButton />
       </div>
     </div>
   );
