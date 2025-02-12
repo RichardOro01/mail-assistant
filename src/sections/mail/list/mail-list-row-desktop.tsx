@@ -58,6 +58,7 @@ const MailListRowDesktop: React.FC<MailListRowDesktopProps> = ({
           <span className='ml-5 opacity-60'>{message.text}</span>
         </span>
       </TableCell>
+      <TableCell className='py-0 w-32'>{priorityComponent}</TableCell>
       <TableCell className='w-[120px] text-right py-0'>
         {showOptions || isDeleting ? (
           <div className='flex gap-2 justify-end'>
@@ -84,7 +85,6 @@ const MailListRowDesktop: React.FC<MailListRowDesktopProps> = ({
           ''
         )}
       </TableCell>
-      <TableCell className='py-0 w-32'>{priorityComponent}</TableCell>
     </TableRow>
   );
 };
