@@ -14,6 +14,8 @@ import {
 import { useMailContext } from '../provider/hooks';
 import { useSummaryAI } from '@/services/hooks';
 import { useTranslationClient } from '@/i18n/client';
+import { ScrollText } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 const MailListSummary: React.FC = () => {
   debugRendering('MailListSummary');
@@ -28,7 +30,18 @@ const MailListSummary: React.FC = () => {
 
   return (
     <Dialog modal>
-      <DialogTrigger onClick={handleGenerateSummary}>{t('summary')}</DialogTrigger>
+      <DialogTrigger onClick={handleGenerateSummary} aria-label={t('summary')}>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger>
+              <ScrollText color='gray' size={18} />
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>{t('summary')}</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+      </DialogTrigger>
       <DialogContent className='w-full max-w-[700px]'>
         <DialogHeader>
           <DialogTitle>{t('ai')}</DialogTitle>
