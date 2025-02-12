@@ -22,7 +22,7 @@ const MailListTable: React.FC<MailListTable> = ({ messages }) => {
             {...{ message }}
             priorityComponent={
               <Suspense fallback={<MailListRowPriority priority='loading' />}>
-                <MailListRowPriorityContainer message={message.text} />
+                <MailListRowPriorityContainer message={message.text} uid={message.uid} />
               </Suspense>
             }
           />
