@@ -4,11 +4,9 @@ import MailMessageComposeButtons from './mail-message-compose-buttons';
 import FormTextarea from '@/components/form-hook/form-textarea';
 import { useTranslationClient } from '@/i18n/client';
 import { useSpeechToTextAI } from '@/services/hooks';
-import MailSpeechToTextButtons from '../speech-to-text/mail-speech-to-text-buttons';
 import { useHandleError } from '@/lib/error/hooks';
 import { useFormContext } from 'react-hook-form';
 import { IReplyEmailForm } from '@/types/smtp';
-import { useAudioRecord } from '@/lib/audio/use-audio-record';
 import { useCallback } from 'react';
 
 const MailMessageComposeForm = () => {
@@ -32,12 +30,6 @@ const MailMessageComposeForm = () => {
     },
     [generateTextFromAudio, getValues, handleStandardError, setValue]
   );
-
-  const { isRecording, startRecording, stopRecording } = useAudioRecord({ onRecord: handleRecord });
-
-  const handleSpeechToText = async () => {
-    startRecording();
-  };
 
   return (
     <div className='flex flex-col mx-5 my-3 gap-3'>
@@ -63,13 +55,7 @@ const MailMessageComposeForm = () => {
         rows={5}
         className='w-full px-0 text-lg font-medium resize-none bg-transparent overflow-hidden border-none'
       />
-      <MailMessageComposeButtons />
-      <MailSpeechToTextButtons
-        handleSpeechToText={handleSpeechToText}
-        stopRecording={stopRecording}
-        isRecording={isRecording}
-        speechToTexIsLoading={speechToTexIsLoading}
-      />
+      <MailMessageComposeButtons {...{ handleRecord, speechToTexIsLoading }} />
     </div>
   );
 };

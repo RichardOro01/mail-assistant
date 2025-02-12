@@ -3,7 +3,6 @@ import { debugRendering } from '@/lib/debug/debuggers';
 import FormTextarea from '@/components/form-hook/form-textarea';
 import MailMessageReplyButtons from './mail-message-reply-buttons';
 import { useMailContext } from '@/sections/mail/provider/hooks';
-import { Button } from '@/components/ui/button';
 import { useFormContext } from 'react-hook-form';
 import { IReplyEmailForm } from '@/types/smtp';
 import { useGenerateAnswerAI, useSpeechToTextAI } from '@/services/hooks';
@@ -12,7 +11,6 @@ import FormInput from '@/components/form-hook/form-input';
 import { Label } from '@/components/ui/label';
 import { useAudioRecord } from '@/lib/audio/use-audio-record';
 import { useHandleError } from '@/lib/error/hooks';
-import MailSpeechToTextButtons from '../../speech-to-text/mail-speech-to-text-buttons';
 
 const MailMessageReplyForm: React.FC = () => {
   const { setValue, getValues, trigger } = useFormContext<IReplyEmailForm>();
@@ -54,17 +52,13 @@ const MailMessageReplyForm: React.FC = () => {
     if (selectedMail && selectedMail.text) generateComplete(selectedMail.text);
   };
 
-  const handleSpeechToText = async () => {
-    startRecording();
-  };
-
   useEffect(() => {
     setValue('text', generateCompletion);
   }, [generateCompletion, setValue]);
 
   debugRendering('MailMessageReplyForm');
   return (
-    <div className='flex flex-col gap-2'>
+    <div className='flex flex-col gap-4 py-2'>
       <div className='flex items-center gap-4 mb-4'>
         <Label className=''>{t('to')}</Label>
         <FormInput
@@ -81,27 +75,17 @@ const MailMessageReplyForm: React.FC = () => {
         placeholder={generateIsLoading ? t('thinking') : isRecording || speechToTexIsLoading ? t('hearing') : ''}
         disabled={generateIsLoading || speechToTexIsLoading || isRecording}
       />
-      <MailMessageReplyButtons />
-      <MailSpeechToTextButtons
-        disabled={generateIsLoading}
-        isRecording={isRecording}
-        speechToTexIsLoading={speechToTexIsLoading}
-        stopRecording={stopRecording}
-        handleSpeechToText={handleSpeechToText}
+      <MailMessageReplyButtons
+        {...{
+          speechToTexIsLoading,
+          generateStop,
+          generateAnswer,
+          generateIsLoading,
+          isRecording,
+          startRecording,
+          stopRecording
+        }}
       />
-      {!generateIsLoading ? (
-        <Button
-          type='button'
-          variant='secondary'
-          onClick={generateAnswer}
-          disabled={speechToTexIsLoading || isRecording}>
-          Generate
-        </Button>
-      ) : (
-        <Button type='button' variant='secondary' onClick={generateStop}>
-          Stop
-        </Button>
-      )}
     </div>
   );
 };

@@ -6,5 +6,7 @@
   "thinking": "Pensando...",
   "read": "Leer",
   "delete_alert": "Si eliminas este mensaje, no lo podrás recuperar.",
+  "autocomplete": "Autocompletar",
+  "stop": "Detener",
   "error": { "send_email_timeout": "Error al conectar con el servidor de correo." }
 }

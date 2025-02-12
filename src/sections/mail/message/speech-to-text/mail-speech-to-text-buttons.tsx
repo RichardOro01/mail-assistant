@@ -1,6 +1,8 @@
 import React from 'react';
 import { debugRendering } from '@/lib/debug/debuggers';
 import { Button } from '@/components/ui/button';
+import { Mic } from 'lucide-react';
+import { useTranslationClient } from '@/i18n/client';
 
 interface MailSpeechToTextButtonsProps {
   disabled?: boolean;
@@ -18,19 +20,23 @@ const MailSpeechToTextButtons: React.FC<MailSpeechToTextButtonsProps> = ({
   handleSpeechToText
 }) => {
   debugRendering('MailSpeechToTextButtons');
+  const { t } = useTranslationClient('audio');
   return (
     <>
       {isRecording ? (
         <Button type='button' variant='secondary' onClick={stopRecording}>
-          Stop
+          <Mic size={20} />
+          <span className='hidden sm:inline'>{t('stop')}</span>
         </Button>
       ) : speechToTexIsLoading ? (
         <Button type='button' variant='secondary' disabled>
-          Transcribing
+          <Mic size={20} />
+          <span className='hidden sm:inline'>{t('transcribing')}</span>
         </Button>
       ) : (
         <Button type='button' variant='secondary' onClick={handleSpeechToText} disabled={disabled}>
-          Speech to Text
+          <Mic size={20} />
+          <span className='hidden sm:inline'>{t('transcribe')}</span>
         </Button>
       )}
     </>

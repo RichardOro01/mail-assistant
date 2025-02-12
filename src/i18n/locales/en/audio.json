@@ -1,3 +1,6 @@
 {
-  "microphone_not_enabled": "Please, enable your microphone."
+  "microphone_not_enabled": "Please, enable your microphone.",
+  "stop": "Stop",
+  "transcribe": "Transcribe",
+  "transcribing": "Transcribing..."
 }
