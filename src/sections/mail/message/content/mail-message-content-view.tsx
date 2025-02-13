@@ -1,26 +1,21 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { debugRendering } from '@/lib/debug/debuggers';
-import GeneralError from '@/components/error/general-error';
-import { emailService } from '@/services/email';
 import MailMessageContentContainer from './mail-message-content-container';
+import MailMessageContentSkeleton from './mail-message-content-skeleton';
 
 interface MailMessageContentViewProps {
   messageId: string;
 }
 
 const MailMessageContentView: React.FC<MailMessageContentViewProps> = async ({ messageId }) => {
-  try {
-    debugRendering('MailMessageContentView');
-    const { data } = await emailService.getMailByUid(Number(messageId));
-    return (
-      <div className='flex flex-col my-4 px-8 w-full'>
-        <MailMessageContentContainer message={data} />
-      </div>
-    );
-  } catch (e) {
-    console.log(e);
-    return <GeneralError />;
-  }
+  debugRendering('MailMessageContentView');
+  return (
+    <div className='flex flex-col my-4 px-8 w-full'>
+      <Suspense fallback={<MailMessageContentSkeleton />}>
+        <MailMessageContentContainer messageId={messageId} />
+      </Suspense>
+    </div>
+  );
 };
 
 export default MailMessageContentView;

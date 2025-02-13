@@ -22,10 +22,6 @@ export const generateSummary = async (messages: string[], limit: number) => {
     prompt: messagesString
   });
 
-  stream.finishReason.then((reason) => {
-    console.log({ reason });
-  });
-
   sumUserAICount('summary');
 
   return stream;
