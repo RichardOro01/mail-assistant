@@ -33,7 +33,7 @@ const MailListSummary: React.FC = () => {
       <DialogTrigger onClick={handleGenerateSummary} aria-label={t('summary')}>
         <TooltipProvider>
           <Tooltip>
-            <TooltipTrigger>
+            <TooltipTrigger asChild>
               <ScrollText color='gray' size={18} />
             </TooltipTrigger>
             <TooltipContent>

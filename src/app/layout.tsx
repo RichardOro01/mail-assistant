@@ -7,6 +7,7 @@ import acceptLanguage from 'accept-language';
 import { I18NProvider } from '@/i18n/context';
 import { AuthProvider } from '@/auth/context';
 import { Toaster } from '@/components/ui/toaster';
+import TopLoader from '@/components/top-loader/top-loader';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -26,7 +27,10 @@ export default function RootLayout({
     <html lang={lng} suppressHydrationWarning>
       <body className={`${inter.className} flex flex-1 flex-col min-h-screen`}>
         <AuthProvider>
-          <I18NProvider {...{ lng }}>{children}</I18NProvider>
+          <I18NProvider {...{ lng }}>
+            <TopLoader />
+            {children}
+          </I18NProvider>
         </AuthProvider>
         <Toaster />
       </body>

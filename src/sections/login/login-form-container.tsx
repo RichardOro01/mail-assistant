@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react';
 import { signIn } from 'next-auth/react';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { LoginRequest } from './types';
 import { useTranslationClient } from '@/i18n/client';
 import LoginForm from './login-form';
@@ -12,10 +12,11 @@ import { useLoginForm } from './login-hooks';
 import { useToast } from '@/hooks/use-toast';
 import { routes } from '@/lib/routes';
 import { useHandleError } from '@/lib/error/hooks';
+import { useHolyRouter } from '@/components/top-loader/hook';
 
 const LoginFormContainer = () => {
   debugRendering('LoginFormContainer');
-  const router = useRouter();
+  const router = useHolyRouter();
   const searchParams = useSearchParams();
   const returnTo = searchParams?.get('returnTo');
   const { t } = useTranslationClient('login');

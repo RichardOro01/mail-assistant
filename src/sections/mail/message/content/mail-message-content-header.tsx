@@ -9,9 +9,9 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import MailOpenMenuButton from '../../mail-open-menu-button';
 import { AlertDialogDefault } from '@/components/ui/alert-dialog';
-import { useRouter } from 'next/navigation';
 import { emailService } from '@/services/email';
 import { useHandleError } from '@/lib/error/hooks';
+import { useHolyRouter } from '@/components/top-loader/hook';
 
 interface MailMessageContentHeaderProps {
   uid: number;
@@ -31,7 +31,7 @@ const MailMessageContentHeader: React.FC<MailMessageContentHeaderProps> = ({
   debugRendering('MailMessageContentHeader');
   const { t } = useTranslationClient('message-reply');
   const [isDeleting, setIsDeleting] = useState(false);
-  const router = useRouter();
+  const router = useHolyRouter();
   const { handleStandardError } = useHandleError();
 
   const handleDelete = async () => {

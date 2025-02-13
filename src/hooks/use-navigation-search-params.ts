@@ -1,9 +1,10 @@
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useHolyRouter } from '@/components/top-loader/hook';
+import { usePathname, useSearchParams } from 'next/navigation';
 import { useCallback, useMemo } from 'react';
 
 export const useNavigationSearchParams = () => {
   const searchParams = useSearchParams();
-  const router = useRouter();
+  const router = useHolyRouter();
   const searchParamsObject = useMemo(() => new URLSearchParams(searchParams.toString()), [searchParams]);
   const pathname = usePathname();
 
@@ -27,5 +28,7 @@ export const useNavigationSearchParams = () => {
     [searchParamsObject, router, pathname]
   );
 
-  return { searchParams, changeSearchParams, removeSearchParams };
+  const isSearching = useMemo(() => router.isLoading, [router]);
+
+  return { searchParams, isSearching, changeSearchParams, removeSearchParams };
 };

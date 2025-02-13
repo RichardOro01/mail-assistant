@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { debugRendering } from '@/lib/debug/debuggers';
 import { useMailContext } from '../provider/hooks';
 import { useTranslationClient } from '@/i18n/client';
-import { useRouter } from 'next/navigation';
 import { routes } from '@/lib/routes';
 import { IMessage } from '@/types/imap';
 import { emailService } from '@/services/email';
@@ -12,6 +11,7 @@ import { useHandleError } from '@/lib/error/hooks';
 import { toast } from '@/hooks/use-toast';
 import MailListRowDesktop from './mail-list-row-desktop';
 import MailListRowMobile from './mail-list-row-mobile';
+import { useHolyRouter } from '@/components/top-loader/hook';
 
 interface MailListRowProps {
   message: IMessage;
@@ -21,7 +21,7 @@ interface MailListRowProps {
 const MailListRow: React.FC<MailListRowProps> = ({ message, priorityComponent }) => {
   debugRendering('MailListRow');
 
-  const router = useRouter();
+  const router = useHolyRouter();
   const { t } = useTranslationClient('mail-list');
   const { handleStandardError } = useHandleError();
   const [isDeleting, setIsDeleting] = useState(false);

@@ -3,13 +3,13 @@ import { debugRendering } from '@/lib/debug/debuggers';
 import { useMailMessageReplyForm } from './mail-message-hooks';
 import { emailService } from '@/services/email';
 import { toast } from '@/hooks/use-toast';
-import { useRouter } from 'next/navigation';
 import { useHandleError } from '@/lib/error/hooks';
 import { useTranslationClient } from '@/i18n/client';
 import { routes } from '@/lib/routes';
 import FormProvider from '@/components/form-hook/form-provider';
 import MailMessageReplyForm from './mail-message-reply-form';
 import { IMessage } from '@/types/imap';
+import { useHolyRouter } from '@/components/top-loader/hook';
 
 interface MailMessageReplyContainerProps {
   hidden: boolean;
@@ -24,7 +24,7 @@ const MailMessageReplyContainer: React.FC<MailMessageReplyContainerProps> = ({ h
   const methods = useMailMessageReplyForm({ defaultTo: message?.from.address ?? '' });
   const { handleStandardError } = useHandleError();
   const { handleSubmit, setFocus } = methods;
-  const router = useRouter();
+  const router = useHolyRouter();
 
   const onSubmit = handleSubmit(async (data) => {
     try {

@@ -4,11 +4,11 @@ import React from 'react';
 import { debugRendering } from '@/lib/debug/debuggers';
 import { CircleX } from 'lucide-react';
 import { Button } from '../ui/button';
-import { useRouter } from 'next/navigation';
+import { useHolyRouter } from '../top-loader/hook';
 
 const GeneralError: React.FC = () => {
   debugRendering('General-error');
-  const router = useRouter();
+  const router = useHolyRouter();
   return (
     <div className='flex flex-col gap-2 flex-1 w-full h-full justify-center items-center'>
       <CircleX size={40} />

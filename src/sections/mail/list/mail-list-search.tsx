@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { debugRendering } from '@/lib/debug/debuggers';
 import { Input } from '@/components/ui/input';
 import { Search } from 'lucide-react';
@@ -18,28 +18,22 @@ const MailListSearch: React.FC<MailListSearchProps> = ({ initialValue }) => {
   debugRendering('MailListSearch');
 
   const { t } = useTranslationClient('mail-list');
-  const { changeSearchParams, removeSearchParams, searchParams } = useNavigationSearchParams();
+  const { changeSearchParams, removeSearchParams, isSearching } = useNavigationSearchParams();
   const [searchValue, setSearchValue] = useState(initialValue || '');
-  const [isSearching, setIsSearching] = useState(false);
 
   const handleChangeSearchParams = useDebouncedCallback((value: string) => {
-    setIsSearching(true);
     if (!value) {
       removeSearchParams(SearchFilter);
     } else {
       changeSearchParams(SearchFilter, value);
     }
-  }, 300);
+  }, 500);
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (event) => {
     const { value } = event.target;
     setSearchValue(value);
     handleChangeSearchParams(value);
   };
-
-  useEffect(() => {
-    if ((searchParams.get(SearchFilter) || '') === searchValue) setIsSearching(false);
-  }, [searchParams, searchValue]);
 
   return (
     <Input

@@ -1,12 +1,13 @@
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { RETURN_TO_PARAM } from './context';
 import { routes } from '@/lib/routes';
 import { useCallback, useMemo } from 'react';
 import { useSession } from 'next-auth/react';
+import { useHolyRouter } from '@/components/top-loader/hook';
 
 export const useNavigateToLogin = () => {
   const pathname = usePathname();
-  const router = useRouter();
+  const router = useHolyRouter();
   const params = useMemo(() => (pathname ? `?${RETURN_TO_PARAM}=${pathname}` : ''), [pathname]);
 
   const navigateToLogin = useCallback(() => {
