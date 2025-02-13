@@ -16,6 +16,10 @@ export const systems = {
     return `You are an email assistant and you will generate a summary for the following messages in a list in ${language}.`;
   },
   getMessagePriority: () => {
-    return 'You are an email assistant and you will prioritize the following message as: low, medium or high.';
+    return `Classify the following message as 'Low,' 'Medium,' or 'High' priority based on its urgency, importance, and required action.
+              Low: General information, no immediate action needed.
+              Medium: Requires attention but is not urgent; follow-up may be needed.
+              High: Critical or urgent, requires immediate action.'
+    `;
   }
 };

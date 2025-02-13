@@ -4,9 +4,9 @@
   "medium": "Media",
   "high": "Alta",
   "none": "Ninguna",
-  "low_explain": "Este mensaje no es suficientemente importante.",
-  "medium_explain": "Este mensaje tiene una importancia media.",
-  "high_explain": "Este mensaje es sumamente importante.",
+  "low_explain": "Información general. No requiere acción inmediata.",
+  "medium_explain": "Requiere atención, pero no es urgente.",
+  "high_explain": "Critico o urgente. Requiere acción inmediata.",
   "none_explain": "No se pudo calcular la prioridad de este mensaje.",
   "loading": "Cargando prioridad..."
 }
