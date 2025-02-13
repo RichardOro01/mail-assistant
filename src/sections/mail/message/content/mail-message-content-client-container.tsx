@@ -4,11 +4,10 @@ import React from 'react';
 import { debugRendering } from '@/lib/debug/debuggers';
 import { IMessage } from '@/types/imap';
 import MailMessageContentHeader from './mail-message-content-header';
-import dynamic from 'next/dynamic';
 import { useAudioPlayer } from '@/lib/audio/use-audio-player';
 import { useTextToSpeechAI } from '@/services/hooks';
 import { useHandleError } from '@/lib/error/hooks';
-const MailMessageContentCard = dynamic(() => import('./mail-message-content-card'), { ssr: false });
+import MailMessageContentCard from './mail-message-content-card';
 
 interface MailMessageContentClientContainerProps {
   message: IMessage;

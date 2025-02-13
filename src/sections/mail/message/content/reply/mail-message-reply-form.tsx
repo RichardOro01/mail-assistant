@@ -11,8 +11,13 @@ import FormInput from '@/components/form-hook/form-input';
 import { Label } from '@/components/ui/label';
 import { useAudioRecord } from '@/lib/audio/use-audio-record';
 import { useHandleError } from '@/lib/error/hooks';
+import clsx from 'clsx';
 
-const MailMessageReplyForm: React.FC = () => {
+interface MailMessageReplyFormProps {
+  hidden: boolean;
+}
+
+const MailMessageReplyForm: React.FC<MailMessageReplyFormProps> = ({ hidden }) => {
   const { setValue, getValues, trigger } = useFormContext<IReplyEmailForm>();
   const { selectedMail } = useMailContext();
   const { t } = useTranslationClient('message-reply');
@@ -63,7 +68,10 @@ const MailMessageReplyForm: React.FC = () => {
 
   debugRendering('MailMessageReplyForm');
   return (
-    <div className='flex flex-col gap-4 py-2'>
+    <div
+      className={clsx('flex flex-col gap-4 py-2 transition-all', {
+        hidden
+      })}>
       <div className='flex items-center gap-4 mb-4'>
         <Label className=''>{t('to')}</Label>
         <FormInput

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { RefObject, useEffect } from 'react';
 import { debugRendering } from '@/lib/debug/debuggers';
 import { useMailMessageReplyForm } from './mail-message-hooks';
 import { emailService } from '@/services/email';
@@ -9,24 +9,30 @@ import { useTranslationClient } from '@/i18n/client';
 import { routes } from '@/lib/routes';
 import FormProvider from '@/components/form-hook/form-provider';
 import MailMessageReplyForm from './mail-message-reply-form';
-import { useMailContext } from '@/sections/mail/provider/hooks';
+import { IMessage } from '@/types/imap';
 
-const MailMessageReplyContainer: React.FC = () => {
+interface MailMessageReplyContainerProps {
+  hidden: boolean;
+  message: IMessage;
+  divRef: RefObject<HTMLDivElement>;
+}
+
+const MailMessageReplyContainer: React.FC<MailMessageReplyContainerProps> = ({ hidden, message, divRef }) => {
   debugRendering('MailMessageReplyContainer');
+
   const { t } = useTranslationClient('message-reply');
-  const { selectedMail } = useMailContext();
-  const methods = useMailMessageReplyForm({ defaultTo: selectedMail?.from.address ?? '' });
+  const methods = useMailMessageReplyForm({ defaultTo: message?.from.address ?? '' });
   const { handleStandardError } = useHandleError();
-  const { handleSubmit } = methods;
+  const { handleSubmit, setFocus } = methods;
   const router = useRouter();
 
   const onSubmit = handleSubmit(async (data) => {
     try {
       await emailService.replyEmail({
         text: data.text,
-        messageId: selectedMail?.messageId ?? '',
+        messageId: message?.messageId ?? '',
         replyTo: data.to,
-        subject: selectedMail?.subject ?? ''
+        subject: message?.subject ?? ''
       });
 
       toast({ title: t('success'), variant: 'success' });
@@ -36,9 +42,18 @@ const MailMessageReplyContainer: React.FC = () => {
     }
   });
 
+  useEffect(() => {
+    if (!hidden) {
+      setTimeout(() => {
+        divRef.current?.scrollTo({ top: divRef.current.scrollHeight, behavior: 'smooth' });
+        setFocus('text');
+      }, 100);
+    }
+  }, [hidden, setFocus, divRef]);
+
   return (
     <FormProvider {...{ methods, onSubmit }}>
-      <MailMessageReplyForm />
+      <MailMessageReplyForm {...{ hidden }} />
     </FormProvider>
   );
 };
