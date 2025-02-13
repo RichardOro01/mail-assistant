@@ -4,7 +4,7 @@ import { useCompletion } from 'ai/react';
 import { useCallback, useState } from 'react';
 import { useHandleError } from '@/lib/error/hooks';
 import { handleFetchAPIResponse } from './fetcher';
-import { ISpeechToTextResponse, ITextToSpeechRequest } from '@/types/ai';
+import { IGenerateMessageRequest, ISpeechToTextResponse, ITextToSpeechRequest } from '@/types/ai';
 
 export const useSummaryAI = (options?: UseCompletionOptions) => {
   const { handleStandardError } = useHandleError();
@@ -27,7 +27,7 @@ export const useSummaryAI = (options?: UseCompletionOptions) => {
 export const useGenerateAnswerAI = (options?: UseCompletionOptions) => {
   const { handleStandardError } = useHandleError();
 
-  const methods = useCompletion({
+  const { complete: oldComplete, ...rest } = useCompletion({
     api: endpoints.ai.generateAnswer,
     onResponse: async (res) => {
       if (res.status >= 400) handleStandardError(await res.json(), { showToast: true, directDetail: true });
@@ -35,7 +35,11 @@ export const useGenerateAnswerAI = (options?: UseCompletionOptions) => {
     ...options
   });
 
-  return methods;
+  const complete = (data: IGenerateMessageRequest) => {
+    return oldComplete('', { body: data });
+  };
+
+  return { complete, ...rest };
 };
 
 export const useSpeechToTextAI = () => {

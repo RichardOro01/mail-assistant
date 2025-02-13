@@ -9,9 +9,9 @@ export const maxDuration = 30;
 
 export async function POST(req: Request) {
   try {
-    const { prompt }: IGenerateMessageRequest = await req.json();
+    const data: IGenerateMessageRequest = await req.json();
 
-    const result = await generateAnswer(prompt);
+    const result = await generateAnswer(data);
 
     return result.toDataStreamResponse();
   } catch (e) {

@@ -4,15 +4,17 @@ import { systems } from '@/lib/ai/system';
 import { openai } from '@ai-sdk/openai';
 import { streamText } from 'ai';
 import { sumUserAICount, verifyUserAICount } from './ai-count';
+import { IGenerateMessageRequest } from '@/types/ai';
+import { prompts } from '@/lib/ai/prompts';
 
-export const generateAnswer = async (prompt: string) => {
+export const generateAnswer = async (data: IGenerateMessageRequest) => {
   await verifyUserAICount('generate_answer');
 
   const stream = streamText({
     system: systems.generateAnswer(),
-    model: openai.completion('gpt-3.5-turbo-instruct'),
+    model: openai('gpt-4o-mini'),
     maxTokens: 2000,
-    prompt
+    prompt: prompts.generateAnswer(data)
   });
 
   sumUserAICount('generate_answer');

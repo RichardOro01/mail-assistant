@@ -49,7 +49,12 @@ const MailMessageReplyForm: React.FC = () => {
   const { isRecording, startRecording, stopRecording } = useAudioRecord({ onRecord: handleRecord });
 
   const generateAnswer = () => {
-    if (selectedMail && selectedMail.text) generateComplete(selectedMail.text);
+    if (selectedMail && selectedMail.text)
+      generateComplete({
+        message: selectedMail.text,
+        answer: getValues('text'),
+        sendBy: selectedMail.from.name || selectedMail.from.address || 'unknown'
+      });
   };
 
   useEffect(() => {

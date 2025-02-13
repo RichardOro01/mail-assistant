@@ -9,7 +9,10 @@ const getLanguageName = () => {
 export const systems = {
   generateAnswer: () => {
     const language = getLanguageName();
-    return `You are an email assistant, and your job is to generate the best possible response for the email you receive using the language ${language}.`;
+    return `Your job is to autocomplete the current answer to the best possible response for the 
+      receiving email using the language ${language} and you understand any language.
+      Do not modify the current answer.
+    `;
   },
   generateSummary: () => {
     const language = getLanguageName();
@@ -17,9 +20,9 @@ export const systems = {
   },
   getMessagePriority: () => {
     return `Classify the following message as 'Low,' 'Medium,' or 'High' priority based on its urgency, importance, and required action.
-              Low: General information, no immediate action needed.
-              Medium: Requires attention but is not urgent; follow-up may be needed.
-              High: Critical or urgent, requires immediate action.'
+      Low: General information, no immediate action needed.
+      Medium: Requires attention but is not urgent; follow-up may be needed.
+      High: Critical or urgent, requires immediate action.'
     `;
   }
 };

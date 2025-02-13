@@ -1,5 +1,7 @@
 export interface IGenerateMessageRequest {
-  prompt: string;
+  message: string;
+  answer: string;
+  sendBy: string;
 }
 
 export interface IGenerateSummaryRequest {
