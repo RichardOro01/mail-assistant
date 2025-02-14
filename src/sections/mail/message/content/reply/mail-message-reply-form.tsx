@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { debugRendering } from '@/lib/debug/debuggers';
 import FormTextarea from '@/components/form-hook/form-textarea';
 import MailMessageReplyButtons from './mail-message-reply-buttons';
@@ -22,19 +22,35 @@ const MailMessageReplyForm: React.FC<MailMessageReplyFormProps> = ({ hidden }) =
   const { selectedMail } = useMailContext();
   const { t } = useTranslationClient('message-reply');
   const { handleStandardError } = useHandleError();
+  const [showError, setShowError] = useState(false);
 
   const onFinish = () => {
     trigger('text');
   };
 
+  const onResponse = async (res: Response) => {
+    if (res.status >= 400) {
+      handleStandardError(await res.json(), { showToast: true, directDetail: true });
+    } else {
+      setShowError(true);
+    }
+  };
   const { generateTextFromAudio, isLoading: speechToTexIsLoading } = useSpeechToTextAI();
 
   const {
     completion: generateCompletion,
     complete: generateComplete,
     isLoading: generateIsLoading,
-    stop: generateStop
-  } = useGenerateAnswerAI({ onFinish });
+    stop: generateStop,
+    error: generateError
+  } = useGenerateAnswerAI({ onFinish, onResponse });
+
+  useEffect(() => {
+    if (generateError && showError) {
+      setShowError(false);
+      handleStandardError(generateError, { showToast: true });
+    }
+  }, [showError, generateError, handleStandardError]);
 
   const handleRecord = useCallback(
     async (audio: Blob) => {

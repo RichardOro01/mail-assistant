@@ -1,5 +1,8 @@
 {
   "cancel": "Cancel",
   "continue": "Continue",
-  "alert_title": "Are you absolutely sure?"
+  "alert_title": "Are you absolutely sure?",
+  "error": {
+    "limit_exceded": "The quota for this AI functionality has been exceded."
+  }
 }

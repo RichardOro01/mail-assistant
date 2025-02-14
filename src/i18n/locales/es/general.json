@@ -1,5 +1,8 @@
 {
   "cancel": "Cancelar",
   "continue": "Continuar",
-  "alert_title": "¿Estás absolutamente seguro?"
+  "alert_title": "¿Estás absolutamente seguro?",
+  "error": {
+    "limit_exceded": "La cuota para esta funcionalidad ha sido excedida."
+  }
 }

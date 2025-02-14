@@ -5,6 +5,7 @@ import { useCallback, useState } from 'react';
 import { useHandleError } from '@/lib/error/hooks';
 import { handleFetchAPIResponse } from './fetcher';
 import { IGenerateMessageRequest, ISpeechToTextResponse, ITextToSpeechRequest } from '@/types/ai';
+import { FetchOkResponse, StandardError } from './types';
 
 export const useSummaryAI = (options?: UseCompletionOptions) => {
   const { handleStandardError } = useHandleError();
@@ -56,7 +57,7 @@ export const useSpeechToTextAI = () => {
         const handledRes = await handleFetchAPIResponse<ISpeechToTextResponse>(res);
         return handledRes.data.text;
       } catch (e) {
-        handleStandardError(e, { showToast: true });
+        handleStandardError((e as FetchOkResponse<StandardError>).data, { showToast: true, directDetail: true });
       } finally {
         setIsLoading(false);
       }
@@ -78,12 +79,12 @@ export const useTextToSpeechAI = () => {
         const body: ITextToSpeechRequest = { text };
         const res = await fetch(endpoints.ai.textToSpeech, { method: 'POST', body: JSON.stringify(body) });
         if (res.status >= 400) {
-          throw new Error('Something went wrong');
+          throw await res.json();
         }
         const blob = await res.blob();
         return blob;
       } catch (e) {
-        handleStandardError(e, { showToast: true });
+        handleStandardError(e, { showToast: true, directDetail: true });
       } finally {
         setIsLoading(false);
       }

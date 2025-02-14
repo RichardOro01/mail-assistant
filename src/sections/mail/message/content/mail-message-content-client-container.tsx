@@ -29,8 +29,6 @@ const MailMessageContentClientContainer: React.FC<MailMessageContentClientContai
           const audio = await generateAudioFromText(message.text);
           if (audio) {
             play(audio);
-          } else {
-            throw new Error('No audio');
           }
         } catch (e) {
           handleStandardError(e, {
