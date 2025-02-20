@@ -10,21 +10,19 @@ import { MessagePriorityType } from '@/types/ai';
 interface MailListRowPriorityContainerProps {
   message?: string;
   uid: number;
+  priority?: MessagePriorityType;
 }
 
-const MailListRowPriorityContainer: React.FC<MailListRowPriorityContainerProps> = async ({ message, uid }) => {
+const MailListRowPriorityContainer: React.FC<MailListRowPriorityContainerProps> = async ({
+  message,
+  uid,
+  priority
+}) => {
   debugRendering('MailListRowPriorityContainer');
   try {
-    const session = await auth();
-    if (!session || !session.user || !session.user.email) throw new Error('No session');
-    let priority: MessagePriorityType | undefined = (
-      await prisma.message_priorities.findUnique({
-        where: {
-          user_id_message_uid: { message_uid: uid, user_id: session.user.id }
-        }
-      })
-    )?.priority;
     if (!priority) {
+      const session = await auth();
+      if (!session || !session.user || !session.user.email) throw new Error('No session');
       priority = message ? await getMessagePriority(message) : 'none';
       if (priority !== 'none') {
         await prisma.message_priorities.create({
@@ -36,7 +34,7 @@ const MailListRowPriorityContainer: React.FC<MailListRowPriorityContainerProps> 
         });
       }
     }
-    return <MailListRowPriority {...{ priority }} />;
+    return <MailListRowPriority {...{ priority, uid }} shouldUpdate={!priority} />;
   } catch (error) {
     handleLogApiError(error);
     return <MailListRowPriority priority='none' />;

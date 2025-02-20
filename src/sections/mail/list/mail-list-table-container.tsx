@@ -6,6 +6,8 @@ import { emailService } from '@/services/email';
 import { EmailFilters, PageFilter, SearchFilter } from '@/types/filters';
 import MailListFooter from './mail-list-footer';
 import MailListMessagesSetter from './mail-list-messages-setter';
+import prisma from '@/lib/prisma';
+import { IMessageWithPriority } from '@/types/imap';
 
 interface MailListTableContainerProps {
   messagesCount: number;
@@ -21,9 +23,20 @@ const MailListTableContainer: React.FC<MailListTableContainerProps> = async ({ m
       page: Number(filters[PageFilter])
     });
     const messages = data.items.reverse();
+
+    const priorities = await prisma.message_priorities.findMany({
+      where: { message_uid: { in: messages.map((m) => m.uid) } },
+      select: { message_uid: true, priority: true }
+    });
+
+    const messagesWithPriorities: IMessageWithPriority[] = messages.map((message) => ({
+      ...message,
+      priority: priorities.find(({ message_uid }) => message.uid === message_uid)?.priority
+    }));
+
     return (
-      <MailListMessagesSetter {...{ messages }}>
-        <MailListTable {...{ messages }} />
+      <MailListMessagesSetter {...{ messagesWithPriorities }}>
+        <MailListTable {...{ messagesWithPriorities }} />
         {!!data.items.length && <MailListFooter filters={filters} totalPages={data.totalPages} />}
       </MailListMessagesSetter>
     );

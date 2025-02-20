@@ -3,20 +3,20 @@
 import React, { useEffect } from 'react';
 import { debugRendering } from '@/lib/debug/debuggers';
 import { LayoutBaseProps } from '@/types/utils';
-import { IMessage } from '@/types/imap';
+import { IMessageWithPriority } from '@/types/imap';
 import { useMailContext } from '../provider/hooks';
 
 interface MailListMessagesSetterProps extends LayoutBaseProps {
-  messages: IMessage[];
+  messagesWithPriorities: IMessageWithPriority[];
 }
 
-const MailListMessagesSetter: React.FC<MailListMessagesSetterProps> = ({ children, messages }) => {
+const MailListMessagesSetter: React.FC<MailListMessagesSetterProps> = ({ children, messagesWithPriorities }) => {
   debugRendering('MailListMessagesSetter');
   const { setMails } = useMailContext();
 
   useEffect(() => {
-    setMails(messages);
-  }, [messages, setMails]);
+    setMails(messagesWithPriorities);
+  }, [messagesWithPriorities, setMails]);
 
   return <>{children}</>;
 };

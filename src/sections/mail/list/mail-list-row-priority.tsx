@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { debugRendering } from '@/lib/debug/debuggers';
 import { MessagePriorityType } from '@/types/ai';
 import { AlertCircle, AlertTriangle, CheckCircle2, Frown } from 'lucide-react';
@@ -8,9 +8,12 @@ import { Badge } from '@/components/ui/badge';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import LoadingCircle from '@/components/ui/loading-circle';
 import { useTranslationClient } from '@/i18n/client';
+import { useMailContext } from '../provider/hooks';
 
 interface MailListRowPriorityProps {
   priority: MessagePriorityType | 'loading';
+  uid?: number;
+  shouldUpdate?: boolean;
 }
 
 const getPriorityIcon = (priority: MailListRowPriorityProps['priority']) => {
@@ -28,9 +31,20 @@ const getPriorityIcon = (priority: MailListRowPriorityProps['priority']) => {
   }
 };
 
-const MailListRowPriority: React.FC<MailListRowPriorityProps> = ({ priority }) => {
+const MailListRowPriority: React.FC<MailListRowPriorityProps> = ({ priority, shouldUpdate, uid }) => {
   debugRendering('MailListRowPriority');
   const { t } = useTranslationClient('priority');
+  const { updateMailPriority } = useMailContext();
+
+  useEffect(() => {
+    if (shouldUpdate) {
+      if (!uid) {
+        throw new Error('No uid');
+      }
+      if (priority !== 'loading') updateMailPriority(uid, priority);
+    }
+  }, [priority, shouldUpdate, uid, updateMailPriority]);
+
   return (
     <div className='flex items-center space-x-2'>
       <TooltipProvider>

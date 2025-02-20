@@ -1,4 +1,5 @@
 import { ImapFlow } from 'imapflow';
+import { MessagePriorityType } from './ai';
 
 export interface ImapInstance {
   email: string;
@@ -16,6 +17,10 @@ export interface IMessage {
   subject?: string;
   text?: string;
   inReplyTo?: string;
+}
+
+export interface IMessageWithPriority extends IMessage {
+  priority?: MessagePriorityType;
 }
 
 export interface IMessagePerson {

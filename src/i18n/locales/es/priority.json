@@ -6,7 +6,7 @@
   "none": "Ninguna",
   "low_explain": "Información general. No requiere acción inmediata.",
   "medium_explain": "Requiere atención, pero no es urgente.",
-  "high_explain": "Critico o urgente. Requiere acción inmediata.",
+  "high_explain": "Crítico o urgente. Requiere acción inmediata.",
   "none_explain": "No se pudo calcular la prioridad de este mensaje.",
   "loading": "Cargando prioridad..."
 }
