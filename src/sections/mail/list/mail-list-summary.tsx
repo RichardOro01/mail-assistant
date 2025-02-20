@@ -16,6 +16,7 @@ import { useSummaryAI } from '@/services/hooks';
 import { useTranslationClient } from '@/i18n/client';
 import { ScrollText } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { getMessagePriorityNumber } from '@/services/ai/utils';
 
 const MailListSummary: React.FC = () => {
   debugRendering('MailListSummary');
@@ -25,7 +26,11 @@ const MailListSummary: React.FC = () => {
   const { mails } = useMailContext();
 
   const handleGenerateSummary = () => {
-    complete(mails.map(({ text }) => text ?? ''));
+    complete(
+      mails
+        .sort((a, b) => getMessagePriorityNumber(b.priority) - getMessagePriorityNumber(a.priority))
+        .map(({ text }) => text ?? '')
+    );
   };
 
   return (

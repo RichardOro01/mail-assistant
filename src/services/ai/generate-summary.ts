@@ -4,6 +4,7 @@ import { systems } from '@/lib/ai/system';
 import { openai } from '@ai-sdk/openai';
 import { streamText } from 'ai';
 import { sumUserAICount, verifyUserAICount } from './ai-count';
+import { removeLinkFromText } from './utils';
 
 export const generateSummary = async (messages: string[], limit: number) => {
   await verifyUserAICount('summary');
@@ -15,11 +16,13 @@ export const generateSummary = async (messages: string[], limit: number) => {
     messagesString += `${message}\n`;
   }
 
+  const cleanMessages = removeLinkFromText(messagesString);
+
   const stream = streamText({
     system: systems.generateSummary(),
-    model: openai.completion('gpt-3.5-turbo-instruct'),
+    model: openai('gpt-4o-mini'),
     maxTokens: 2000,
-    prompt: messagesString
+    prompt: cleanMessages
   });
 
   sumUserAICount('summary');

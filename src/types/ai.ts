@@ -12,6 +12,13 @@ export const MessagePriorityEnum = ['high', 'medium', 'low', 'none'] as const;
 
 export type MessagePriorityType = (typeof MessagePriorityEnum)[number];
 
+export const MessagePriorityNumeric = {
+  high: 3,
+  medium: 2,
+  low: 1,
+  none: 0
+};
+
 export interface ISpeechToTextResponse {
   text: string;
 }

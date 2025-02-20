@@ -14,7 +14,6 @@ export async function POST(req: Request) {
     const { messages }: IGenerateSummaryRequest = await req.json();
 
     const result = await generateSummary(messages, MESSAGE_LIMIT);
-
     return result.toDataStreamResponse();
   } catch (e) {
     if (isInstanceOfStandardError(e)) {
