@@ -1,9 +1,10 @@
 import { startHolyLoader, stopHolyLoader } from 'holy-loader';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { usePathname, useSearchParams, useRouter } from 'next/navigation';
 
 export const useHolyRouter = () => {
-  const { push: oldPush, replace: oldReplace, ...rest } = useRouter();
+  const router = useRouter();
+  const { push: oldPush, replace: oldReplace } = useMemo(() => router, [router]);
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
@@ -46,5 +47,7 @@ export const useHolyRouter = () => {
     stopHolyLoader();
   }, [pathname, searchParams]);
 
-  return { push, replace, isLoading, ...rest };
+  const memoReturn = useMemo(() => ({ ...router, push, replace, isLoading }), [router, push, replace, isLoading]);
+
+  return memoReturn;
 };
