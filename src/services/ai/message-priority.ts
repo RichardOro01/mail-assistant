@@ -6,9 +6,12 @@ import { openai } from '@ai-sdk/openai';
 import { generateObject } from 'ai';
 import { sumUserAICount, verifyUserAICount } from './ai-count';
 import { z } from 'zod';
+import { removeLinkFromText } from './utils';
 
 export const getMessagePriority = async (prompt: string): Promise<MessagePriorityType> => {
   await verifyUserAICount('priority');
+
+  prompt = removeLinkFromText(prompt);
 
   const {
     object: { priority }

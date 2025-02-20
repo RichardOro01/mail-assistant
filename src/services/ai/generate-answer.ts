@@ -6,9 +6,12 @@ import { streamText } from 'ai';
 import { sumUserAICount, verifyUserAICount } from './ai-count';
 import { IGenerateMessageRequest } from '@/types/ai';
 import { prompts } from '@/lib/ai/prompts';
+import { removeLinkFromText } from './utils';
 
 export const generateAnswer = async (data: IGenerateMessageRequest) => {
   await verifyUserAICount('generate_answer');
+
+  data.message = removeLinkFromText(data.message);
 
   const stream = streamText({
     system: systems.generateAnswer(),
