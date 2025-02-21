@@ -29,7 +29,7 @@ const MailListSummary: React.FC = () => {
     complete(
       mails
         .sort((a, b) => getMessagePriorityNumber(b.priority) - getMessagePriorityNumber(a.priority))
-        .map(({ text }) => text ?? '')
+        .map(({ text, from }) => ({ message: text ?? '', sendBy: from.name || from.address || 'unknown' }))
     );
   };
 

@@ -4,7 +4,7 @@ import { useCompletion } from 'ai/react';
 import { useCallback, useState } from 'react';
 import { useHandleError } from '@/lib/error/hooks';
 import { handleFetchAPIResponse } from './fetcher';
-import { IGenerateMessageRequest, ISpeechToTextResponse, ITextToSpeechRequest } from '@/types/ai';
+import { IGenerateMessageRequest, IMessageToSummary, ISpeechToTextResponse, ITextToSpeechRequest } from '@/types/ai';
 import { FetchOkResponse, StandardError } from './types';
 
 export const useSummaryAI = (options?: UseCompletionOptions) => {
@@ -18,7 +18,7 @@ export const useSummaryAI = (options?: UseCompletionOptions) => {
     ...options
   });
 
-  const complete = (messages: string[]) => {
+  const complete = (messages: IMessageToSummary[]) => {
     return oldComplete('', { body: { messages } });
   };
 

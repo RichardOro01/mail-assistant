@@ -5,15 +5,17 @@ import { openai } from '@ai-sdk/openai';
 import { streamText } from 'ai';
 import { sumUserAICount, verifyUserAICount } from './ai-count';
 import { removeLinkFromText } from './utils';
+import { IMessageToSummary } from '@/types/ai';
 
-export const generateSummary = async (messages: string[], limit: number) => {
+export const generateSummary = async (messages: IMessageToSummary[], limit: number) => {
   await verifyUserAICount('summary');
 
   let messagesString = '';
   for (let i = 0; i < messages.length && i < limit; i++) {
     const message = messages[i];
     messagesString += `Message ${i}\n`;
-    messagesString += `${message}\n`;
+    messagesString += `from: ${message.sendBy}\n`;
+    messagesString += `text: ${message.message}\n`;
   }
 
   const cleanMessages = removeLinkFromText(messagesString);
