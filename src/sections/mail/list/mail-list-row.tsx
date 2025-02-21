@@ -12,6 +12,8 @@ import { toast } from '@/hooks/use-toast';
 import MailListRowDesktop from './mail-list-row-desktop';
 import MailListRowMobile from './mail-list-row-mobile';
 import { useHolyRouter } from '@/components/top-loader/hook';
+import { useSearchParams } from 'next/navigation';
+import { SearchFilter } from '@/types/filters';
 
 interface MailListRowProps {
   message: IMessage;
@@ -26,6 +28,8 @@ const MailListRow: React.FC<MailListRowProps> = ({ message, priorityComponent })
   const { handleStandardError } = useHandleError();
   const [isDeleting, setIsDeleting] = useState(false);
   const { selectedMail, setSelectedMail } = useMailContext();
+  const searchParams = useSearchParams();
+  const searchValue = searchParams.get(SearchFilter);
 
   const isSelected = selectedMail?.uid === message.uid;
 
@@ -57,12 +61,14 @@ const MailListRow: React.FC<MailListRowProps> = ({ message, priorityComponent })
         onSelect={handleSelect}
         onViewMessage={handleViewMessage}
         className='hidden md:table-row'
+        search={searchValue}
       />
       <MailListRowMobile
         {...{ isDeleting, message, priorityComponent }}
         onDelete={handleDelete}
         onViewMessage={handleViewMessage}
         className='md:hidden'
+        search={searchValue}
       />
     </>
   );

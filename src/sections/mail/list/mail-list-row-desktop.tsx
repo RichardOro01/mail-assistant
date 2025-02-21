@@ -8,6 +8,7 @@ import { useTranslationClient } from '@/i18n/client';
 import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { AlertDialogDefault } from '@/components/ui/alert-dialog';
+import Highlighter from 'react-highlight-words';
 
 interface MailListRowDesktopProps {
   message: IMessage;
@@ -15,12 +16,14 @@ interface MailListRowDesktopProps {
   isSelected: boolean;
   isDeleting: boolean;
   priorityComponent: React.ReactNode;
+  search: string | null;
   onDelete: () => void;
   onSelect: () => void;
   onViewMessage: () => void;
 }
 
 const MailListRowDesktop: React.FC<MailListRowDesktopProps> = ({
+  search,
   message,
   className,
   isSelected,
@@ -50,12 +53,19 @@ const MailListRowDesktop: React.FC<MailListRowDesktopProps> = ({
       onClick={() => onSelect()}
       onDoubleClick={() => onViewMessage()}>
       <TableCell className={`w-[150px] py-3 ${isSelected ? 'border-l-4 border-blue-400' : ''}`}>
-        <span className='line-clamp-1'>{message?.from?.name ? message.from.name : message.from.address}</span>
+        <span className='line-clamp-1'>
+          <Highlighter
+            textToHighlight={message?.from?.name ? message.from.name : message.from.address || ''}
+            searchWords={[search || '']}
+          />
+        </span>
       </TableCell>
       <TableCell className='py-3'>
         <span className='line-clamp-1'>
-          {message.subject}
-          <span className='ml-5 opacity-60'>{message.text}</span>
+          <Highlighter textToHighlight={message.subject || ''} searchWords={[search || '']} />
+          <span className='ml-5 opacity-60'>
+            <Highlighter textToHighlight={message.text || ''} searchWords={[search || '']} />
+          </span>
         </span>
       </TableCell>
       <TableCell className='py-0 w-32'>{priorityComponent}</TableCell>

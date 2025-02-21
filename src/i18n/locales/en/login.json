@@ -1,5 +1,5 @@
 {
-  "title": "Login",
+  "title": "Email assistant",
   "submit-button": "Login",
   "failed-title": "Failed to login",
   "invalid-credentials": "The credentials provided are invalid. Please try again.",
