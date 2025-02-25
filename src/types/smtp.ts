@@ -8,7 +8,7 @@ export interface ISendEmailRequest {
 
 export interface IReplyEmailRequest {
   text: string;
-  replyTo: string | string[];
+  replyTo: string;
   messageId: string;
   subject: string;
 }

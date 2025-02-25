@@ -12,6 +12,7 @@ import { Label } from '@/components/ui/label';
 import { useAudioRecord } from '@/lib/audio/use-audio-record';
 import { useHandleError } from '@/lib/error/hooks';
 import clsx from 'clsx';
+import { EMAIL_TEXT_LIMIT, EMAIL_TO_LIMIT } from '@/services/email/validation';
 
 interface MailMessageReplyFormProps {
   hidden: boolean;
@@ -92,8 +93,9 @@ const MailMessageReplyForm: React.FC<MailMessageReplyFormProps> = ({ hidden }) =
         <Label className=''>{t('to')}</Label>
         <FormInput
           name='to'
-          placeholder='To'
+          placeholder='pepe@avangenio.com'
           className='flex-1 bg-transparent text-lg font-bold border-none focus-visible:ring-0 focus-visible:ring-offset-0 placeholder-gray-400'
+          maxLength={EMAIL_TO_LIMIT}
         />
       </div>
       <FormTextarea
@@ -103,6 +105,7 @@ const MailMessageReplyForm: React.FC<MailMessageReplyFormProps> = ({ hidden }) =
         rows={5}
         placeholder={generateIsLoading ? t('thinking') : isRecording || speechToTexIsLoading ? t('hearing') : ''}
         disabled={generateIsLoading || speechToTexIsLoading || isRecording}
+        maxLength={EMAIL_TEXT_LIMIT}
       />
       <MailMessageReplyButtons
         {...{

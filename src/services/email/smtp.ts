@@ -4,6 +4,7 @@ import { getEmailInstance } from '@/server/email';
 import { FetchError, FetchServerResponse, StandardError } from '../types';
 import { IReplyEmailRequest, ISendEmailRequest, ISendEmailResponse } from '@/types/smtp';
 import { NEXT_SMTP_TIMEOUT_SEND_EMAIL } from '@/config';
+import { validateSendEmail } from './validation';
 
 export const sendEmail = async ({
   to,
@@ -12,6 +13,7 @@ export const sendEmail = async ({
 }: ISendEmailRequest): Promise<FetchServerResponse<ISendEmailResponse>> =>
   new Promise(async (resolve) => {
     try {
+      validateSendEmail({ to, subject, text });
       const emailInstance = await getEmailInstance();
       if (!emailInstance) resolve(email_instance_not_found_error);
       else {
@@ -39,6 +41,7 @@ export const replyEmail = async ({
 }: IReplyEmailRequest): Promise<FetchServerResponse<ISendEmailResponse>> =>
   new Promise(async (resolve) => {
     try {
+      validateSendEmail({ to: replyTo, subject, text });
       const emailInstance = await getEmailInstance();
       if (!emailInstance) resolve(email_instance_not_found_error);
       else {

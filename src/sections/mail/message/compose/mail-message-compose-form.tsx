@@ -8,6 +8,7 @@ import { useHandleError } from '@/lib/error/hooks';
 import { useFormContext } from 'react-hook-form';
 import { IReplyEmailForm } from '@/types/smtp';
 import { useCallback } from 'react';
+import { EMAIL_TEXT_LIMIT, EMAIL_TO_LIMIT, EMAIL_SUBJECT_LIMIT } from '@/services/email/validation';
 
 const MailMessageComposeForm = () => {
   const { t } = useTranslationClient('message-compose');
@@ -41,12 +42,14 @@ const MailMessageComposeForm = () => {
           name='to'
           id='to'
           className='flex-1 bg-transparent text-lg font-bold border-none focus-visible:ring-0 focus-visible:ring-offset-0 placeholder-gray-400'
+          maxLength={EMAIL_TO_LIMIT}
         />
       </div>
       <FormInput
         name='subject'
         placeholder={t('subject_placeholder')}
         className='w-full px-0 mb-4 text-lg font-bold border-none focus-visible:ring-0 focus-visible:ring-offset-0'
+        maxLength={EMAIL_SUBJECT_LIMIT}
       />
       <FormTextarea
         name='text'
@@ -54,6 +57,7 @@ const MailMessageComposeForm = () => {
         placeholder={t('text_placeholder')}
         rows={5}
         className='w-full px-0 text-lg font-medium resize-none bg-transparent overflow-hidden border-none'
+        maxLength={EMAIL_TEXT_LIMIT}
       />
       <MailMessageComposeButtons {...{ handleRecord, speechToTexIsLoading }} />
     </div>
