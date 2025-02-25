@@ -15,7 +15,7 @@ export const useMailMessageForm = () => {
   const schema: z.ZodSchema<ISendEmailRequest> = z.object({
     to: z.string().min(1, t('email-required')).email(t('email-invalid')),
     subject: z.string(),
-    text: z.string()
+    text: z.string().min(1)
   });
 
   const methods = useForm({ resolver: zodResolver(schema), defaultValues });
