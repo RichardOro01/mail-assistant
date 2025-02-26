@@ -1,10 +1,7 @@
 import { ISendEmailRequest } from '@/types/smtp';
 import { FetchError, StandardError } from '../types';
 import { encoding_for_model, TiktokenModel } from 'tiktoken';
-
-export const EMAIL_TO_LIMIT = 256;
-export const EMAIL_SUBJECT_LIMIT = 78;
-export const EMAIL_TEXT_LIMIT = 5120;
+import { EMAIL_SUBJECT_LIMIT, EMAIL_TEXT_LIMIT, EMAIL_TO_LIMIT } from './validation-consts';
 
 export const validateSendEmail = ({ to, subject, text }: ISendEmailRequest) => {
   if (to?.length > EMAIL_TO_LIMIT)

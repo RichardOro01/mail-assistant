@@ -19,7 +19,7 @@ const MailMessageReply: React.FC<MailMessageReplyProps> = ({ message, divRef }) 
       <button title='Reply' onClick={() => setShowReply((current) => !current)}>
         <Reply />
       </button>
-      {<MailMessageReplyContainer hidden={!showReply} {...{ message, divRef }} />}
+      <MailMessageReplyContainer hidden={!showReply} {...{ message, divRef }} />
     </div>
   );
 };

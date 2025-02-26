@@ -12,7 +12,7 @@ import { Label } from '@/components/ui/label';
 import { useAudioRecord } from '@/lib/audio/use-audio-record';
 import { useHandleError } from '@/lib/error/hooks';
 import clsx from 'clsx';
-import { EMAIL_TEXT_LIMIT, EMAIL_TO_LIMIT } from '@/services/email/validation';
+import { EMAIL_TEXT_LIMIT, EMAIL_TO_LIMIT } from '@/services/email/validation-consts';
 
 interface MailMessageReplyFormProps {
   hidden: boolean;

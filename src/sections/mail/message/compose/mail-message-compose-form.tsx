@@ -8,7 +8,7 @@ import { useHandleError } from '@/lib/error/hooks';
 import { useFormContext } from 'react-hook-form';
 import { IReplyEmailForm } from '@/types/smtp';
 import { useCallback } from 'react';
-import { EMAIL_TEXT_LIMIT, EMAIL_TO_LIMIT, EMAIL_SUBJECT_LIMIT } from '@/services/email/validation';
+import { EMAIL_SUBJECT_LIMIT, EMAIL_TEXT_LIMIT, EMAIL_TO_LIMIT } from '@/services/email/validation-consts';
 
 const MailMessageComposeForm = () => {
   const { t } = useTranslationClient('message-compose');
