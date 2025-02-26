@@ -3,6 +3,7 @@
 import openai from 'openai';
 import { sumUserAICount, verifyUserAICount } from './ai-count';
 import { removeLinkFromText } from './utils';
+import { validateMaxInputCharacters } from '../email/validation';
 
 export const textToSpeech = async (text: string) => {
   await verifyUserAICount('text_to_speech');
@@ -10,6 +11,7 @@ export const textToSpeech = async (text: string) => {
   const openaiClient = new openai();
 
   text = removeLinkFromText(text);
+  validateMaxInputCharacters(text, 5000);
 
   const response = await openaiClient.audio.speech.create({
     model: 'tts-1',
