@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { debugRendering } from '@/lib/debug/debuggers';
 import LanguageSwitcher from '@/components/language-switcher/language-switcher';

@@ -18,9 +18,12 @@ export const useSummaryAI = (options?: UseCompletionOptions) => {
     ...options
   });
 
-  const complete = (messages: IMessageToSummary[]) => {
-    return oldComplete('', { body: { messages } });
-  };
+  const complete = useCallback(
+    (messages: IMessageToSummary[]) => {
+      return oldComplete('', { body: { messages } });
+    },
+    [oldComplete]
+  );
 
   return { complete, ...rest };
 };
