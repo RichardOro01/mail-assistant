@@ -7,17 +7,12 @@ import { sumUserAICount, verifyUserAICount } from './ai-count';
 import { removeLinkFromText } from './utils';
 import { IMessageToSummary } from '@/types/ai';
 import { validateMaxInputTokens } from '../email/validation';
+import { prompts } from '@/lib/ai/prompts';
 
 export const generateSummary = async (messages: IMessageToSummary[], limit: number) => {
   await verifyUserAICount('summary');
 
-  let messagesString = '';
-  for (let i = 0; i < messages.length && i < limit; i++) {
-    const message = messages[i];
-    messagesString += `Message ${i}\n`;
-    messagesString += `from: ${message.sendBy}\n`;
-    messagesString += `text: ${message.message}\n`;
-  }
+  const messagesString = prompts.generateSummary(messages, limit);
 
   const cleanMessages = removeLinkFromText(messagesString);
   validateMaxInputTokens(cleanMessages, 'gpt-4o-mini', 2000);
