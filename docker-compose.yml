@@ -5,6 +5,10 @@ services:
     container_name: postgres
     restart: always
     image: postgres:15-alpine
+    deploy:
+      resources:
+        limits:
+          memory: 512M
     ports:
       - 5432:5432
     volumes:
@@ -22,6 +26,10 @@ services:
     links:
       - postgres
     command: sh -c "/wait && npx prisma db push && npm run start"
+    deploy:
+      resources:
+        limits:
+          memory: 512M
     environment:
       NEXT_DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}?schema=public
       WAIT_HOSTS: ${POSTGRES_HOST}:${POSTGRES_PORT}
@@ -29,6 +37,5 @@ services:
       WAIT_SLEEP_INTERVAL: 10
       WAIT_BEFORE: 10
       WAIT_HOST_CONNECT_TIMEOUT: 30
-
 volumes:
   mail_postgres:

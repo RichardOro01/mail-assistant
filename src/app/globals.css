@@ -67,3 +67,13 @@
     @apply bg-background text-foreground;
   }
 }
+
+.h-screen-support {
+  height: 100vh;
+}
+
+@supports (height: 100svh) {
+  .h-screen-support {
+    height: 100svh;
+  }
+}
