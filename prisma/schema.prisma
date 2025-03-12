@@ -8,31 +8,27 @@ datasource db {
 }
 
 model ai_use_count {
-  id            String      @id @default(uuid()) @db.Uuid
-  user_id       String      @db.Uuid
-  count         Int
-  last_use_date DateTime    @db.Date
-  type          ai_use_type
-  users         users       @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  user_id          String      @db.Uuid
+  ai_count         Int
+  ai_last_use_date DateTime    @db.Date
+  ai_type          ai_use_type
+  users            users       @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
-  @@unique([user_id, type])
+  @@id([user_id, ai_type])
 }
 
 model message_priorities {
-  id          String                 @id @default(uuid()) @db.Uuid
   message_uid Int
   priority    message_priority_level
   user_id     String                 @db.Uuid
   users       users                  @relation(fields: [user_id], references: [id], onDelete: Cascade)
 
-  @@unique([user_id, message_uid])
+  @@id([user_id, message_uid])
 }
 
 model users {
   id                 String               @id @default(uuid()) @db.Uuid
-  email              String               @unique @db.VarChar(256)
-  display_name       String?
-  picture            String?
+  email              String               @unique @db.VarChar(320)
   ai_use_count       ai_use_count[]
   message_priorities message_priorities[]
 }

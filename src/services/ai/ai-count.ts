@@ -9,9 +9,9 @@ export const sumUserAICount = async (type: ai_use_type) => {
   const session = await auth();
   if (session && session.user && session.user.email) {
     await prisma.ai_use_count.upsert({
-      where: { user_id_type: { user_id: session.user.id, type } },
-      update: { count: { increment: 1 }, last_use_date: new Date() },
-      create: { user_id: session.user.id, type, count: 1, last_use_date: new Date() }
+      where: { user_id_ai_type: { user_id: session.user.id, ai_type: type } },
+      update: { ai_count: { increment: 1 }, ai_last_use_date: new Date() },
+      create: { user_id: session.user.id, ai_type: type, ai_count: 1, ai_last_use_date: new Date() }
     });
   } else {
     throw {
@@ -26,17 +26,17 @@ export const verifyUserAICount = async (type: ai_use_type) => {
   const session = await auth();
   if (session && session.user && session.user.email) {
     const currentUse = await prisma.ai_use_count.findUnique({
-      where: { user_id_type: { user_id: session.user.id, type } },
-      select: { count: true, last_use_date: true }
+      where: { user_id_ai_type: { user_id: session.user.id, ai_type: type } },
+      select: { ai_count: true, ai_last_use_date: true }
     });
     if (currentUse) {
       if (
         isSameDay(
-          new Date(currentUse.last_use_date).toISOString().split('T')[0],
+          new Date(currentUse.ai_last_use_date).toISOString().split('T')[0],
           new Date().toISOString().split('T')[0]
         )
       ) {
-        if (currentUse.count >= OPENAI_LIMITS_PER_DAY[type]) {
+        if (currentUse.ai_count >= OPENAI_LIMITS_PER_DAY[type]) {
           throw {
             detail: { code: 'limit_exceded', message: 'The quota for this AI functionality has been exceded.' },
             status: 429,
@@ -44,7 +44,7 @@ export const verifyUserAICount = async (type: ai_use_type) => {
           } as FetchError<StandardError>;
         }
       } else {
-        await prisma.ai_use_count.delete({ where: { user_id_type: { user_id: session.user.id, type } } });
+        await prisma.ai_use_count.delete({ where: { user_id_ai_type: { user_id: session.user.id, ai_type: type } } });
       }
     }
     return true;
