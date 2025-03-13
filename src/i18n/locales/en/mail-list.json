@@ -3,6 +3,7 @@
   "title": "Messages",
   "view": "View",
   "delete": "Delete",
+  "refresh": "Refresh",
   "summary": "Summary",
   "compose": "Compose",
   "search": "Search",

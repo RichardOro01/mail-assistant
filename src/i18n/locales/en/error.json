@@ -1,4 +1,5 @@
 {
+  "reload": "Reload",
   "unknown": "Something went wrong. Please, try later.",
   "network_error": "Please, check your internet connection."
 }
