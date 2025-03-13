@@ -1,11 +1,13 @@
+'use client';
+
 import React from 'react';
 import { debugRendering } from '@/lib/debug/debuggers';
 import EmailIllustration from '@/assets/illustrations/email-illustration';
-import { translationServer } from '@/i18n';
+import { useTranslationClient } from '@/i18n/client';
 
-const MailListEmpty: React.FC = async () => {
+const MailListEmpty: React.FC = () => {
   debugRendering('MailListEmpty');
-  const { t } = await translationServer('mail-list');
+  const { t } = useTranslationClient('mail-list');
   return (
     <div className='flex flex-col w-full items-center gap-4 mt-14'>
       <EmailIllustration size={200} />

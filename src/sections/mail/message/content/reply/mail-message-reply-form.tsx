@@ -59,7 +59,7 @@ const MailMessageReplyForm: React.FC<MailMessageReplyFormProps> = ({ hidden }) =
         const text = await generateTextFromAudio(audio);
         if (text) {
           const currentTextValue = getValues('text');
-          setValue('text', `${currentTextValue} ${text}`);
+          setValue('text', `${currentTextValue} ${text}`, { shouldValidate: true });
         }
       } catch (e) {
         handleStandardError(e, { showToast: true });
@@ -103,7 +103,7 @@ const MailMessageReplyForm: React.FC<MailMessageReplyFormProps> = ({ hidden }) =
         name='text'
         className='w-full text-lg font-medium  bg-transparent resize-none overflow-hidden'
         rows={5}
-        placeholder={generateIsLoading ? t('thinking') : isRecording || speechToTexIsLoading ? t('hearing') : ''}
+        placeholder={generateIsLoading ? t('thinking') : isRecording || speechToTexIsLoading ? '...' : ''}
         disabled={generateIsLoading || speechToTexIsLoading || isRecording}
         maxLength={EMAIL_TEXT_LIMIT}
       />

@@ -1,15 +1,17 @@
+'use client';
+
 import React from 'react';
 import { debugRendering } from '@/lib/debug/debuggers';
 import FloatButton from '@/components/ui/float-button';
 import Link from 'next/link';
-import { translationServer } from '@/i18n';
 import { routes } from '@/lib/routes';
 import { PencilLine } from 'lucide-react';
+import { useTranslationClient } from '@/i18n/client';
 
-const MailListFloatCompose: React.FC = async () => {
+const MailListFloatCompose: React.FC = () => {
   debugRendering('MailListFloatCompose');
 
-  const { t } = await translationServer('mail-list');
+  const { t } = useTranslationClient('mail-list');
 
   return (
     <Link href={routes.mail.message.compose} className='content-center flex sm:hidden'>
