@@ -16,7 +16,6 @@ import { useSummaryAI } from '@/services/hooks';
 import { useTranslationClient } from '@/i18n/client';
 import { ScrollText } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { getMessagePriorityNumber } from '@/services/ai/utils';
 import { Button } from '@/components/ui/button';
 
 const MailListSummary: React.FC = () => {
@@ -24,16 +23,17 @@ const MailListSummary: React.FC = () => {
 
   const { t } = useTranslationClient('mail-list');
   const { complete, completion, isLoading, error, stop } = useSummaryAI();
-  const { mails } = useMailContext();
+  const { selectedMailsCheckbox } = useMailContext();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleGenerateSummary = useCallback(() => {
     complete(
-      mails
-        .sort((a, b) => getMessagePriorityNumber(b.priority) - getMessagePriorityNumber(a.priority))
-        .map(({ text, from }) => ({ message: text ?? '', sendBy: from.name || from.address || 'unknown' }))
+      selectedMailsCheckbox.map(({ text, from }) => ({
+        message: text ?? '',
+        sendBy: from.name || from.address || 'unknown'
+      }))
     );
-  }, [mails, complete]);
+  }, [selectedMailsCheckbox, complete]);
 
   const handleDialogChange = useCallback(
     (open: boolean) => {
@@ -45,7 +45,7 @@ const MailListSummary: React.FC = () => {
 
   return (
     <Dialog modal onOpenChange={handleDialogChange} open={isDialogOpen}>
-      <DialogTrigger onClick={handleGenerateSummary} aria-label={t('summary')}>
+      <DialogTrigger disabled={!selectedMailsCheckbox.length} onClick={handleGenerateSummary} aria-label={t('summary')}>
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>

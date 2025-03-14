@@ -9,6 +9,9 @@ import clsx from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { AlertDialogDefault } from '@/components/ui/alert-dialog';
 import Highlighter from 'react-highlight-words';
+import { Checkbox } from '@/components/ui/checkbox';
+import { useMailContext } from '../provider/hooks';
+import { CheckedState } from '@radix-ui/react-checkbox';
 
 interface MailListRowDesktopProps {
   message: IMessage;
@@ -37,6 +40,12 @@ const MailListRowDesktop: React.FC<MailListRowDesktopProps> = ({
 
   const { t } = useTranslationClient('mail-list');
   const [showOptions, setShowOptions] = useState(false);
+  const { isSelectedMailCheckbox, addSelectedMailCheckbox, removeSelectedMailCheckbox } = useMailContext();
+
+  const handleCheckMessage = (value: CheckedState) => {
+    if (value === true) addSelectedMailCheckbox(message);
+    if (value === false) removeSelectedMailCheckbox(message);
+  };
 
   return (
     <TableRow
@@ -52,7 +61,14 @@ const MailListRowDesktop: React.FC<MailListRowDesktopProps> = ({
       onMouseLeave={() => setShowOptions(false)}
       onClick={() => onSelect()}
       onDoubleClick={() => onViewMessage()}>
-      <TableCell className={`w-[150px] py-3 ${isSelected ? 'border-l-4 border-blue-400' : ''}`}>
+      <TableCell
+        className={clsx('w-8 py-3 border-l-4 isSelected', {
+          'border-blue-400': isSelected,
+          'border-transparent': !isSelected
+        })}>
+        <Checkbox checked={isSelectedMailCheckbox(message)} onCheckedChange={handleCheckMessage} />
+      </TableCell>
+      <TableCell className={'w-[150px] py-3'}>
         <span className='line-clamp-1'>
           <Highlighter
             textToHighlight={message?.from?.name ? message.from.name : message.from.address || ''}
