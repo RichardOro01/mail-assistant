@@ -4,7 +4,7 @@ import { systems } from '@/lib/ai/system';
 import { openai } from '@ai-sdk/openai';
 import { createDataStreamResponse, generateId, streamText } from 'ai';
 import { sumUserAICount, verifyUserAICount } from './ai-count';
-import { removeLinkFromText } from './utils';
+import { cleanText, removeLinkFromText } from './utils';
 import { IMessageToSummary } from '@/types/ai';
 import { validateMaxInputTokens } from '../email/validation';
 import prisma from '@/lib/prisma';
@@ -23,7 +23,7 @@ export const generateSummary = async (message: IMessageToSummary) => {
     return createDataStreamResponse({
       execute: (dataStream) => {
         dataStream.write(`f:{"messageId":"msg-${generateId()}"}\n`);
-        dataStream.write(`0:"${summaryFromBD.summary}"\n`);
+        dataStream.write(`0:"${cleanText(summaryFromBD.summary)}"\n`);
         dataStream.write(
           'e:{"finishReason":"stop","usage":{"promptTokens":0,"completionTokens":0},"isContinued":false}\n'
         );
