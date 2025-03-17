@@ -41,7 +41,11 @@ const MailListSummary: React.FC = () => {
 
   return (
     <Dialog modal onOpenChange={handleDialogChange} open={isDialogOpen}>
-      <DialogTrigger disabled={!selectedMailsCheckbox.length} onClick={handleGenerateSummary} aria-label={t('summary')}>
+      <DialogTrigger
+        disabled={!selectedMailsCheckbox.length}
+        onClick={handleGenerateSummary}
+        aria-label={t('summary')}
+        className='flex items-center'>
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>

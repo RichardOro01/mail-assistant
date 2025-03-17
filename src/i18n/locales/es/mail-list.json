@@ -8,6 +8,8 @@
   "compose": "Redactar",
   "search": "Buscar",
   "menu": "Menú",
+  "selected": "Seleccionado",
+  "many_selected": "Seleccionados",
   "summing_up": "Resumiendo...",
   "summing_error": "Ups. Algo salió mal resumiendo el mensaje.",
   "message_deleted": "Mensaje eliminado",

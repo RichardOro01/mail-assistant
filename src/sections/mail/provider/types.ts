@@ -11,4 +11,7 @@ export type MailContextType = {
   isSelectedMailCheckbox: (message: IMessage) => boolean;
   addSelectedMailCheckbox: (message: IMessage) => void;
   removeSelectedMailCheckbox: (message: IMessage) => void;
+  isAllSelectedMailCheckbox: () => boolean;
+  selectAllMailCheckbox: () => void;
+  deselectAllMailCheckbox: () => void;
 };

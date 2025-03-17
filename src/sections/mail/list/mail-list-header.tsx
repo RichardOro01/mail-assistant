@@ -1,6 +1,5 @@
 import React from 'react';
 import { debugRendering } from '@/lib/debug/debuggers';
-import MailListSummary from './mail-list-summary';
 import MailListSearch from './mail-list-search';
 import { EmailFilters } from '@/types/filters';
 import MailOpenMenuButton from '../mail-open-menu-button';
@@ -20,7 +19,6 @@ const MailListHeader: React.FC<MailListHeaderProps> = async ({ filters }) => {
       <MailListTitle />
       <div className='flex gap-6 w-full sm:w-fit'>
         <MailListRefresh />
-        <MailListSummary />
         <MailListCompose />
         <MailListSearch initialValue={filters.search} />
         <MailOpenMenuButton />

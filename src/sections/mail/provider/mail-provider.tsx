@@ -34,6 +34,18 @@ const MailProvider: React.FC<LayoutBaseProps> = ({ children }) => {
     [selectedMailsCheckbox]
   );
 
+  const isAllSelectedMailCheckbox = useCallback(() => {
+    return selectedMailsCheckbox.length === mails.length;
+  }, [selectedMailsCheckbox, mails]);
+
+  const selectAllMailCheckbox = useCallback(() => {
+    setSelectedMailsCheckbox(mails);
+  }, [mails]);
+
+  const deselectAllMailCheckbox = useCallback(() => {
+    setSelectedMailsCheckbox([]);
+  }, []);
+
   return (
     <MailContext.Provider
       value={{
@@ -43,8 +55,11 @@ const MailProvider: React.FC<LayoutBaseProps> = ({ children }) => {
         setMails,
         updateMailPriority,
         selectedMailsCheckbox,
+        selectAllMailCheckbox,
         isSelectedMailCheckbox,
+        deselectAllMailCheckbox,
         addSelectedMailCheckbox,
+        isAllSelectedMailCheckbox,
         removeSelectedMailCheckbox
       }}>
       {children}

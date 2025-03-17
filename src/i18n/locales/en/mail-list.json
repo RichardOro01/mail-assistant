@@ -8,6 +8,8 @@
   "compose": "Compose",
   "search": "Search",
   "menu": "Menu",
+  "selected": "Selected",
+  "many_selected": "Selected",
   "summing_up": "Summing up...",
   "summing_error": "Ups. Something went wrong summing up the message.",
   "message_deleted": "Message deleted",
