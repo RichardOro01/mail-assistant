@@ -12,7 +12,7 @@ export const NEXT_OPENAI_API_KEY = process.env.NEXT_OPENAI_API_KEY;
 export const SESSION_EXPIRES_DAYS = Number(process.env.SESSION_EXPIRES_DAYS) || 1;
 export const NEXT_SMTP_TIMEOUT_SEND_EMAIL = Number(process.env.NEXT_SMTP_TIMEOUT_SEND_EMAIL) || 10000;
 export const OPENAI_LIMITS_PER_DAY: Record<ai_use_type, number> = {
-  summary: Number(process.env.OPENAI_SUMMARY_LIMIT_PER_DAY) || 3,
+  summary: Number(process.env.OPENAI_SUMMARY_LIMIT_PER_DAY) || 20,
   generate_answer: Number(process.env.OPENAI_GENERATE_ANSWER_LIMIT_PER_DAY) || 10,
   priority: Number(process.env.OPENAI_PRIORITY_LIMIT_PER_DAY) || 100,
   speech_to_text: Number(process.env.OPENAI_SPEECH_TO_TEXT_LIMIT_PER_DAY) || 10,

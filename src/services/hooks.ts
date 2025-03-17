@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { endpoints } from '@/lib/endpoints';
 import { UseCompletionOptions } from '@ai-sdk/ui-utils';
 import { useCompletion } from 'ai/react';
@@ -6,26 +7,43 @@ import { useHandleError } from '@/lib/error/hooks';
 import { handleFetchAPIResponse } from './fetcher';
 import { IGenerateMessageRequest, IMessageToSummary, ISpeechToTextResponse, ITextToSpeechRequest } from '@/types/ai';
 import { FetchOkResponse, StandardError } from './types';
+import { MESSAGES_COUNT } from '@/sections/mail/config';
 
 export const useSummaryAI = (options?: UseCompletionOptions) => {
   const { handleStandardError } = useHandleError();
+  const hooks = [];
+  const [customErrors, setCustomErrors] = useState<string[]>([]);
+  for (let i = 0; i < MESSAGES_COUNT; i++) {
+    const { complete: oldComplete, ...rest } = useCompletion({
+      api: endpoints.ai.generateSummary,
+      onResponse: async (res) => {
+        if (res.status >= 400) {
+          const json = await res.json();
+          setCustomErrors((prev) => {
+            const copy = [...prev];
+            copy[i] = handleStandardError(json, { directDetail: true });
+            return copy;
+          });
+        }
+      },
+      ...options
+    });
+    const complete = useCallback(
+      (message: IMessageToSummary) => {
+        setCustomErrors((prev) => {
+          const copy = [...prev];
+          copy[i] = '';
+          return copy;
+        });
+        return oldComplete('', { body: { message } });
+      },
+      [oldComplete, i]
+    );
 
-  const { complete: oldComplete, ...rest } = useCompletion({
-    api: endpoints.ai.generateSummary,
-    onResponse: async (res) => {
-      if (res.status >= 400) handleStandardError(await res.json(), { showToast: true, directDetail: true });
-    },
-    ...options
-  });
+    hooks[i] = { complete, customError: customErrors[i], ...rest };
+  }
 
-  const complete = useCallback(
-    (messages: IMessageToSummary[]) => {
-      return oldComplete('', { body: { messages } });
-    },
-    [oldComplete]
-  );
-
-  return { complete, ...rest };
+  return hooks;
 };
 
 export const useGenerateAnswerAI = (options?: UseCompletionOptions) => {

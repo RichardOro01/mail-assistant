@@ -16,7 +16,7 @@ export const systems = {
   },
   generateSummary: () => {
     const language = getLanguageName();
-    return `You are an email assistant and you will generate a summary for the following messages in a list in ${language}.`;
+    return `Generate a summary for the following message in ${language}. Only type the summary`;
   },
   getMessagePriority: () => {
     return `Classify the following message as 'Low,' 'Medium,' or 'High' priority based on its urgency, importance, and required action.

@@ -17,30 +17,26 @@ import { useTranslationClient } from '@/i18n/client';
 import { ScrollText } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Button } from '@/components/ui/button';
+import clsx from 'clsx';
 
 const MailListSummary: React.FC = () => {
   debugRendering('MailListSummary');
 
   const { t } = useTranslationClient('mail-list');
-  const { complete, completion, isLoading, error, stop } = useSummaryAI();
+  const summaryHooks = useSummaryAI();
   const { selectedMailsCheckbox } = useMailContext();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const handleGenerateSummary = useCallback(() => {
-    complete(
-      selectedMailsCheckbox.map(({ text, from }) => ({
-        message: text ?? '',
-        sendBy: from.name || from.address || 'unknown'
-      }))
-    );
-  }, [selectedMailsCheckbox, complete]);
+    selectedMailsCheckbox.forEach(({ text, uid }, index) => summaryHooks[index].complete({ message: text ?? '', uid }));
+  }, [selectedMailsCheckbox, summaryHooks]);
 
   const handleDialogChange = useCallback(
     (open: boolean) => {
       setIsDialogOpen(open);
-      if (!open) stop();
+      if (!open) selectedMailsCheckbox.forEach((_, index) => summaryHooks[index].stop());
     },
-    [setIsDialogOpen, stop]
+    [setIsDialogOpen, selectedMailsCheckbox, summaryHooks]
   );
 
   return (
@@ -61,10 +57,29 @@ const MailListSummary: React.FC = () => {
         <DialogHeader>
           <DialogTitle>{t('ai')}</DialogTitle>
         </DialogHeader>
-        <DialogDescription>
-          <pre className='text-balance'>
-            {error ? t('summing_error') : isLoading && !completion ? t('summing_up') : completion}
-          </pre>
+        <DialogDescription className='flex flex-col gap-4 px-1 h-[50vh] max-h-[400px] overflow-auto'>
+          {selectedMailsCheckbox.map(({ from, subject }, index) => {
+            const currentHook = summaryHooks[index];
+            return (
+              <div className='flex flex-col gap-2 w-full' key={index}>
+                <span>
+                  <b>{from.name || from.address}</b> - {subject}.
+                </span>
+                <p
+                  className={clsx('text-justify w-full', {
+                    'text-red-500': currentHook.customError || currentHook.error
+                  })}>
+                  {currentHook.customError
+                    ? currentHook.customError
+                    : currentHook.error
+                      ? t('summing_error')
+                      : currentHook.isLoading && !currentHook.completion
+                        ? t('summing_up')
+                        : currentHook.completion}
+                </p>
+              </div>
+            );
+          })}
         </DialogDescription>
         <DialogFooter>
           <Button onClick={() => setIsDialogOpen(false)}>{t('accept')}</Button>

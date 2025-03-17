@@ -5,8 +5,7 @@ import MailListTableContainer from './mail-list-table-container';
 import MailListSkeleton from './mail-list-skeleton';
 import { EmailFilters } from '@/types/filters';
 import MailListFloatCompose from './mail-list-float-compose';
-
-const MESSAGES_COUNT = 20;
+import { MESSAGES_COUNT } from '../config';
 
 interface MailListViewProps {
   filters: EmailFilters;

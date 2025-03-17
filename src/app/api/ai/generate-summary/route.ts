@@ -7,14 +7,12 @@ export const maxDuration = 30;
 
 // export const runtime = 'edge';
 
-const MESSAGE_LIMIT = 5;
-
 export async function POST(req: Request) {
   try {
-    const { messages }: IGenerateSummaryRequest = await req.json();
+    const { message }: IGenerateSummaryRequest = await req.json();
 
-    const result = await generateSummary(messages, MESSAGE_LIMIT);
-    return result.toDataStreamResponse();
+    const result = await generateSummary(message);
+    return result;
   } catch (e) {
     if (isInstanceOfStandardError(e)) {
       return NextResponse.json(e.detail, { status: e.status, statusText: e.statusText });

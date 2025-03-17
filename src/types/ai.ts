@@ -5,12 +5,12 @@ export interface IGenerateMessageRequest {
 }
 
 export interface IGenerateSummaryRequest {
-  messages: IMessageToSummary[];
+  message: IMessageToSummary;
 }
 
 export interface IMessageToSummary {
   message: string;
-  sendBy: string;
+  uid: number;
 }
 
 export const MessagePriorityEnum = ['high', 'medium', 'low', 'none'] as const;
