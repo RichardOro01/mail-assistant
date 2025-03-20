@@ -20,13 +20,21 @@ export const speechToText = async (audio: Uint8Array) => {
       file: audioStream,
       model: 'whisper-1'
     });
-    fs.unlinkSync(filePatch);
+    fs.unlink(filePatch, (err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
 
     sumUserAICount('speech_to_text');
 
     return response.text;
   } catch (error) {
-    fs.unlinkSync(filePatch);
+    fs.unlink(filePatch, (err) => {
+      if (err) {
+        console.error(err);
+      }
+    });
     throw error;
   }
 };
